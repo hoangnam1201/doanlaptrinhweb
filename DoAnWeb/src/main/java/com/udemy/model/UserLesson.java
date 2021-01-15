@@ -3,6 +3,7 @@ package com.udemy.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table
@@ -42,5 +43,18 @@ public class UserLesson implements Serializable {
 
     public void setLesson(Lesson lesson) {
         this.lesson = lesson;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserLesson that = (UserLesson) o;
+        return Objects.equals(id, that.id) && Objects.equals(user, that.user) && Objects.equals(lesson, that.lesson);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, user, lesson);
     }
 }

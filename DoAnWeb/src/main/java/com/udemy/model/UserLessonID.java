@@ -4,6 +4,7 @@ package com.udemy.model;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Embeddable
 public class UserLessonID implements Serializable {
@@ -26,5 +27,18 @@ public class UserLessonID implements Serializable {
 
     public void setLessonId(Long lessonId) {
         this.lessonId = lessonId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserLessonID that = (UserLessonID) o;
+        return Objects.equals(userId, that.userId) && Objects.equals(lessonId, that.lessonId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, lessonId);
     }
 }

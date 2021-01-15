@@ -8,9 +8,8 @@ import java.util.List;
 @Entity
 @Table
 public class Category implements Serializable {
-    private static final long serialVersionUID = 1L;
-
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true, length = 100)
@@ -19,11 +18,11 @@ public class Category implements Serializable {
     @Column(nullable = false, unique = true, length = 100)
     private String slug;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="parent_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "parent_id")
     private Category parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Category> children = new ArrayList<Category>();
 
     private String image;

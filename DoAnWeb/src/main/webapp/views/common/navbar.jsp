@@ -1,3 +1,6 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+
 <header class="position-sticky" style="top:0;z-index: 999;">
     <div class="header">
         <div class="position-relative d-block d-md-none ml-2">
@@ -23,65 +26,39 @@
             </button>
             <div class="header-dropdown-menu">
                 <ul class="list-unstyled m-0">
-                    <li>
-                        <a href="#" class="primary-category-item category-item text-inherit text-decoration-none">
-                            <div class="category-content">
-                                Development
+                    <c:forEach items="${requestScope.categoryList}" var="cat">
+                        <li>
+                            <a href="<c:url value="${cat.slug}" />"
+                               class="primary-category-item category-item text-inherit text-decoration-none">
+                                <div class="category-content">
+                                        ${cat.name}
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <div class="header-dropdown-menu sub-category">
+                                <ul class="list-unstyled m-0">
+                                    <li>
+                                        <a href="<c:url value="${cat.slug}" />"
+                                           class="category-item text-inherit text-decoration-none">
+                                            <div class="category-content">
+                                                All ${cat.name}
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <c:forEach items="${cat.children}" var="subCat">
+                                        <li>
+                                            <a href="<c:url value="${subCat.slug}" />"
+                                               class="category-item text-inherit text-decoration-none">
+                                                <div class="category-content">
+                                                        ${subCat.name}
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
                             </div>
-                            <i class="fas fa-chevron-right"></i>
-                        </a>
-                        <div class="header-dropdown-menu sub-category">
-                            <ul class="list-unstyled m-0">
-                                <li>
-                                    <a href="#" class="category-item text-inherit text-decoration-none">
-                                        <div class="category-content">
-                                            All Development
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="category-item text-inherit text-decoration-none">
-                                        <div class="category-content">
-                                            Web Development
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="category-item text-inherit text-decoration-none">
-                                        <div class="category-content">
-                                            Data Sciene
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#" class="primary-category-item category-item text-inherit text-decoration-none">
-                            <div class="category-content">
-                                Business
-                            </div>
-                            <i class="fas fa-chevron-right"></i>
-                        </a>
-                        <div class="header-dropdown-menu sub-category">
-                            <ul class="list-unstyled m-0">
-                                <li>
-                                    <a href="#" class="category-item text-inherit text-decoration-none">
-                                        <div class="category-content">
-                                            All Business
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="category-item text-inherit text-decoration-none">
-                                        <div class="category-content">
-                                            Sales
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
+                        </li>
+                    </c:forEach>
                 </ul>
             </div>
         </nav>
@@ -103,7 +80,8 @@
                         Get your team access to over 5,000 top Udemy courses, anytime, anywhere.
                     </div>
                     <a href="#" class="btn btn-info btn-block mt-2 font-weight-bold text-white">Try Udemy for
-                        Business</a>
+                        Business
+                    </a>
                 </div>
             </div>
         </div>
@@ -114,7 +92,8 @@
             <div class="header-dropdown-menu right">
                 <div class="px-3 py-2">
                     <div class="header-dropdown-menu-heading">
-                        Turn what you know into an opportunity and reach millions around the world. </div>
+                        Turn what you know into an opportunity and reach millions around the world.
+                    </div>
                     <a href="#" class="btn btn-info btn-block mt-2 font-weight-bold text-white">Learn more</a>
                 </div>
             </div>
@@ -135,4 +114,5 @@
         </div>
         <button class="header-button btn header-login-button d-none d-md-block">Log in</button>
         <button class="header-button btn header-signup-button d-none d-md-block">Sign up</button>
+    </div>
 </header>
