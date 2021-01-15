@@ -12,7 +12,8 @@ import java.util.*;
 public class Course implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     @Lob
@@ -43,7 +44,11 @@ public class Course implements Serializable {
     private Date updatedAt;
 
     @ManyToOne
-    @JoinColumn(name="category_id")
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private User teacher;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @OneToMany
@@ -52,6 +57,14 @@ public class Course implements Serializable {
 
     @OneToMany(mappedBy = "course")
     private Set<Enrollment> enrollments = new HashSet<Enrollment>();
+
+    public User getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(User teacher) {
+        this.teacher = teacher;
+    }
 
     public Long getId() {
         return id;

@@ -5,7 +5,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table
@@ -31,11 +33,22 @@ public class User implements Serializable {
     @Column(nullable = false, columnDefinition = "varchar(50) default 'student'")
     private String role;
 
+    @OneToMany(mappedBy = "teacher")
+    private List<Course> courses;
+
     @CreationTimestamp
     private Date createdAt;
 
     @UpdateTimestamp
     private Date updatedAt;
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
 
     public Long getId() {
         return id;
