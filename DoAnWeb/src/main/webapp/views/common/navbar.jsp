@@ -28,7 +28,7 @@
                 <ul class="list-unstyled m-0">
                     <c:forEach items="${requestScope.categoryList}" var="cat">
                         <li>
-                            <a href="<c:url value="${cat.slug}" />"
+                            <a href="/courses/${cat.slug}"
                                class="primary-category-item category-item text-inherit text-decoration-none">
                                 <div class="category-content">
                                         ${cat.name}
@@ -38,7 +38,7 @@
                             <div class="header-dropdown-menu sub-category">
                                 <ul class="list-unstyled m-0">
                                     <li>
-                                        <a href="<c:url value="${cat.slug}" />"
+                                        <a href="/courses/${cat.slug}"
                                            class="category-item text-inherit text-decoration-none">
                                             <div class="category-content">
                                                 All ${cat.name}
@@ -47,7 +47,7 @@
                                     </li>
                                     <c:forEach items="${cat.children}" var="subCat">
                                         <li>
-                                            <a href="<c:url value="${subCat.slug}" />"
+                                            <a href="/courses/${subCat.slug}"
                                                class="category-item text-inherit text-decoration-none">
                                                 <div class="category-content">
                                                         ${subCat.name}
