@@ -112,7 +112,7 @@
                 </div>
             </div>
         </div>
-        <button class="header-button btn header-login-button d-none d-md-block">Log in</button>
-        <button class="header-button btn header-signup-button d-none d-md-block">Sign up</button>
+        <a class="header-button btn header-login-button d-none d-md-block" href="${pageContext.request.contextPath}/Account/Login" role="button">Log in</a>
+        <a class="header-button btn header-signup-button d-none d-md-block" href="${pageContext.request.contextPath}/Account/Register" role="button">Sign up</a>
     </div>
 </header>
