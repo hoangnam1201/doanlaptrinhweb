@@ -1,7 +1,9 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="en">
-<jsp:include page="../common/head.jsp" />
+<jsp:include page="common/head.jsp" />
 <body>
 <header class="position-sticky" style="top:0;z-index: 999;">
     <div class="header">
@@ -165,7 +167,7 @@
     <div>
         <a href="#" class="bg-grey border rounded a-unstyled single-course--container flex-column flex-sm-row">
             <div>
-                <img src="nodejs.jpg" class="mw-100 h-auto" width="500" height="250">
+                <img src="<c:url value="static/images/nodejs.jpg" />" class="mw-100 h-auto" width="500" height="250">
             </div>
             <div class="featured-course-content mt-3 ml-1 ml-sm-3 mt-sm-0">
                 <div>
@@ -208,7 +210,7 @@
                     <div class="a-unstyled bg-grey course-card--container">
                         <div>
                             <a href="#">
-                                <img class="course-card--image" src="angular.jpg" alt="Card image cap">
+                                <img class="course-card--image" src="<c:url value="static/images/angular.jpg" />" alt="Card image cap">
                             </a>
                             <div class="card-body py-2 px-3">
                                 <div class="mb-1">
@@ -250,7 +252,7 @@
                     <div class="a-unstyled bg-grey course-card--container">
                         <div>
                             <a href="#">
-                                <img class="course-card--image" src="angular.jpg" alt="Card image cap">
+                                <img class="course-card--image" src="<c:url value="static/images/angular.jpg" />" alt="Card image cap">
                             </a>
                             <div class="card-body py-2 px-3">
                                 <div class="mb-1">
@@ -292,7 +294,7 @@
                     <div class="a-unstyled bg-grey course-card--container">
                         <div>
                             <a href="#">
-                                <img class="course-card--image" src="angular.jpg" alt="Card image cap">
+                                <img class="course-card--image" src="<c:url value="static/images/angular.jpg" />" alt="Card image cap">
                             </a>
                             <div class="card-body py-2 px-3">
                                 <div class="mb-1">
@@ -334,7 +336,7 @@
                     <div class="a-unstyled bg-grey course-card--container">
                         <div>
                             <a href="#">
-                                <img class="course-card--image" src="angular.jpg" alt="Card image cap">
+                                <img class="course-card--image" src="<c:url value="static/images/angular.jpg" />" alt="Card image cap">
                             </a>
                             <div class="card-body py-2 px-3">
                                 <div class="mb-1">
@@ -376,7 +378,7 @@
         </div>
     </section>
 </main>
-<jsp:include page="../common/footer.jsp" />
+<jsp:include page="common/footer.jsp" />
 
 </body>
 
