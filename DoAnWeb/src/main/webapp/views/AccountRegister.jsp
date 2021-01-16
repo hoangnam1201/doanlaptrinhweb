@@ -7,6 +7,27 @@
 <body>
 <jsp:include page="common/navbar.jsp"/>
 <main>
+    <script>
+        $('#frmRegister').on('submit', function (e) {
+            e.preventDefault();
+
+            const username = $('#txtUsername').val();
+            if (username.length === 0) {
+                alert('Invalid username.');
+                return;
+            }
+
+            $.getJSON('${pageContext.request.contextPath}/Account/IsAvailable?user=' + username, function(data) {
+                if (data === true) {
+                    $('#frmRegister').off('submit').submit();
+                } else {
+                    alert('Not available.');
+                }
+            });
+        });
+
+        $('#txtUsername').select();
+    </script>
     <form method="post" id="frmRegister">
         <div class="card">
             <div class="card-header">
@@ -51,7 +72,7 @@
     </form>
 </main>
 <jsp:include page="common/footer.jsp"/>
-
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </body>
 
 </html>

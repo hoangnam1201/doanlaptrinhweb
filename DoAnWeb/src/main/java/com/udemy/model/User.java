@@ -27,8 +27,6 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, unique = true, length = 100)
-    private String slug;
 
     @Column(nullable = false, columnDefinition = "varchar(50) default 'student'")
     private String role = "student";
@@ -82,13 +80,6 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getSlug() {
-        return slug;
-    }
-
-    public void setSlug(String slug) {
-        this.slug = slug;
-    }
 
     public String getRole() {
         return role;
