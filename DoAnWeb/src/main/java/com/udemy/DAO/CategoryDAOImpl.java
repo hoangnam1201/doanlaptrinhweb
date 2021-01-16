@@ -6,10 +6,13 @@ import com.udemy.util.JpaUtil;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
-import java.util.Optional;
 
 public class CategoryDAOImpl implements CategoryDAO {
-    private final EntityManagerFactory emf = JpaUtil.getJPAFactory();
+    private EntityManagerFactory emf;
+
+    public CategoryDAOImpl() {
+        emf = JpaUtil.getJPAFactory();
+    }
 
     @Override
     public List<Category> getAllParentAndSub() {
@@ -18,6 +21,11 @@ public class CategoryDAOImpl implements CategoryDAO {
         List<Category> list = em.createQuery(queryString, Category.class).getResultList();
         em.close();
         return list;
+    }
+
+    @Override
+    public List<Category> getMostEnrolledCategoriesLastWeek(int amount) {
+        return null;
     }
 
     @Override
@@ -33,24 +41,5 @@ public class CategoryDAOImpl implements CategoryDAO {
     @Override
     public void update(Category category) {
 
-    }
-
-    @Override
-    public Category findById(Long id) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            Category category = em.find(Category.class, id);
-            em.close();
-            return category;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            em.close();
-            return null;
-        }
-    }
-
-    @Override
-    public Optional<Category> findBySlug(String slug) {
-        return Optional.empty();
     }
 }

@@ -15,6 +15,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public List<Category> getMostEnrolledCategoriesLastWeek(int amount) {
+        return null;
+    }
+
+    @Override
     public void delete(Long id) {
 
     }
@@ -27,15 +32,5 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void update(Category category) {
 
-    }
-
-    @Override
-    public Category findById(Long id) {
-        return null;
-    }
-
-    @Override
-    public Optional<Category> findBySlug(String slug) {
-        return Optional.empty();
     }
 }

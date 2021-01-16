@@ -16,10 +16,10 @@ public class Course implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String image;
+    private String shortDescription;
     @Lob
     private String description;
-    @Lob
-    private String shortDescription;
     @Lob
     private String learnGoals;
     @Lob
@@ -51,12 +51,23 @@ public class Course implements Serializable {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
     @JoinColumn(name = "course_id")
     private List<Section> sections = new ArrayList<Section>();
 
     @OneToMany(mappedBy = "course")
     private Set<Enrollment> enrollments = new HashSet<Enrollment>();
+
+    public Course() {
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public User getTeacher() {
         return teacher;

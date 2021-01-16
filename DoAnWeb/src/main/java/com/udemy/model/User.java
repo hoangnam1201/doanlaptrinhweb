@@ -31,7 +31,7 @@ public class User implements Serializable {
     private String slug;
 
     @Column(nullable = false, columnDefinition = "varchar(50) default 'student'")
-    private String role;
+    private String role = "student";
 
     @OneToMany(mappedBy = "teacher")
     private List<Course> courses;
