@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -74,6 +75,10 @@ public class AccountServlet extends HttpServlet {
             BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.get().getPassword());
             if (result.verified) {
                 out.println("OK");
+                HttpSession session = request.getSession();
+                session.setAttribute("auth",true);
+                session.setAttribute("authUser",user.get());
+                ServletUtils.redirect("/index",request,response);
             } else {
                 out.println("SAI PASS");
             }

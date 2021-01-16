@@ -1,6 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-
 <header class="position-sticky" style="top:0;z-index: 999;">
     <div class="header">
         <div class="position-relative d-block d-md-none ml-2">
@@ -112,7 +111,24 @@
                 </div>
             </div>
         </div>
-        <a class="header-button btn header-login-button d-none d-md-block" href="${pageContext.request.contextPath}/Account/Login" role="button">Log in</a>
-        <a class="header-button btn header-signup-button d-none d-md-block" href="${pageContext.request.contextPath}/Account/Register" role="button">Sign up</a>
+        <c:choose>
+            <c:when test="${auth}">
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Hi, <b>${authUser.username}</b>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Profile</a>
+                        <a class="dropdown-item" href="#">LogOut</a>
+                    </div>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <a class="header-button btn header-login-button d-none d-md-block" href="${pageContext.request.contextPath}/Account/Login" role="button">Log in</a>
+                <a class="header-button btn header-signup-button d-none d-md-block" href="${pageContext.request.contextPath}/Account/Register" role="button">Sign up</a>
+            </c:otherwise>
+        </c:choose>
+
+
     </div>
 </header>
