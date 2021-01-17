@@ -37,8 +37,8 @@ public class HomeServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 boolean auth =(boolean)session.getAttribute("auth");
                 User authUser =(User) session.getAttribute("authUser");
-                System.out.println(auth);
-                System.out.println(authUser);
+                //System.out.println(auth);
+                //System.out.println(authUser);
                 ServletUtils.forward("/views/Home.jsp",request,response);
                 break;
             default:

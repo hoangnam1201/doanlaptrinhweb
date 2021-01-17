@@ -113,13 +113,14 @@
         </div>
         <c:choose>
             <c:when test="${auth}">
+                <form id="frmLogout" method="post" action="${pageContext.request.contextPath}/Account/Logout"></form>
                 <div class="dropdown">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Hi, <b>${authUser.username}</b>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Profile</a>
-                        <a class="dropdown-item" href="#">LogOut</a>
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/Account/Profile">Profile</a>
+                        <a class="dropdown-item" href="javascript:$('#frmLogout').submit();">LogOut</a>
                     </div>
                 </div>
             </c:when>

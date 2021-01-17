@@ -55,7 +55,7 @@ public class AccountServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         try{
             userService.addNew(user);
-            ServletUtils.redirect("/Login",request,response);
+            ServletUtils.redirect("/Account/Login",request,response);
             //out.println("Dang ky thanh cong");
         }catch (Exception ex){
             out.println(ex.getMessage());
@@ -74,11 +74,16 @@ public class AccountServlet extends HttpServlet {
         if (user.isPresent()) {
             BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.get().getPassword());
             if (result.verified) {
-                out.println("OK");
+                //out.println("OK");
                 HttpSession session = request.getSession();
                 session.setAttribute("auth",true);
                 session.setAttribute("authUser",user.get());
-                ServletUtils.redirect("/index",request,response);
+                String url =(String)session.getAttribute("retUrl");
+                if(url ==null)
+                {
+                    url ="/index";
+                }
+                ServletUtils.redirect(url,request,response);
             } else {
                 out.println("SAI PASS");
             }
@@ -88,7 +93,12 @@ public class AccountServlet extends HttpServlet {
     }
 
     private void postLogout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        HttpSession session = request.getSession();
+        session.setAttribute("auth",false);
+        session.setAttribute("authUser", new User());
+        String url =request.getHeader("referer");
+        if(url==null) url ="/index";
+        ServletUtils.redirect(url,request,response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
