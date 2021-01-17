@@ -17,7 +17,7 @@
                 return;
             }
 
-            $.getJSON('${pageContext.request.contextPath}/Account/IsAvailable?user=' + username, function(data) {
+            $.getJSON('${pageContext.request.contextPath}/account/isAvailable?user=' + username, function(data) {
                 if (data === true) {
                     $('#frmRegister').off('submit').submit();
                 } else {

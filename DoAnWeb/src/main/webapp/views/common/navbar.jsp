@@ -11,12 +11,11 @@
             <div class="drawer">
                 <nav class="sidebar--mobile">
                     <div class="sidebar--mobile-profile">
-
                     </div>
                 </nav>
             </div>
         </div>
-        <a class="flex-shrink-0" href="/">
+        <a class="flex-shrink-0" href="${pageContext.request.contextPath}/">
             <img alt="logo" width="100" src="https://www.udemy.com/staticx/udemy/images/v6/logo-coral.svg">
         </a>
         <nav class="header-dropdown-wrapper d-none d-md-flex">
@@ -27,7 +26,7 @@
                 <ul class="list-unstyled m-0">
                     <c:forEach items="${requestScope.categoryList}" var="cat">
                         <li>
-                            <a href="/courses/${cat.slug}"
+                            <a href="${pageContext.request.contextPath}/courses/${cat.slug}"
                                class="primary-category-item category-item text-inherit text-decoration-none">
                                 <div class="category-content">
                                         ${cat.name}
@@ -37,7 +36,7 @@
                             <div class="header-dropdown-menu sub-category">
                                 <ul class="list-unstyled m-0">
                                     <li>
-                                        <a href="/courses/${cat.slug}"
+                                        <a href="${pageContext.request.contextPath}/courses/${cat.slug}"
                                            class="category-item text-inherit text-decoration-none">
                                             <div class="category-content">
                                                 All ${cat.name}
@@ -46,7 +45,7 @@
                                     </li>
                                     <c:forEach items="${cat.children}" var="subCat">
                                         <li>
-                                            <a href="/courses/${subCat.slug}"
+                                            <a href="${pageContext.request.contextPath}/courses/${cat.slug}/${subCat.slug}"
                                                class="category-item text-inherit text-decoration-none">
                                                 <div class="category-content">
                                                         ${subCat.name}
@@ -128,7 +127,5 @@
                 <a class="header-button btn header-signup-button d-none d-md-block" href="${pageContext.request.contextPath}/Account/Register" role="button">Sign up</a>
             </c:otherwise>
         </c:choose>
-
-
     </div>
 </header>

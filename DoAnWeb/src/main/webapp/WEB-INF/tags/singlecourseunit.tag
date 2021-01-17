@@ -3,7 +3,7 @@
 <%@attribute name="course" required="true" type="com.udemy.model.Course" %>
 
 <a href="${pageContext.request.contextPath}/course/${course.slug}"
-   class="bg-grey border rounded a-unstyled single-course--container flex-column flex-sm-row">
+   class="a-unstyled single-course--container flex-column flex-sm-row">
     <div>
         <img alt="" src="<c:url value="/static/images/${course.image}" />" class="mw-100 h-auto" width="500" height="250">
     </div>
