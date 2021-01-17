@@ -20,6 +20,23 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Category getCategoryBySlugFromList(String catSlug, String parentCatSlug, List<Category> categoryList) {
+        if (catSlug.isEmpty())
+            return null;
+        if (parentCatSlug.isEmpty()) {
+            return categoryList.stream().filter(c -> c.getSlug().equals(catSlug)).findAny().orElse(null);
+        } else {
+            Category parent = categoryList.stream().filter(c -> c.getSlug().equals(parentCatSlug)).findFirst().orElse(null);
+            if (parent == null)
+                return null;
+            else {
+                return parent.getChildren().stream().filter(c -> c.getSlug().equals(catSlug)).findFirst().orElse(null);
+            }
+        }
+    }
+
+
+    @Override
     public void delete(Long id) {
 
     }

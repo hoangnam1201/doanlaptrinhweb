@@ -35,7 +35,12 @@ public class CategoryDAOImpl implements CategoryDAO {
 
     @Override
     public void addNew(Category category) {
-
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.persist(category);
+        } finally {
+            em.close();
+        }
     }
 
     @Override

@@ -10,6 +10,8 @@ public interface CategoryService {
 
     List<Category> getMostEnrolledCategoriesLastWeek(int amount);
 
+    Category getCategoryBySlugFromList(String catSlug, String parentCatSlug, List<Category> categoryList);
+
     void delete(Long id);
 
     void addNew(Category category);

@@ -21,12 +21,11 @@ public class User implements Serializable {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 22)
     private String username;
 
     @Column(nullable = false)
     private String password;
-
 
     @Column(nullable = false, columnDefinition = "varchar(50) default 'student'")
     private String role = "student";
@@ -79,7 +78,6 @@ public class User implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-
 
     public String getRole() {
         return role;
