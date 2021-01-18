@@ -19,7 +19,7 @@
             <img alt="logo" width="100" src="https://www.udemy.com/staticx/udemy/images/v6/logo-coral.svg">
         </a>
         <nav class="header-dropdown-wrapper d-none d-md-flex">
-            <button class="header-dropdown-button">
+            <button id="category-button" class="header-dropdown-button btn">
                 Categories
             </button>
             <div class="header-dropdown-menu">
@@ -60,41 +60,13 @@
                 </ul>
             </div>
         </nav>
-        <div class="flex-fill header-search rounded-pill d-none d-md-block">
-            <form class="h-100 d-flex align-items-center">
-                <button class="ml-2 btn outline-none">
+        <div class="flex-fill header-search d-none d-md-block">
+            <form class="h-100 d-flex align-items-center border rounded">
+                <input placeholder="Search for anything" type="text" class="pl-3 header-search-input flex-fill pr-3">
+                <button class="ml-2 h-100 btn rounded-0 outline-none bg-active text-white">
                     <i class="fas fa-search"></i>
                 </button>
-                <input placeholder="Search for anything" type="text" class="header-search-input flex-fill pr-3">
             </form>
-        </div>
-        <div class="header-dropdown-wrapper d-none d-xl-flex">
-            <a href="#" class="header-dropdown-button text-decoration-none">
-                Udemy for business
-            </a>
-            <div class="header-dropdown-menu right">
-                <div class="px-3 py-2">
-                    <div class="header-dropdown-menu-heading">
-                        Get your team access to over 5,000 top Udemy courses, anytime, anywhere.
-                    </div>
-                    <a href="#" class="btn btn-info btn-block mt-2 font-weight-bold text-white">Try Udemy for
-                        Business
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="header-dropdown-wrapper d-none d-lg-flex">
-            <a href="#" class="header-dropdown-button text-decoration-none">
-                Teach on Udemy
-            </a>
-            <div class="header-dropdown-menu right">
-                <div class="px-3 py-2">
-                    <div class="header-dropdown-menu-heading">
-                        Turn what you know into an opportunity and reach millions around the world.
-                    </div>
-                    <a href="#" class="btn btn-info btn-block mt-2 font-weight-bold text-white">Learn more</a>
-                </div>
-            </div>
         </div>
         <div class="header-dropdown-wrapper">
             <button class="header-dropdown-button">
@@ -112,20 +84,23 @@
         </div>
         <c:choose>
             <c:when test="${auth}">
-                <form id="frmLogout" method="post" action="${pageContext.request.contextPath}/Account/Logout"></form>
+                <form id="frmLogout" method="post" action="${pageContext.request.contextPath}/account/logout"></form>
                 <div class="dropdown">
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Hi, <b>${authUser.username}</b>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="${pageContext.request.contextPath}/Account/Profile">Profile</a>
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/account/profile">Profile</a>
                         <a class="dropdown-item" href="javascript:$('#frmLogout').submit();">LogOut</a>
                     </div>
                 </div>
             </c:when>
             <c:otherwise>
-                <a class="header-button btn header-login-button d-none d-md-block" href="${pageContext.request.contextPath}/Account/Login" role="button">Log in</a>
-                <a class="header-button btn header-signup-button d-none d-md-block" href="${pageContext.request.contextPath}/Account/Register" role="button">Sign up</a>
+                <a class="header-button btn header-login-button d-none d-md-block"
+                   href="${pageContext.request.contextPath}/account/login" role="button">Log in</a>
+                <a class="header-button btn header-signup-button d-none d-md-block"
+                   href="${pageContext.request.contextPath}/account/register" role="button">Sign up</a>
             </c:otherwise>
         </c:choose>
     </div>

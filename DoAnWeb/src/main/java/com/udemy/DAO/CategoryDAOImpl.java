@@ -17,7 +17,7 @@ public class CategoryDAOImpl implements CategoryDAO {
     @Override
     public List<Category> getAllParentAndSub() {
         EntityManager em = emf.createEntityManager();
-        String queryString = "select c from Category c join fetch c.children where c.parent=null";
+        String queryString = "select distinct c from Category c left join fetch c.children where c.parent=null";
         List<Category> list = em.createQuery(queryString, Category.class).getResultList();
         em.close();
         return list;

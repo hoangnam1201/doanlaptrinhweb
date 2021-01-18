@@ -8,6 +8,12 @@
         <url-pattern>/static/*</url-pattern>
     </servlet-mapping>
 
+    <error-page>
+        <error-code>404</error-code>
+        <location>/views/Error404.jsp</location>
+    </error-page>
+
+
     <filter-mapping>
         <filter-name>SessionInitFilter</filter-name>
         <url-pattern>/*</url-pattern>
@@ -21,10 +27,6 @@
         <filter-name>UrlRewriteFilter</filter-name>
         <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
     </filter>
-
-    <welcome-file-list>
-        <welcome-file>/</welcome-file>
-    </welcome-file-list>
 
     <filter-mapping>
         <filter-name>CategoryFilter</filter-name>

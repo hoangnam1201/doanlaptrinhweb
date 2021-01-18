@@ -11,7 +11,7 @@
         </a>
         <div class="card-body py-2 px-3 border-top">
             <div class="mb-1">
-                <a href="<c:url value="/courses/${course.category.slug}"/>"
+                <a href="<c:url value="/courses/${course.category.parent.slug}/${course.category.slug}"/>"
                    class="course-card--category">${course.category.name}</a>
             </div>
             <div>
@@ -20,23 +20,18 @@
             </div>
             <div>
                 <small class="text-muted">by
-                    <a href="${course.teacher.username}}">${course.teacher.username}</a>
+                    <a href="${pageContext.request.contextPath}/account/${course.teacher.username}}">${course.teacher.username}</a>
                 </small>
             </div>
-            <div class="mt-1 d-flex align-items-center">
-                                        <span class="rating">
-                                            <span class="font-weight-bold">${course.avgRating}</span>
-                                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                                class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                                class="fas fa-star-half-alt"></i>
-                                        </span>
-                <small>(${course.ratingCount})</small>
-            </div>
-            <div class="mt-1">
-                <small class="d-block">
-                    ${course.studentCount} students
-                </small>
-            </div>
+            <ul class="list-dot p-0">
+                <li><span class="rating">
+                                <span class="font-weight-bold">${course.avgRating}</span>
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                        class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span><small>(${course.ratingCount}) </small>
+                </li>
+                <li><small>${course.studentCount} students </small></li>
+                <li><small>All levels</small></li>
+            </ul>
             <div class="mt-3 d-flex align-items-center">
                 <p class="price">$${course.price}</p>
             </div>

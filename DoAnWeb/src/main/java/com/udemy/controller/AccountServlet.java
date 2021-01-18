@@ -16,22 +16,22 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Optional;
 
-@WebServlet(name = "AccountServlet", urlPatterns = "/Account/*")
+@WebServlet(name = "AccountServlet", urlPatterns = "/account/*")
 public class AccountServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getPathInfo();
         switch (path) {
-            case "/Register":
+            case "/register":
                 postRegister(request, response);
                 break;
-            case "/Login":
+            case "/login":
                 postLogin(request, response);
                 break;
-            case "/Logout":
+            case "/logout":
                 postLogout(request, response);
                 break;
             default:
-                ServletUtils.redirect("/NotFound", request, response);
+                ServletUtils.forwardErrorPage("404", response);
                 break;
         }
     }
@@ -40,24 +40,22 @@ public class AccountServlet extends HttpServlet {
         String password = request.getParameter("password");
         String bcryptHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
         String email = request.getParameter("email");
-        String username =request.getParameter("username");
-        String role ="student";
+        String username = request.getParameter("username");
+        String name = request.getParameter("name");
 
         UserServiceImpl userService = new UserServiceImpl();
 
         User user = new User();
         user.setEmail(email);
         user.setUsername(username);
-        user.setRole(role);
+        user.setName(name);
         user.setPassword(bcryptHashString);
 
-
         PrintWriter out = response.getWriter();
-        try{
+        try {
             userService.addNew(user);
-            ServletUtils.redirect("/Account/Login",request,response);
-            //out.println("Dang ky thanh cong");
-        }catch (Exception ex){
+            ServletUtils.redirect("/account/login", request, response);
+        } catch (Exception ex) {
             out.println(ex.getMessage());
         }
 
@@ -76,47 +74,52 @@ public class AccountServlet extends HttpServlet {
             if (result.verified) {
                 //out.println("OK");
                 HttpSession session = request.getSession();
-                session.setAttribute("auth",true);
-                session.setAttribute("authUser",user.get());
-                String url =(String)session.getAttribute("retUrl");
-                if(url ==null)
-                {
-                    url ="/index";
+                session.setAttribute("auth", true);
+                session.setAttribute("authUser", user.get());
+                String url = (String) session.getAttribute("retUrl");
+                if (url == null) {
+                    url = "/";
                 }
-                ServletUtils.redirect(url,request,response);
+                ServletUtils.redirect(url, request, response);
             } else {
-                out.println("SAI PASS");
+                request.setAttribute("hasError", true);
+                request.setAttribute("errorMessage", "Wrong password");
+                ServletUtils.forward("/views/Login.jsp", request, response);
+                return;
             }
         } else {
-            out.println("Khong co user");
+            request.setAttribute("hasError", true);
+            request.setAttribute("errorMessage", "User not found!");
+            ServletUtils.forward("/views/Login.jsp", request, response);
+            return;
         }
     }
 
     private void postLogout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        session.setAttribute("auth",false);
+        session.setAttribute("auth", false);
         session.setAttribute("authUser", new User());
-        String url =request.getHeader("referer");
-        if(url==null) url ="/index";
-        ServletUtils.redirect(url,request,response);
+        String url = request.getHeader("referer");
+        if (url == null) url = "/index";
+        ServletUtils.redirect(url, request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getPathInfo();
         switch (path) {
-            case "/Register":
+            case "/register":
                 ServletUtils.forward("/views/AccountRegister.jsp", request, response);
                 break;
-            case "/Login":
+            case "/login":
                 request.setAttribute("hasError", false);
                 ServletUtils.forward("/views/Login.jsp", request, response);
                 break;
-            case "/Profile":
+            case "/profile":
                 ServletUtils.forward("/views/Profile.jsp", request, response);
                 break;
             case "/IsAvailable":
                 String username = request.getParameter("user");
-                UserServiceImpl userService =new UserServiceImpl();
+                UserServiceImpl userService = new UserServiceImpl();
                 Optional<User> user = userService.findByUsername(username);
                 PrintWriter out = response.getWriter();
                 response.setContentType("application/json");
@@ -125,7 +128,7 @@ public class AccountServlet extends HttpServlet {
                 out.flush();
                 break;
             default:
-                ServletUtils.redirect("/NotFound", request, response);
+                ServletUtils.forwardErrorPage("404", response);
                 break;
         }
     }
