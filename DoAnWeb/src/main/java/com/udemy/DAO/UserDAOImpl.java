@@ -34,8 +34,6 @@ public class UserDAOImpl implements UserDAO {
         } catch (Exception ex) {
             ex.printStackTrace();
             return Optional.empty();
-        } finally {
-            entityManager.close();
         }
     }
 }

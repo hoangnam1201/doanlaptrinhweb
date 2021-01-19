@@ -18,10 +18,10 @@ public class AuthenticationFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest)req;
         HttpSession session = request.getSession();
         boolean auth = (boolean) session.getAttribute("auth");
-        if(!auth){
+        if(auth==false){
             System.out.println(request.getRequestURI());
             session.setAttribute("retUrl",request.getRequestURI());
-            ServletUtils.redirect("/account/login",request,(HttpServletResponse) resp);
+            ServletUtils.redirect("/Account/Login",request,(HttpServletResponse) resp);
             return;
         }
         chain.doFilter(req, resp);

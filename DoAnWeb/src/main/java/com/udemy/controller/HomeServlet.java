@@ -27,19 +27,21 @@ public class HomeServlet extends HttpServlet {
 
         request.setAttribute("featuredCourses", featuredCourseList);
 
-        String path = request.getServletPath();
-        if (path == null) {
-            path = "/";
+        String path =request.getPathInfo();
+        if(path == null || path.equals("/")){
+            path = "/index";
         }
-        switch (path) {
-            case "/":
+        switch (path)
+        {
+            case "/index":
                 HttpSession session = request.getSession();
-                boolean auth = (boolean) session.getAttribute("auth");
-                User authUser = (User) session.getAttribute("authUser");
-                ServletUtils.forward("/views/Home.jsp", request, response);
+                boolean auth =(boolean)session.getAttribute("auth");
+                User authUser =(User) session.getAttribute("authUser");
+                //System.out.println(auth);
+                //System.out.println(authUser);
+                ServletUtils.forward("/views/Home.jsp",request,response);
                 break;
             default:
-                ServletUtils.forwardErrorPage("404", response);
                 break;
         }
     }

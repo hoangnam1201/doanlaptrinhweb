@@ -18,19 +18,16 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 35)
-    private String name;
-
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true, length = 15)
+    @Column(nullable = false, unique = true, length = 22)
     private String username;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, length = 15)
+    @Column(nullable = false, columnDefinition = "varchar(50) default 'student'")
     private String role = "student";
 
     @OneToMany(mappedBy = "teacher")
@@ -41,14 +38,6 @@ public class User implements Serializable {
 
     @UpdateTimestamp
     private Date updatedAt;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public List<Course> getCourses() {
         return courses;
