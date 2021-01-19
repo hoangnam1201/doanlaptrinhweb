@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="<c:url value="/static/css/bootstrap.min.css" />">
     <link rel="stylesheet" href="<c:url value="/static/css/style.css" />">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" type="text/css" href="<c:url value="/static/css/slick.css" />"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/static/css/slick-theme.css" />"/>
     <title>Khóa Học Trực Tuyến</title>

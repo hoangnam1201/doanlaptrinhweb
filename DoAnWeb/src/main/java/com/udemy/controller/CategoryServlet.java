@@ -1,22 +1,16 @@
 package com.udemy.controller;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.udemy.model.Category;
-import com.udemy.model.User;
-import com.udemy.service.CategoryService;
+import com.udemy.model.Course;
 import com.udemy.service.CategoryServiceImpl;
-import com.udemy.service.UserServiceImpl;
+import com.udemy.service.CourseServiceImpl;
 import com.udemy.util.ServletUtils;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,22 +20,25 @@ public class CategoryServlet extends HttpServlet {
 
     }
 
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CategoryServiceImpl categoryService = new CategoryServiceImpl();
-         String catSlug = Optional.ofNullable(request.getParameter("catSlug")).orElse("");
+        CourseServiceImpl courseService = new CourseServiceImpl();
+
+        String catSlug = Optional.ofNullable(request.getParameter("catSlug")).orElse("");
         String parentCatSlug = Optional.ofNullable(request.getParameter("parentCatSlug")).orElse("");
         if (catSlug.isEmpty() && !parentCatSlug.isEmpty()) {
-           catSlug = parentCatSlug;
+            catSlug = parentCatSlug;
             parentCatSlug = "";
         }
-       List<Category> categoryList = (List<Category>) request.getAttribute("categoryList");
-      Category category = categoryService.getCategoryBySlugFromList(catSlug, parentCatSlug, categoryList);
+        List<Category> categoryList = (List<Category>) request.getAttribute("categoryList");
+        Category category = categoryService.getCategoryBySlugFromList(catSlug, parentCatSlug, categoryList);
         if (category == null) {
-            ServletUtils.redirect("/", request, response);
-            return;
+            ServletUtils.forward("/views/Error404.jsp", request, response);
+        } else {
+            List<Course> courseList = courseService.getFeaturedCourses(5);
+            request.setAttribute("courseList", courseList);
+            request.setAttribute("category", category);
+            ServletUtils.forward("/views/Category.jsp", request, response);
         }
-       PrintWriter out = response.getWriter();out.println(category.getName());
-
     }
 }

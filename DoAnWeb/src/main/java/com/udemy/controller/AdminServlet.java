@@ -15,41 +15,55 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Optional;
 
-@WebServlet(name = "AdminServlet", urlPatterns = "/Admin/*")
+@WebServlet(name = "AdminServlet", urlPatterns = "/admin/*")
 public class AdminServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getPathInfo();
         switch (path) {
-            case "/Manager":
+            case "/manager":
                 postCategories(request, response);
                 break;
             default:
-                ServletUtils.redirect("/NotFound", request, response);
+                ServletUtils.forwardErrorPage("404", response);
                 break;
         }
     }
+
     private void postCategories(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("name");
         String image = request.getParameter("image");
-        String slug = "";
+        String slug = request.getParameter("slug");
+        String parentId = request.getParameter("parent");
 
         CategoryServiceImpl categoryService = new CategoryServiceImpl();
-        Category category =new Category();
+        Category parentCategory = parentId.isEmpty()
+                ? null
+                : categoryService.getCategoryById(Long.parseLong(parentId));
+
+        Category category = new Category();
         category.setName(name);
         category.setImage(image);
         category.setSlug(slug);
+        category.setParent(parentCategory);
 
-        categoryService.addNew(category);
+        try {
+            categoryService.addNew(category);
+            ServletUtils.redirect("/", request, response);
+        } catch (Exception ex) {
+            PrintWriter out = response.getWriter();
+            out.println(ex.getMessage());
+        }
 
     }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getPathInfo();
         switch (path) {
-            case "/Manager":
-                ServletUtils.forward("/views/addCategories.jsp", request, response);
+            case "/manager":
+                ServletUtils.forward("/views/AddCategories.jsp", request, response);
                 break;
             default:
-                ServletUtils.redirect("/NotFound", request, response);
+                ServletUtils.forwardErrorPage("404", response);
                 break;
         }
     }

@@ -23,16 +23,29 @@
                     <input type="text" class="form-control" id="txtName" name="name">
                 </div>
                 <div class="form-group">
+                    <label for="txtSlug">Slug</label>
+                    <input type="text" class="form-control" id="txtSlug" name="slug">
+                </div>
+                <div class="form-group">
+                    <label for="txtSlug">Parent</label>
+                    <select name="parent" id="parent" class="form-control">
+                        <option selected value="">None</option>
+                        <c:forEach items="${requestScope.categoryList}" var="category">
+                            <option value="${category.id}">${category.name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="txtImage">Image</label>
                     <input type="text" class="form-control" id="txtImage" name="image">
                 </div>
-            <div class="card-footer">
-                <button type="submit" class="btn btn-outline-success">
-                    <i class="fa fa-check" aria-hidden="true"></i>
-                    ADD
-                </button>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-outline-success">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                        ADD
+                    </button>
+                </div>
             </div>
-        </div>
         </div>
     </form>
 

@@ -12,6 +12,8 @@ public interface CategoryService {
 
     Category getCategoryBySlugFromList(String catSlug, String parentCatSlug, List<Category> categoryList);
 
+    Category getCategoryById(long id);
+
     void delete(Long id);
 
     void addNew(Category category);

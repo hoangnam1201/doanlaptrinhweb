@@ -1,6 +1,5 @@
 package com.udemy.service;
 
-import com.udemy.DAO.CategoryDAO;
 import com.udemy.DAO.CategoryDAOImpl;
 import com.udemy.model.Category;
 
@@ -8,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class CategoryServiceImpl implements CategoryService {
-    private CategoryDAOImpl categoryDAO = new CategoryDAOImpl();
+    private final CategoryDAOImpl categoryDAO = new CategoryDAOImpl();
 
     @Override
     public List<Category> getAllParentAndSub() {
@@ -36,6 +35,11 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    @Override
+    public Category getCategoryById(long id) {
+        return categoryDAO.getCategoryById(id);
+    }
+
 
     @Override
     public void delete(Long id) {
@@ -44,7 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void addNew(Category category) {
-         categoryDAO.addNew(category);
+        categoryDAO.addNew(category);
     }
 
     @Override

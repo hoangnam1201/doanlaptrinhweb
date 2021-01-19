@@ -8,7 +8,7 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class CourseDAOImpl implements CourseDAO {
-    private EntityManagerFactory emf;
+    private final EntityManagerFactory emf;
 
     public CourseDAOImpl() {
         emf = JpaUtil.getJPAFactory();

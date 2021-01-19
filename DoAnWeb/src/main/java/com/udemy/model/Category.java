@@ -18,8 +18,8 @@ public class Category implements Serializable {
     @Column(nullable = false, unique = true, length = 100)
     private String slug;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "parent_id" )
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
     private Category parent;
 
     @OneToMany(mappedBy = "parent", orphanRemoval = true)

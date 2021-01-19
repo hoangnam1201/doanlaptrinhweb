@@ -17,7 +17,7 @@ public class CategoryDAOImpl implements CategoryDAO {
     @Override
     public List<Category> getAllParentAndSub() {
         EntityManager em = emf.createEntityManager();
-        String queryString = "select c from Category c join fetch c.children where c.parent=null";
+        String queryString = "select distinct c from Category c left join fetch c.children where c.parent=null";
         List<Category> list = em.createQuery(queryString, Category.class).getResultList();
         em.close();
         return list;
@@ -29,21 +29,29 @@ public class CategoryDAOImpl implements CategoryDAO {
     }
 
     @Override
+    public Category getCategoryById(long id) {
+        EntityManager em = emf.createEntityManager();
+        Category category = em.find(Category.class, id);
+        em.close();
+        return category;
+    }
+
+    @Override
     public void delete(Long id) {
 
     }
 
     @Override
     public void addNew(Category category) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
+        EntityManager entityManager = emf.createEntityManager();
+        entityManager.getTransaction().begin();
         try {
-            em.persist(category);
+            entityManager.persist(category);
         } catch (Exception ex) {
             throw ex;
         } finally {
-            em.getTransaction().commit();
-            em.close();
+            entityManager.getTransaction().commit();
+            entityManager.close();
         }
     }
 
