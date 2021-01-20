@@ -1,5 +1,6 @@
 package com.udemy.controller;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.udemy.model.Category;
 import com.udemy.model.User;
 import com.udemy.service.CategoryServiceImpl;
@@ -11,8 +12,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Optional;
 
 @WebServlet(name = "AdminServlet", urlPatterns = "/admin/*")
@@ -20,8 +23,20 @@ public class AdminServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getPathInfo();
         switch (path) {
-            case "/manager":
+            case "/addcat":
                 postCategories(request, response);
+                break;
+            case "/deletecat":
+                deleteCategory(request, response);
+                break;
+            case "/editcat":
+                updateCategory(request, response);
+                break;
+            case "/addteacher":
+                postRegisterTeacher(request, response);
+                break;
+            case "/deleteuser":
+                deleteUser(request, response);
                 break;
             default:
                 ServletUtils.forwardErrorPage("404", response);
@@ -48,20 +63,118 @@ public class AdminServlet extends HttpServlet {
 
         try {
             categoryService.addNew(category);
-            ServletUtils.redirect("/", request, response);
+            ServletUtils.redirect("/admin/managercat", request, response);
         } catch (Exception ex) {
             PrintWriter out = response.getWriter();
             out.println(ex.getMessage());
         }
 
     }
+    private void deleteCategory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Long id =Long.parseLong(request.getParameter("id"));
+        CategoryServiceImpl categoryService = new CategoryServiceImpl();
+
+        try {
+            categoryService.delete(id);
+            ServletUtils.redirect("/admin/managercat",request,response);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+
+        }
+    }
+    private void updateCategory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Long id =Long.parseLong(request.getParameter("id"));
+        String parentId = request.getParameter("parent");
+        CategoryServiceImpl categoryService = new CategoryServiceImpl();
+        Category category =categoryService.getCategoryById(id);
+        Category parentCategory = parentId.isEmpty()
+                ? null
+                : categoryService.getCategoryById(Long.parseLong(parentId));
+
+        category.setName(request.getParameter("name"));
+        category.setSlug(request.getParameter("slug"));
+        category.setParent(parentCategory);
+
+        try {
+            categoryService.update(category);
+            ServletUtils.redirect("/admin/managercat",request,response);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+
+        }
+    }
+    private void postRegisterTeacher(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String password = request.getParameter("password");
+        String bcryptHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+        String email = request.getParameter("email");
+        String username = request.getParameter("username");
+        String name = request.getParameter("name");
+
+        String role ="Teacher";
+
+        UserServiceImpl userService = new UserServiceImpl();
+
+        User user = new User();
+        user.setEmail(email);
+        user.setUsername(username);
+        user.setName(name);
+        user.setPassword(bcryptHashString);
+        user.setRole(role);
+
+        PrintWriter out = response.getWriter();
+        try {
+            userService.addNew(user);
+            ServletUtils.redirect("/admin/manageruser", request, response);
+        } catch (Exception ex) {
+            out.println(ex.getMessage());
+        }
+
+    }
+    private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Long id =Long.parseLong(request.getParameter("id"));
+        UserServiceImpl userService = new UserServiceImpl();
+
+        try {
+            userService.delete(id);
+            ServletUtils.redirect("/admin/manageruser",request,response);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+
+        }
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getPathInfo();
         switch (path) {
-            case "/manager":
+            case "/managercat":
+                ServletUtils.forward("/views/Admin.jsp", request, response);
+                break;
+            case "/addcat":
                 ServletUtils.forward("/views/AddCategories.jsp", request, response);
                 break;
+            case "/editcat":
+                Long id =Long.parseLong(request.getParameter("id"));
+                CategoryServiceImpl categoryService =new CategoryServiceImpl();
+                Category category = categoryService.getCategoryById(id);
+                request.setAttribute("category",category);
+                ServletUtils.forward("/views/EditCategories.jsp", request, response);
+                break;
+            case "/manageruser":
+                UserServiceImpl userService =new UserServiceImpl();
+                List<User> userList = userService.getAllUser();
+                request.setAttribute("userList",userList);
+                ServletUtils.forward("/views/AdminUser.jsp", request, response);
+                break;
+            case "/addteacher":
+                ServletUtils.forward("/views/AccountRegister.jsp", request, response);
+                break;
+
             default:
                 ServletUtils.forwardErrorPage("404", response);
                 break;

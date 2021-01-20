@@ -1,74 +1,89 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <jsp:include page="common/head.jsp"/>
-</head>
-<body>
-<jsp:include page="common/navbar.jsp"/>
-<main>
-    <div class="w3-sidebar w3-light-grey w3-bar-block" style="width:25%">
-        <h3 class="w3-bar-item">Dasboard</h3>
-        <a href="#" class="w3-bar-item w3-button">Categories</a>
-        <a href="#" class="w3-bar-item w3-button">Lessons</a>
-        <a href="#" class="w3-bar-item w3-button">Users</a>
-    </div>
-
-    <!-- Page Content -->
-    <div style="margin-left:25%">
-
-        <div class="w3-container w3-teal">
-            <h1>Adminstrator</h1>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="t" %>
+<t:genericpage>
+    <jsp:body>
+        <div class="sidebar-container">
+            <div class="sidebar-logo">
+                Udemy
+            </div>
+            <ul class="sidebar-navigation">
+                <li>
+                    <a href="#">
+                        <i class="fa fa-home" aria-hidden="true"></i> Homepage
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/admin/manager">
+                        <i class="fa fa-book" aria-hidden="true"></i> Categories
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-users" aria-hidden="true"></i> Users
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i> Information
+                    </a>
+                </li>
+            </ul>
         </div>
 
-        <div class="w3-container">
-            <table class="w3-table-all">
-                <thead>
-                <tr class="w3-light-grey w3-hover-red">
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Image</th>
-                    <th>Parent_Id</th>
-                </tr>
-                </thead>
-                <tr class="w3-hover-green">
-                    <td>Jill</td>
-                    <td>Smith</td>
-                    <td>50</td>
-                    <td>1</td>
-                </tr>
-                <tr class="w3-hover-blue">
-                    <td>Eve</td>
-                    <td>Jackson</td>
-                    <td>94</td>
-                    <td>1</td>
-                </tr>
-                <tr class="w3-hover-black">
-                    <td>Adam</td>
-                    <td>Johnson</td>
-                    <td>67</td>
-                    <td>1</td>
-                </tr>
-                <tr class="w3-hover-text-green">
-                    <td>Bo</td>
-                    <td>Nilson</td>
-                    <td>35</td>
-                    <td>1</td>
-                </tr>
-            </table>
-        </div>
-        <div style="margin-top: 10px; margin-left: 15px">
-            <a class="header-button btn header-login-button d-none d-md-block" href="${pageContext.request.contextPath}/Account/Login" role="button">ADD</a>
-            <button type="button" class="btn btn-outline-warning">Update</button>
-            <button type="button" class="btn btn-outline-danger">Delete</button>
-        </div>
+        <div class="content-container">
 
-    </div>
-</main>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+            <div class="container-fluid">
+
+                <a class="btn btn-outline-success mb-2"
+                   href="${pageContext.request.contextPath}/admin/addcat" role="button"><i class="fa fa-plus" aria-hidden="true"></i>ADD</a>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Slug</th>
+                        <th scope="col">Parent</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${requestScope.categoryList}" var="cat">
+
+                        <tr>
+                        <td>${cat.id}</td>
+                        <td>${cat.name}</td>
+                        <td>${cat.image}</td>
+                        <td>${cat.slug}</td>
+                            <td>None</td>
+                        <td><a class="btn btn-sm btn-outline-primary" role="button" href="${pageContext.request.contextPath}/admin/editcat?id=${cat.id}">
+                            <i class="fa fa-pen" aria-hidden="true"></i></a></td>
+                            <td><form method="post" action="${pageContext.request.contextPath}/admin/deletecat?id=${cat.id}"><button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></form></td>
+                         </tr>
+                        <c:forEach items="${cat.children}" var="subcat">
+                            <tr>
+                                <td>${subcat.id}</td>
+                                <td>${subcat.name}</td>
+                                <td>${subcat.image}</td>
+                                <td>${subcat.slug}</td>
+                                <td>${subcat.parent.name}</td>
+                                <td><a class="btn btn-sm btn-outline-primary" role="button" href="${pageContext.request.contextPath}/admin/editcat?id=${subcat.id}">
+                                    <i class="fa fa-pen" aria-hidden="true"></i></a></td>
+                                <td><form method="post" action="${pageContext.request.contextPath}/admin/deletecat?id=${subcat.id}"><button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></form></td>
+                            </tr>
+                        </c:forEach>
+                    </c:forEach>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </jsp:body>
+</t:genericpage>

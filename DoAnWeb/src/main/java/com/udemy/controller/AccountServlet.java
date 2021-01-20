@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Optional;
 
 @WebServlet(name = "AccountServlet", urlPatterns = "/account/*")
@@ -115,17 +116,17 @@ public class AccountServlet extends HttpServlet {
                 ServletUtils.forward("/views/Login.jsp", request, response);
                 break;
             case "/profile":
-                ServletUtils.forward("/views/Profile.jsp", request, response);
-                break;
-            case "/IsAvailable":
-                String username = request.getParameter("user");
+                String username = request.getParameter("username");
                 UserServiceImpl userService = new UserServiceImpl();
                 Optional<User> user = userService.findByUsername(username);
-                PrintWriter out = response.getWriter();
-                response.setContentType("application/json");
-                response.setCharacterEncoding("utf-8");
-                out.print(!user.isPresent());
-                out.flush();
+                if (user.isPresent())
+                {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("auth", true);
+                    session.setAttribute("authUser", user.get());
+                    request.setAttribute("authUser",user.get());
+                }
+                ServletUtils.forward("/views/Profile.jsp", request, response);
                 break;
             default:
                 ServletUtils.forwardErrorPage("404", response);

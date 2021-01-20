@@ -5,6 +5,7 @@ import com.udemy.util.JpaUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.io.Serializable;
 import java.util.List;
 
 public class CategoryDAOImpl implements CategoryDAO {
@@ -38,6 +39,20 @@ public class CategoryDAOImpl implements CategoryDAO {
 
     @Override
     public void delete(Long id) {
+        EntityManager em = emf.createEntityManager();
+        Category category = em.find(Category.class, id);
+        em.getTransaction().begin();
+        try {
+            em.remove(category);
+            em.getTransaction().commit();
+        }catch (Exception ex)
+        {
+            em.getTransaction().rollback();
+            throw  ex;
+        }
+        finally {
+            em.close();
+        }
 
     }
 
@@ -57,6 +72,18 @@ public class CategoryDAOImpl implements CategoryDAO {
 
     @Override
     public void update(Category category) {
-
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        try {
+            em.merge(category);
+            em.getTransaction().commit();
+        }catch (Exception ex)
+        {
+            em.getTransaction().rollback();
+            throw  ex;
+        }
+        finally {
+            em.close();
+        }
     }
 }

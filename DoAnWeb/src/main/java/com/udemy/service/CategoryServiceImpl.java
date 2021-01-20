@@ -1,5 +1,6 @@
 package com.udemy.service;
 
+import com.udemy.DAO.CategoryDAO;
 import com.udemy.DAO.CategoryDAOImpl;
 import com.udemy.model.Category;
 
@@ -43,7 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void delete(Long id) {
-
+        categoryDAO.delete(id);
     }
 
     @Override
@@ -53,6 +54,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void update(Category category) {
-
+        categoryDAO.update(category);
     }
 }
