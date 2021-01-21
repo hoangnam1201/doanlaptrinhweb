@@ -22,13 +22,7 @@ public class ServletUtils {
         }
     }
 
-    public static void forwardErrorPage(String errorCode, HttpServletResponse response) throws IOException {
-        switch (errorCode) {
-            case "404":
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                break;
-            default:
-                break;
-        }
+    public static void forwardErrorPage(HttpServletResponse response) throws IOException {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
     }
 }

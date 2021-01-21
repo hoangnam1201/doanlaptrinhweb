@@ -1,19 +1,22 @@
 package com.udemy.controller;
 
+import com.udemy.model.Category;
 import com.udemy.model.Course;
-import com.udemy.model.User;
+import com.udemy.service.CategoryServiceImpl;
 import com.udemy.service.CourseServiceImpl;
 import com.udemy.util.ServletUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.Optional;
 
 @WebServlet(name = "HomeServlet", urlPatterns = "/")
 public class HomeServlet extends HttpServlet {
@@ -23,9 +26,13 @@ public class HomeServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CourseServiceImpl courseService = new CourseServiceImpl();
-        List<Course> featuredCourseList = courseService.getFeaturedCourses(5);
+        CategoryServiceImpl categoryService = new CategoryServiceImpl();
+
+        List<Course> featuredCourseList = courseService.getFeaturedCourses(25);
+        List<Category> trendingCategoryList = categoryService.getMostEnrolledCategoriesLastWeek(10);
 
         request.setAttribute("featuredCourses", featuredCourseList);
+        request.setAttribute("trendingCategories", trendingCategoryList);
 
         String path = request.getServletPath();
         if (path == null) {
@@ -33,13 +40,27 @@ public class HomeServlet extends HttpServlet {
         }
         switch (path) {
             case "/":
-                HttpSession session = request.getSession();
-                boolean auth = (boolean) session.getAttribute("auth");
-                User authUser = (User) session.getAttribute("authUser");
                 ServletUtils.forward("/views/Home.jsp", request, response);
                 break;
+            case "/get-subcategory":
+                PrintWriter out = response.getWriter();
+                response.setContentType("application/json;charset=UTF-8");
+                String catId = Optional.ofNullable(request.getParameter("catId")).orElse("0");
+                List<Category> categoryList = (List<Category>) request.getAttribute("categoryList");
+                Category category = categoryService.getCategoryByIdFromList(Long.parseLong(catId), categoryList);
+                if (category == null) {
+                    response.setStatus(404);
+                    out.println("Category not found!");
+                } else {
+                    response.setStatus(200);
+                    ObjectWriter objectMapper = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                    String json = objectMapper.writeValueAsString(category.getChildren());
+                    out.write(json);
+                }
+                out.flush();
+                break;
             default:
-                ServletUtils.forwardErrorPage("404", response);
+                ServletUtils.forwardErrorPage(response);
                 break;
         }
     }

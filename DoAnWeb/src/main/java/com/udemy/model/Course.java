@@ -15,8 +15,11 @@ public class Course implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 50, nullable = false, unique = true)
     private String name;
+    private String level;
     private String image;
+    @Column(length = 150)
     private String shortDescription;
     @Lob
     private String description;
@@ -36,20 +39,12 @@ public class Course implements Serializable {
     private double price;
     @Column(columnDefinition = "varchar(50) default 'English'")
     private String language;
-    @Column(nullable = false, unique = true, length = 100)
-    private String slug;
+    @Column(nullable = false)
+    private boolean isComplete = false;
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp
     private Date updatedAt;
-
-    public Set<Enrollment> getEnrollments() {
-        return enrollments;
-    }
-
-    public void setEnrollments(Set<Enrollment> enrollments) {
-        this.enrollments = enrollments;
-    }
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)
@@ -59,14 +54,39 @@ public class Course implements Serializable {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "course_id")
+    @OrderBy("rowOrder asc")
     private List<Section> sections = new ArrayList<Section>();
 
     @OneToMany(mappedBy = "course")
     private Set<Enrollment> enrollments = new HashSet<Enrollment>();
 
     public Course() {
+    }
+
+    public boolean isComplete() {
+        return isComplete;
+    }
+
+    public void setComplete(boolean complete) {
+        isComplete = complete;
+    }
+
+    public Set<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(Set<Enrollment> enrollments) {
+        this.enrollments = enrollments;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getImage() {
@@ -179,14 +199,6 @@ public class Course implements Serializable {
 
     public void setLanguage(String language) {
         this.language = language;
-    }
-
-    public String getSlug() {
-        return slug;
-    }
-
-    public void setSlug(String slug) {
-        this.slug = slug;
     }
 
     public Date getCreatedAt() {

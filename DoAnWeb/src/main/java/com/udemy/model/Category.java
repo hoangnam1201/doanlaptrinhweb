@@ -1,5 +1,8 @@
 package com.udemy.model;
 
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,11 +23,12 @@ public class Category implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
+    @JsonIgnore
     private Category parent;
 
-    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    @OneToMany(mappedBy = "parent", orphanRemoval = true, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Category> children = new ArrayList<Category>();
-
     private String image;
 
     public Long getId() {

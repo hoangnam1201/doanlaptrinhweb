@@ -1,4 +1,4 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="t" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 
@@ -44,36 +44,12 @@
                         Trending Categories
                     </div>
                     <div class="category-carousel">
-                        <a class="d-block border-active rounded font-weight-bold text-center p-2" href="/">
-                            1
-                        </a>
-                        <a class="d-block border-active rounded font-weight-bold text-center p-2" href="/">
-                            2
-                        </a>
-                        <a class="d-block border-active rounded font-weight-bold text-center p-2" href="/">
-                            3
-                        </a>
-                        <a class="d-block border-active rounded font-weight-bold text-center p-2" href="/">
-                            4
-                        </a>
-                        <a class="d-block border-active rounded font-weight-bold text-center p-2" href="/">
-                            5
-                        </a>
-                        <a class="d-block border-active rounded font-weight-bold text-center p-2" href="/">
-                            6
-                        </a>
-                        <a class="d-block border-active rounded font-weight-bold text-center p-2" href="/">
-                            7
-                        </a>
-                        <a class="d-block border-active rounded font-weight-bold text-center p-2" href="/">
-                            8
-                        </a>
-                        <a class="d-block border-active rounded font-weight-bold text-center p-2" href="/">
-                            9
-                        </a>
-                        <a class="d-block border-active rounded font-weight-bold text-center p-2" href="/">
-                            10
-                        </a>
+                        <c:forEach items="${requestScope.trendingCategories}" var="category">
+                            <a class="d-block border-active rounded font-weight-bold text-center p-2"
+                               href="<c:url value="${category.parent.slug}/${category.slug}" />">
+                                    ${category.name}
+                            </a>
+                        </c:forEach>
                     </div>
                 </div>
             </section>

@@ -67,3 +67,63 @@ $(document).ready(function () {
         ]
     })
 });
+
+var quillOptions = {
+    theme: 'snow',
+    modules: {
+        toolbar: [
+            ['bold', 'italic', 'underline'],
+            [{'list': 'ordered'}, {'list': 'bullet'}]
+        ]
+    }
+};
+
+var editor = new Quill("#quill", quillOptions);
+
+$("#create-course #category").change(e => {
+    let catId = e.target.value;
+    e.target.disabled = true;
+    $.ajax({
+        url: myContextPath + '/get-subcategory?catId=' + catId,
+        type: 'GET',
+        dataType: 'json',
+        error: (data) => {
+            alert(data.responseText);
+        },
+        success: function (data) {
+            let subcategorySelect = $("#create-course #subcategory")
+            subcategorySelect.html("");
+            subcategorySelect.append('<option selected disabled value="">-- Subcategory --</option>');
+            data.forEach(subCategory => {
+                subcategorySelect.append(`<option value="${subCategory.id}">${subCategory.name}</option>`)
+            })
+            const subcategoryId = $("#create-course #category").attr("subcategory-id") || "";
+            subcategorySelect.val(subcategoryId);
+        },
+        complete: () => {
+            e.target.disabled = false;
+        }
+    })
+})
+
+$("#create-course").submit(e => {
+    let description = $("#create-course #description");
+    description.val(JSON.stringify(editor.getContents()));
+})
+
+var quills = [];
+initEditors.forEach(editor => {
+    const quill = new Quill(editor.selector, quillOptions);
+    quill.setContents(editor?.value);
+    quills.push({selector: editor?.selector, obj: quill})
+})
+
+console.log(quills)
+
+$("form.lesson").submit(e => {
+    const formId = e.target.id;
+    const description = $(`#${formId} [name=description]`)
+    const quillId = $(`#${formId} .ql-container`).attr('id')
+    const quill = quills.find(q => q.selector === `#${quillId}`)
+    description.val(JSON.stringify(quill?.obj.getContents()))
+})

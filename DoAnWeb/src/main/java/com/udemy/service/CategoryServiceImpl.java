@@ -17,7 +17,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> getMostEnrolledCategoriesLastWeek(int amount) {
-        return null;
+        return categoryDAO.getMostEnrolledCategoriesLastWeek(amount);
     }
 
     @Override
@@ -39,6 +39,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category getCategoryById(long id) {
         return categoryDAO.getCategoryById(id);
+    }
+
+    @Override
+    public Category getCategoryByIdFromList(long id, List<Category> categoryList) {
+        return categoryList.stream().filter(c -> c.getId() == id).findAny().orElse(null);
     }
 
 

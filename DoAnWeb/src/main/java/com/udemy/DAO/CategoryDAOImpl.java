@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class CategoryDAOImpl implements CategoryDAO {
-    private EntityManagerFactory emf;
+    private final EntityManagerFactory emf;
 
     public CategoryDAOImpl() {
         emf = JpaUtil.getJPAFactory();
@@ -26,7 +26,16 @@ public class CategoryDAOImpl implements CategoryDAO {
 
     @Override
     public List<Category> getMostEnrolledCategoriesLastWeek(int amount) {
-        return null;
+        EntityManager em = emf.createEntityManager();
+        String queryString = "select c " +
+                "from Category c left join Course course on course.category.id = c.id " +
+                "left join course.enrollments " +
+                "where c.parent!=null " +
+                "group by c.id " +
+                "order by count(course.enrollments.size) desc";
+        List<Category> list = em.createQuery(queryString, Category.class).setMaxResults(amount).getResultList();
+        em.close();
+        return list;
     }
 
     @Override
@@ -45,12 +54,10 @@ public class CategoryDAOImpl implements CategoryDAO {
         try {
             em.remove(category);
             em.getTransaction().commit();
-        }catch (Exception ex)
-        {
+        } catch (Exception ex) {
             em.getTransaction().rollback();
-            throw  ex;
-        }
-        finally {
+            throw ex;
+        } finally {
             em.close();
         }
 
@@ -77,12 +84,10 @@ public class CategoryDAOImpl implements CategoryDAO {
         try {
             em.merge(category);
             em.getTransaction().commit();
-        }catch (Exception ex)
-        {
+        } catch (Exception ex) {
             em.getTransaction().rollback();
-            throw  ex;
-        }
-        finally {
+            throw ex;
+        } finally {
             em.close();
         }
     }

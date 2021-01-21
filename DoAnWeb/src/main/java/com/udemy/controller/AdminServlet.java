@@ -39,7 +39,7 @@ public class AdminServlet extends HttpServlet {
                 deleteUser(request, response);
                 break;
             default:
-                ServletUtils.forwardErrorPage("404", response);
+                ServletUtils.forwardErrorPage(response);
                 break;
         }
     }
@@ -150,7 +150,7 @@ public class AdminServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String path = request.getPathInfo();
+        String path = Optional.ofNullable(request.getPathInfo()).orElse("");
         switch (path) {
             case "/managercat":
                 ServletUtils.forward("/views/Admin.jsp", request, response);
@@ -176,7 +176,7 @@ public class AdminServlet extends HttpServlet {
                 break;
 
             default:
-                ServletUtils.forwardErrorPage("404", response);
+                ServletUtils.forwardErrorPage(response);
                 break;
         }
     }

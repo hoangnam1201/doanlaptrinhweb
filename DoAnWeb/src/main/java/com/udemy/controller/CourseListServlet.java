@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-@WebServlet(name = "CategoryServlet", urlPatterns = "/courses/*")
-public class CategoryServlet extends HttpServlet {
+@WebServlet(name = "CourseListServlet", urlPatterns = "/courses/*")
+public class CourseListServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }

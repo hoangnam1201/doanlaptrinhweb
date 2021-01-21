@@ -8,13 +8,11 @@
             <script>
                 $('#frmRegister').on('submit', function (e) {
                     e.preventDefault();
-
                     const username = $('#txtUsername').val();
                     if (username.length === 0) {
                         alert('Invalid username.');
                         return;
                     }
-
                     $.getJSON('${pageContext.request.contextPath}/account/isAvailable?user=' + username, function (data) {
                         if (data === true) {
                             $('#frmRegister').off('submit').submit();

@@ -1,4 +1,6 @@
-package com.udemy.filter;
+package com.udemy.controller;
+
+import com.udemy.util.ServletUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,13 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "CourseServlet")
-public class CourseServlet extends HttpServlet {
+@WebServlet(name = "CartServlet", urlPatterns = "/cart")
+public class CartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        ServletUtils.forward("/views/Cart.jsp", request, response);
     }
 }

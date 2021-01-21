@@ -4,9 +4,9 @@
 
 <div class="a-unstyled course-card--container">
     <div>
-        <a href="<c:url value="/course/${course.slug}"/>">
+        <a href="<c:url value="/course/${course.id}"/>">
             <img class="course-card--image"
-                 src="<c:url value="/static/images/${course.image}" />"
+                 src="<c:url value="/images/${course.image}" />"
                  alt="Card image cap">
         </a>
         <div class="card-body py-2 px-3 border-top">
@@ -15,12 +15,12 @@
                    class="course-card--category">${course.category.name}</a>
             </div>
             <div>
-                <a href="<c:url value="/course/${course.slug}"/>"
+                <a href="<c:url value="/course/${course.id}"/>"
                    class="a-unstyled course-card--title">${course.name}</a>
             </div>
             <div>
                 <small class="text-muted">by
-                    <a href="${pageContext.request.contextPath}/account/${course.teacher.username}}">${course.teacher.username}</a>
+                    <span class="active-color">${course.teacher.name}</span>
                 </small>
             </div>
             <ul class="list-dot p-0">
@@ -30,7 +30,7 @@
                         class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span><small>(${course.ratingCount}) </small>
                 </li>
                 <li><small>${course.studentCount} students </small></li>
-                <li><small>All levels</small></li>
+                <li><small>${course.level}</small></li>
             </ul>
             <div class="mt-3 d-flex align-items-center">
                 <p class="price">$${course.price}</p>

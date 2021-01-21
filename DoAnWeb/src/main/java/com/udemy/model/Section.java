@@ -18,12 +18,11 @@ public class Section implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
-    @Column(unique = true)
     private int rowOrder;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "section_id")
+    @OrderBy("rowOrder asc")
     private List<Lesson> lessons = new ArrayList<Lesson>();
 
     @CreationTimestamp

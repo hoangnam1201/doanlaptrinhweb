@@ -25,8 +25,6 @@ public class Lesson implements Serializable {
 
     @Lob
     private String videoUrl;
-
-    @Column(unique = true)
     private int rowOrder;
 
     @OneToMany(mappedBy = "lesson")

@@ -1,6 +1,7 @@
 package com.udemy.DAO;
 
 import com.udemy.model.Category;
+import com.udemy.model.Course;
 
 import java.util.List;
 
@@ -11,9 +12,9 @@ public interface CategoryDAO {
 
     Category getCategoryById(long id);
 
-    void delete(Long id);
-
     void addNew(Category category);
+
+    void delete(Long id);
 
     void update(Category category);
 }

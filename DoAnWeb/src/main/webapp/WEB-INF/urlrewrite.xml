@@ -15,4 +15,9 @@
         <from>/courses/(.*)</from>
         <to>/courses?catSlug=$1</to>
     </rule>
+    <rule>
+        <name>ManageCourse</name>
+        <from>/teacher/manage/(.*)/(.*)</from>
+        <to>/teacher/manage?id=$1&amp;section=$2</to>
+    </rule>
 </urlrewrite>
