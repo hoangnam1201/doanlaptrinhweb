@@ -2,10 +2,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="t" %>
 <style>
-    body{
+    body {
         background-color: #6f42c1;
     }
-    .card{
+
+    .card {
         display: flex;
         justify-content: center;
     }
@@ -40,23 +41,23 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="txtUsername">Username</label>
-                            <input type="text" class="form-control" id="txtUsername" name="username">
+                            <input required type="text" class="form-control" id="txtUsername" name="username">
                         </div>
                         <div class="form-group">
                             <label for="txtPassword">Password</label>
-                            <input type="password" class="form-control" id="txtPassword" name="password">
+                            <input required type="password" class="form-control" id="txtPassword" name="password">
                         </div>
                         <div class="form-group">
                             <label for="txtConfirm">Confirm password</label>
-                            <input type="password" class="form-control" id="txtConfirm" name="confirm">
+                            <input required type="password" class="form-control" id="txtConfirm" name="confirm">
                         </div>
                         <div class="form-group">
                             <label for="txtName">Name</label>
-                            <input type="text" class="form-control" id="txtName" name="name">
+                            <input required type="text" class="form-control" id="txtName" name="name">
                         </div>
                         <div class="form-group">
                             <label for="txtEmail">Email</label>
-                            <input type="text" class="form-control" id="txtEmail" name="email">
+                            <input required type="text" class="form-control" id="txtEmail" name="email">
                         </div>
                     </div>
                     <div class="card-footer">

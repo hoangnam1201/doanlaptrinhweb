@@ -15,11 +15,11 @@ public class Course implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 50, nullable = false, unique = true)
+    @Column(length = 65, nullable = false, unique = true)
     private String name;
     private String level;
     private String image;
-    @Column(length = 150)
+    @Column(length = 180)
     private String shortDescription;
     @Lob
     private String description;

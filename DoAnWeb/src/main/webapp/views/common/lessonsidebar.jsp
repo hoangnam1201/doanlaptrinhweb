@@ -9,7 +9,7 @@
     </a>
 </header>
 <c:choose>
-    <c:when test="${requestScope.enrollment}">
+    <c:when test="${requestScope.enrolled}">
         <button data-toggle="modal" data-target="#rating-form"
                 class="d-block d-md-none btn outline-none content-text">
                 ${requestScope.enrollment.rating == 0 ? "Leave a rating":"Edit your rating"}

@@ -2,6 +2,7 @@ package com.udemy.controller;
 
 import com.udemy.model.*;
 import com.udemy.service.CourseServiceImpl;
+import com.udemy.service.UserServiceImpl;
 import com.udemy.util.ServletUtils;
 
 import javax.servlet.ServletException;
@@ -20,6 +21,7 @@ public class CourseServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = Optional.ofNullable(request.getPathInfo()).orElse("");
         CourseServiceImpl courseService = new CourseServiceImpl();
+        UserServiceImpl userService = new UserServiceImpl();
         boolean enrolled = (boolean) request.getAttribute("enrolled");
 
         User user = (User) request.getSession().getAttribute("authUser");
@@ -47,13 +49,24 @@ public class CourseServlet extends HttpServlet {
                     }
                     response.sendError(422);
                     break;
-                case "/get-comment":
+                case "/wishlist":
+                    if (user.getId() == null) {
+                        ServletUtils.redirect("/account/login", request, response);
+                        return;
+                    }
+                    Wishlist wishlist = user.getWishlist().stream()
+                            .filter(_wishlist -> _wishlist.getCourse().getId().equals(courseId)).findAny().orElse(null);
+                    if (wishlist == null) {
+                        userService.addWishlist(user, courseId);
+                    } else {
+                        userService.removeWishlist(user, courseId);
+                    }
+                    ServletUtils.redirect("/course/" + courseId, request, response);
                     break;
                 default:
                     break;
             }
         } catch (Exception e) {
-            System.out.println("asd");
             e.printStackTrace();
             ServletUtils.forwardErrorPage(response);
         }
@@ -61,6 +74,7 @@ public class CourseServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CourseServiceImpl courseService = new CourseServiceImpl();
+        UserServiceImpl userService = new UserServiceImpl();
         HttpSession session = request.getSession();
         boolean learn = Optional.ofNullable(request.getParameter("learn")).isPresent();
         Course course = (Course) request.getAttribute("course");
@@ -96,6 +110,17 @@ public class CourseServlet extends HttpServlet {
                 ServletUtils.forwardErrorPage(response);
             }
         } else {
+            if (user != null) {
+                Wishlist wishlist = user.getWishlist().stream()
+                        .filter(_wishlist -> _wishlist.getCourse().getId().equals(course.getId())).findAny().orElse(null);
+                if (wishlist != null) {
+                    request.setAttribute("wishlist", true);
+                } else {
+                    request.setAttribute("wishlist", false);
+                }
+            } else {
+                request.setAttribute("wishlist", false);
+            }
             List<Course> courseList = courseService
                     .getCourseRecommendations(course, 5);
             request.setAttribute("recommendation", courseList);

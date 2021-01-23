@@ -40,7 +40,7 @@
                         <form method="post">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <input class="form-control form-control-lg border-right-0 border"
+                                    <input required class="form-control form-control-lg border-right-0 border"
                                            placeholder="User name"
                                            type="text" name="username" autofocus>
                                     <span class="input-group-append">
@@ -52,7 +52,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="input-group">
-                                    <input class="form-control form-control-lg border-right-0 border" placeholder="Password"
+                                    <input required class="form-control form-control-lg border-right-0 border" placeholder="Password"
                                            type="password" name="password">
                                     <span class="input-group-append">
                                         <div class="input-group-text bg-white">

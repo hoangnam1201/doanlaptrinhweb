@@ -23,17 +23,11 @@ import java.util.Optional;
 @WebServlet(name = "AccountServlet", urlPatterns = "/account/*")
 public class AccountServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (request.getCharacterEncoding() == null) {
+            request.setCharacterEncoding("UTF-8");
+        }
+
         String path = Optional.ofNullable(request.getPathInfo()).orElse("");
-        CourseServiceImpl courseService = new CourseServiceImpl();
-
-        User teacher;
-        Course course;
-        Section section;
-        Lesson lesson;
-
-        long courseId = Long.parseLong(Optional.ofNullable(request.getParameter("courseId")).orElse("0"));
-        long sectionId = Long.parseLong(Optional.ofNullable(request.getParameter("sectionId")).orElse("0"));
-        long lessonId = Long.parseLong(Optional.ofNullable(request.getParameter("lessonId")).orElse("0"));
         switch (path) {
             case "/register":
                 postRegister(request, response);
@@ -119,29 +113,27 @@ public class AccountServlet extends HttpServlet {
     }
 
     private void updateProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String password = request.getParameter("password");
-        String bcryptHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+        UserServiceImpl userService = new UserServiceImpl();
+        User user = (User) request.getSession().getAttribute("authUser");
+
         String email = request.getParameter("email");
         String username = request.getParameter("username");
         String name = request.getParameter("name");
         String job = Optional.ofNullable(request.getParameter("job")).orElse("");
         String bio = Optional.ofNullable(request.getParameter("bio")).orElse("");
 
-        UserServiceImpl userService = new UserServiceImpl();
-
-        User user = (User) request.getSession().getAttribute("authUser");
-
         user.setEmail(email);
         user.setUsername(username);
         user.setName(name);
-        user.setPassword(bcryptHashString);
         user.setJob(job);
         user.setBio(bio);
 
-        System.out.println(password);
-        System.out.println(user.getPassword());
+        String password = request.getParameter("password");
+        if (!password.isEmpty()) {
+            String bcryptHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+            user.setPassword(bcryptHashString);
+        }
 
-        PrintWriter out = response.getWriter();
         try {
             userService.update(user);
             ServletUtils.redirect("/account/profile", request, response);
@@ -154,6 +146,7 @@ public class AccountServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = Optional.ofNullable(request.getPathInfo()).orElse("");
         CourseServiceImpl courseService = new CourseServiceImpl();
+        User user = (User) request.getSession().getAttribute("authUser");
 
         switch (path) {
             case "/register":
@@ -172,24 +165,16 @@ public class AccountServlet extends HttpServlet {
                 ServletUtils.forward("/views/Login.jsp", request, response);
                 break;
             case "/profile":
-                String username = request.getParameter("username");
-                UserServiceImpl userService = new UserServiceImpl();
-                Optional<User> user = userService.findByUsername(username);
-                if (user.isPresent()) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("auth", true);
-                    session.setAttribute("authUser", user.get());
-                    request.setAttribute("user", user.get());
-                }
-
                 ServletUtils.forward("/views/Profile.jsp", request, response);
                 break;
             case "/learning":
+                user.getEnrollments().size();
                 List<Course> myLearningList = courseService.getCourseList();
                 request.setAttribute("courseList", myLearningList);
                 request.setAttribute("page", "My learning");
                 ServletUtils.forward("/views/UserMyLearning.jsp", request, response);
             case "/wishlist":
+                user.getEnrollments().size();
                 List<Course> myWishlist = courseService.getCourseList();
                 request.setAttribute("courseList", myWishlist);
                 request.setAttribute("page", "Wishlist");

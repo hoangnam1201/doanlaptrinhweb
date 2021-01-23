@@ -11,12 +11,7 @@
 <t:genericpage>
     <jsp:attribute name="js">
         <script>
-            var quillGetHTML = inputDelta => {
-                var tempCont = document.createElement("div");
-                (new Quill(tempCont)).setContents(inputDelta);
-                return tempCont.getElementsByClassName("ql-editor")[0].innerHTML;
-            }
-            $("#description").html(quillGetHTML(${requestScope.course.description}))
+            $("#description").html(quillGetHTML('${requestScope.course.description}'));
         </script>
     </jsp:attribute>
     <jsp:body>
@@ -91,9 +86,14 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <c:if test="${!requestScope.course.teacher.id.equals(sessionScope.authUser.id)}">
-                                    <button class="btn wishlist ml ml-lg-2">Wishlist <i
-                                            class="far fa-heart d-inline-block ml-2"></i>
-                                    </button>
+                                    <form class="mb-0" method="post"
+                                          action="<c:url value="/course/wishlist" />">
+                                        <input name="courseId" type="hidden"
+                                               value="${requestScope.course.id}">
+                                        <button class="btn wishlist ml ml-lg-2">${requestScope.wishlist ? "Wishlisted" : "Wishlist"}
+                                            <i class="${requestScope.wishlist?"fas":"far"} fa-heart d-inline-block ml-2"></i>
+                                        </button>
+                                    </form>
                                 </c:if>
                             </div>
                             <p class="ml-1 mb-0 mt-2"><strong>${requestScope.course.studentCount}</strong> already

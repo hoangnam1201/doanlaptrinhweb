@@ -68,14 +68,14 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="name">Section name</label>
-                                        <input class="form-control outline-none" name="name" id="name"
+                                        <input required class="form-control outline-none" name="name" id="name"
                                                type="text">
                                     </div>
                                 </div>
                                 <div class="col-3">
                                     <div class="form-group">
                                         <label for="row-order">Row order</label>
-                                        <input class="form-control outline-none" name="row-order" id="row-order"
+                                        <input required class="form-control outline-none" name="row-order" id="row-order"
                                                type="number" step="1">
                                     </div>
                                 </div>
@@ -122,7 +122,7 @@
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label for="name${section.id}">Section name</label>
-                                                        <input class="form-control outline-none" name="name"
+                                                        <input required class="form-control outline-none" name="name"
                                                                id="name${section.id}"
                                                                type="text" value="${section.name}">
                                                     </div>
@@ -130,7 +130,7 @@
                                                 <div class="col-3">
                                                     <div class="form-group">
                                                         <label for="row-order${section.id}">Row order</label>
-                                                        <input class="form-control outline-none" name="row-order"
+                                                        <input required class="form-control outline-none" name="row-order"
                                                                id="row-order${section.id}"
                                                                type="number" value="${section.rowOrder}" step="1">
                                                     </div>
@@ -170,7 +170,7 @@
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label for="name${lesson.id}">Lesson name</label>
-                                                                <input class="form-control bg-light outline-none"
+                                                                <input required class="form-control bg-light outline-none"
                                                                        name="name"
                                                                        id="name${lesson.id}"
                                                                        type="text" value="${lesson.name}">
@@ -179,7 +179,7 @@
                                                         <div class="col-3">
                                                             <div class="form-group">
                                                                 <label for="row-order${lesson.id}">Row order</label>
-                                                                <input class="form-control bg-light outline-none"
+                                                                <input required class="form-control bg-light outline-none"
                                                                        name="row-order" value="${lesson.rowOrder}"
                                                                        id="row-order${lesson.id}"
                                                                        type="number" step="1">
@@ -188,7 +188,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="video-url${lesson.id}">Video URL (.mp4)</label>
-                                                        <input class="form-control bg-light outline-none"
+                                                        <input required class="form-control bg-light outline-none"
                                                                name="video-url" value="${lesson.videoUrl}"
                                                                id="video-url${lesson.id}">
                                                     </div>
@@ -222,7 +222,7 @@
                                                         <div class="form-group">
                                                             <label for="new-lesson-name${section.id}">Lesson
                                                                 name</label>
-                                                            <input class="form-control bg-light outline-none"
+                                                            <input required class="form-control bg-light outline-none"
                                                                    name="name"
                                                                    id="new-lesson-name${section.id}"
                                                                    type="text">
@@ -232,7 +232,7 @@
                                                         <div class="form-group">
                                                             <label for="new-lesson-row-order${section.id}">Row
                                                                 order</label>
-                                                            <input class="form-control bg-light outline-none"
+                                                            <input required class="form-control bg-light outline-none"
                                                                    name="row-order"
                                                                    id="new-lesson-row-order${section.id}"
                                                                    type="number" step="1">
@@ -242,14 +242,14 @@
                                                 <div class="form-group">
                                                     <label for="new-lesson-video-url${section.id}">Video URL
                                                         (.mp4)</label>
-                                                    <input class="form-control bg-light outline-none" name="video-url"
+                                                    <input required class="form-control bg-light outline-none" name="video-url"
                                                            id="new-lesson-video-url${section.id}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="description${section.id}">Course description</label>
                                                     <div>
                                                         <input type="hidden" id="description${section.id}"
-                                                               name="description" value="as">
+                                                               name="description">
                                                         <div id="new-lesson-quill${section.id}" class="quill"></div>
                                                     </div>
                                                 </div>
@@ -267,11 +267,10 @@
             </div>
         </main>
         <script>
-            var initEditors = [];
             <c:forEach items="${requestScope.course.sections}" var="section">
             initEditors.push({selector: '#new-lesson-quill${section.id}'})
             <c:forEach items="${section.lessons}" var="lesson">
-            initEditors.push({selector: '#quill${lesson.id}', value: ${lesson.description}})
+            initEditors.push({selector: '#quill${lesson.id}', value: '${lesson.description}'})
             </c:forEach>
             </c:forEach>
         </script>

@@ -23,6 +23,9 @@ import java.util.Optional;
 @WebServlet(name = "AdminServlet", urlPatterns = "/admin/*")
 public class AdminServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (request.getCharacterEncoding() == null) {
+            request.setCharacterEncoding("UTF-8");
+        }
         String path = request.getPathInfo();
         switch (path) {
             case "/addcat":

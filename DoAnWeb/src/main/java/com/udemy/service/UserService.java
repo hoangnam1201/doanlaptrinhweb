@@ -7,10 +7,17 @@ import java.util.Optional;
 
 public interface UserService {
     List<User> getAllUser();
+
     void addNew(User user);
+
     void update(User user);
+
     void delete(Long id);
-    User getUserbyId(Long id);
+
+    void addWishlist(User user, long courseId);
+
+    void removeWishlist(User user, long courseId);
+
     Optional<User> findByUsername(String username);
 
 }

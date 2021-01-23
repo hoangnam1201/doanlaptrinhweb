@@ -10,7 +10,7 @@
     <jsp:attribute name="js">
         <script>
             <c:if test="${!requestScope.create}">
-            editor.setContents(${requestScope.course.description});
+            editor.setContents(decoding('${requestScope.course.description}'));
             $("#create-course #language").val('${requestScope.course.language}')
             $("#create-course #level").val('${requestScope.course.level}')
             $("#create-course #category").attr("subcategory-id", ${requestScope.course.category.id});
@@ -91,21 +91,23 @@
                                         <label for="name">Course name</label>
                                         <input value="${requestScope.create ? "" : requestScope.course.name}"
                                                class="form-control outline-none"
-                                               maxlength="50" name="name" id="name"
+                                               maxlength="65" name="name" id="name"
+                                               placeholder="Maximum 65 characters..."
                                                type="text">
                                     </div>
                                     <div class="col-12 col-md-3 mb-3">
                                         <label for="price">Course price (USD)</label>
-                                        <input value="${requestScope.create ? "" : requestScope.course.price}"
+                                        <input required value="${requestScope.create ? "" : requestScope.course.price}"
                                                class="form-control outline-none" name="price" id="price"
                                                type="number" step="0.01">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="short-description">Short description</label>
-                                    <input value="${requestScope.create ? "" : requestScope.course.shortDescription}"
-                                           class="form-control outline-none" maxlength="150"
-                                           placeholder="Maximum 150 characters..."
+                                    <input required
+                                           value="${requestScope.create ? "" : requestScope.course.shortDescription}"
+                                           class="form-control outline-none" maxlength="180"
+                                           placeholder="Maximum 180 characters..."
                                            name="short-description"
                                            id="short-description" type="text">
                                 </div>
@@ -159,18 +161,18 @@
 
                                 <div class="form-group">
                                     <label for="learn-goal">What will students learn in your course?</label>
-                                    <textarea class="form-control outline-none" rows="3" name="learn-goal"
+                                    <textarea required class="form-control outline-none" rows="3" name="learn-goal"
                                               id="learn-goal">${requestScope.create?"":requestScope.course.learnGoals}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="requirements">Are there any course requirements or
                                         prerequisites?</label>
-                                    <textarea class="form-control outline-none" rows="3" name="requirements"
+                                    <textarea required class="form-control outline-none" rows="3" name="requirements"
                                               id="requirements">${requestScope.create?"":requestScope.course.requirements}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="target-students">Who are your target students?</label>
-                                    <textarea class="form-control outline-none" rows="3" name="target-students"
+                                    <textarea required class="form-control outline-none" rows="3" name="target-students"
                                               id="target-students">${requestScope.create?"":requestScope.course.targetStudents}</textarea>
                                 </div>
                                 <div class="form-group">

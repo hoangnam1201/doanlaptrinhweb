@@ -11,9 +11,9 @@ import java.util.Objects;
 @Entity
 @Table(
         uniqueConstraints =
-        @UniqueConstraint(columnNames = {"user_id", "lesson_id"})
+        @UniqueConstraint(columnNames = {"user_id", "course_id"})
 )
-public class UserLesson implements Serializable {
+public class Wishlist implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,8 +23,8 @@ public class UserLesson implements Serializable {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "lesson_id", nullable = false)
-    private Lesson lesson;
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 
     @CreationTimestamp
     private Date createdAt;
@@ -47,12 +47,12 @@ public class UserLesson implements Serializable {
         this.user = user;
     }
 
-    public Lesson getLesson() {
-        return lesson;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setLesson(Lesson lesson) {
-        this.lesson = lesson;
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     public Date getCreatedAt() {

@@ -17,10 +17,10 @@
                 <input type="hidden" name="courseId" value="${param.id}">
                 <div class="bg-grey p-4 border-bottom">Review this course</div>
                 <div class="p-3">
-                    <input min="0" step="1" value="${requestScope.enrollment.rating}" class="form-control mb-2"
+                    <input required min="0" step="1" value="${requestScope.enrollment.rating}" class="form-control mb-2"
                            type="number"
                            name="rating">
-                    <textarea class="form-control" type="text" name="comment" placeholder="comment"
+                    <textarea required class="form-control" type="text" name="comment" placeholder="comment"
                               rows="6">${requestScope.enrollment.comment}</textarea>
                 </div>
                 <div class="p-4 text-right">
@@ -57,7 +57,7 @@
                      height="32">
             </a>
             <c:choose>
-                <c:when test="${requestScope.enrollment}">
+                <c:when test="${requestScope.enrolled}">
                     <button data-toggle="modal" data-target="#rating-form"
                             class="d-none d-md-block btn text-white font-weight-bold outline-none">
                             ${requestScope.enrollment.rating == 0 ? "Leave a rating":"Edit your rating"}

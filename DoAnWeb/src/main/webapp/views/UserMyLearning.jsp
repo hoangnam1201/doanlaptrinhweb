@@ -1,6 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="t" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<c:set var="page" value="${requestScope.page}"/>
+<c:set var="user" value="${sessionScope.authUser}"/>
 
 <t:genericpage>
     <jsp:attribute name="js">
@@ -34,19 +36,33 @@
                     </c:choose>
                 </ul>
                 <c:choose>
-                    <c:when test="${requestScope.courseList.isEmpty()}">
+                    <c:when test="${(page.equals('Wishlist')&&user.wishlist.size()==0)||
+            (page.equals('My learning')&&user.enrollments.size()==0)}">
                         <div class="p-3 text-center bg-grey rounded">
                             <h4 class="font-weight-bold">Nothing to see here</h4>
-                            <p class="text-secondary">Your course list is empty!</p>
+                            <p class="text-secondary">
+                                Your ${page.equals("Wishlist") ? "wishlist" : "enrolled course list"} is
+                                empty!</p>
                         </div>
                     </c:when>
                     <c:otherwise>
                         <div class="d-flex flex-wrap">
-                            <c:forEach items="${requestScope.courseList}" var="course">
-                                <div class="col-3 my-list mb-3">
-                                    <t:multicourseunit course="${course}"/>
-                                </div>
-                            </c:forEach>
+                            <c:choose>
+                                <c:when test="${page.equals('Wishlist')}">
+                                    <c:forEach items="${sessionScope.authUser.wishlist}" var="wishlist">
+                                        <div class="col-3 my-list mb-3">
+                                            <t:multicourseunit course="${wishlist.course}"/>
+                                        </div>
+                                    </c:forEach>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach items="${sessionScope.authUser.enrollments}" var="enrollment">
+                                        <div class="col-3 my-list mb-3">
+                                            <t:multicourseunit course="${enrollment.course}"/>
+                                        </div>
+                                    </c:forEach>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                     </c:otherwise>
                 </c:choose>

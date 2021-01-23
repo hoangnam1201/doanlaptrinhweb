@@ -6,5 +6,8 @@
 <script type="text/javascript" src="<c:url value="/static/scripts/slick.js" />"></script>
 <script type="text/javascript" src="//cdn.quilljs.com/1.3.6/quill.js"></script>
 <script type="text/javascript" src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
-<script>let myContextPath = "${pageContext.request.contextPath}"</script>
+<script>
+    let myContextPath = "${pageContext.request.contextPath}"
+    var initEditors = []
+</script>
 <script type="text/javascript" src="<c:url value="/static/scripts/main.js"/>"></script>

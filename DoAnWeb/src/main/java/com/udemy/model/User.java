@@ -43,11 +43,33 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Enrollment> enrollments = new ArrayList<Enrollment>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserLesson> userLessons = new ArrayList<UserLesson>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Wishlist> wishlist = new ArrayList<Wishlist>();
+
     @CreationTimestamp
     private Date createdAt;
 
     @UpdateTimestamp
     private Date updatedAt;
+
+    public List<Wishlist> getWishlist() {
+        return wishlist;
+    }
+
+    public void setWishlist(List<Wishlist> wishlist) {
+        this.wishlist = wishlist;
+    }
+
+    public List<UserLesson> getUserLessons() {
+        return userLessons;
+    }
+
+    public void setUserLessons(List<UserLesson> userLessons) {
+        this.userLessons = userLessons;
+    }
 
     public String getBio() {
         return bio;

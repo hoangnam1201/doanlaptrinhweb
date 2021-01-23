@@ -3,9 +3,6 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 
 <t:genericpage>
-    <jsp:attribute name="js">
-        <script src="<c:url value="/static/scripts/main.js"/>"></script>
-    </jsp:attribute>
     <jsp:body>
         <section class="hero">
             <div class="container">

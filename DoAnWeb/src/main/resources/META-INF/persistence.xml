@@ -13,7 +13,7 @@
         <class>com.udemy.model.Lesson</class>
         <class>com.udemy.model.Section</class>
         <class>com.udemy.model.UserLesson</class>
-        <class>com.udemy.model.UserLessonID</class>
+        <class>com.udemy.model.Wishlist</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>

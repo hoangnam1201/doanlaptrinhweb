@@ -126,27 +126,44 @@ $("#create-course #category").change(e => {
     })
 })
 
+var encoding = text => {
+    return encodeURIComponent(JSON.stringify(text)).replaceAll("'", "\\'");
+}
+
+var decoding = text => {
+    return JSON.parse(decodeURIComponent(text));
+}
+
 $("#create-course").submit(e => {
+    const content = encoding(editor.getContents());
     let description = $("#create-course #description");
-    description.val(JSON.stringify(editor.getContents()));
+    description.val(content);
 })
 
 var quills = [];
+
 initEditors.forEach(editor => {
     const quill = new Quill(editor.selector, quillOptions);
-    quill.setContents(editor?.value);
+    console.log(editor.value);
+    if (editor.value) {
+        quill.setContents(decoding(editor?.value));
+        quills.push({selector: editor?.selector, obj: quill})
+    }
     quills.push({selector: editor?.selector, obj: quill})
-})
 
-console.log(quills)
+})
 
 $("form.lesson").submit(e => {
     const formId = e.target.id;
     const description = $(`#${formId} [name=description]`)
     const quillId = $(`#${formId} .ql-container`).attr('id')
     const quill = quills.find(q => q.selector === `#${quillId}`)
-    const content = JSON.stringify(quill?.obj.getContents().replace(/\&nbsp;/g, ''));
-    console.log(encodeURIComponent(content));
-    e.preventDefault()
-    description.val(encodeURIComponent(content));
+    const content = encoding(quill?.obj.getContents());
+    description.val(content);
 })
+
+var quillGetHTML = inputDelta => {
+    var tempCont = document.createElement("div");
+    (new Quill(tempCont)).setContents(decoding(inputDelta));
+    return tempCont.getElementsByClassName("ql-editor")[0].innerHTML;
+}

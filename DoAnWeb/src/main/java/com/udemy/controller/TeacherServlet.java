@@ -23,6 +23,9 @@ import java.util.*;
 @WebServlet(name = "InstructorServlet", urlPatterns = "/teacher/*")
 public class TeacherServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (request.getCharacterEncoding() == null) {
+            request.setCharacterEncoding("UTF-8");
+        }
         String path = Optional.ofNullable(request.getPathInfo()).orElse("");
         CourseServiceImpl courseService = new CourseServiceImpl();
 
@@ -35,8 +38,6 @@ public class TeacherServlet extends HttpServlet {
         long sectionId = Long.parseLong(Optional.ofNullable(request.getParameter("sectionId")).orElse("0"));
         long lessonId = Long.parseLong(Optional.ofNullable(request.getParameter("lessonId")).orElse("0"));
 
-
-        PrintWriter out = response.getWriter();
         try {
             switch (path) {
                 case "/create":
@@ -46,7 +47,7 @@ public class TeacherServlet extends HttpServlet {
                     courseService.addNew(course);
                     request.setAttribute("create", true);
                     request.setAttribute("success", true);
-                    ServletUtils.forward("/views/TeacherCourseDetails.jsp", request, response);
+                    ServletUtils.redirect("/teacher/create", request, response);
                     break;
                 case "/update-details":
                     course = setCourseDetails(true, request);
@@ -100,7 +101,8 @@ public class TeacherServlet extends HttpServlet {
                     break;
             }
         } catch (Exception ex) {
-            out.println(ex.getCause() + " " + ex.getMessage());
+            ex.printStackTrace();
+            ServletUtils.forwardErrorPage(response);
         }
 
 
@@ -122,16 +124,15 @@ public class TeacherServlet extends HttpServlet {
         while (iter.hasNext()) {
             FileItem item = iter.next();
             if (item.isFormField()) {
-                params.put(item.getFieldName(), item.getString());
+                params.put(item.getFieldName(), item.getString("UTF-8"));
             } else {
                 try {
                     if (!item.getName().isEmpty()) {
                         String[] split = item.getName().split("\\.");
                         fileName = UUID.randomUUID().toString() + "." + split[split.length - 1];
                     }
-                    String realPath = "D:/images/" + fileName;
+                    String realPath = "E:/images/" + fileName;
                     File savedFile = new File(realPath);
-                    System.out.println(realPath);
                     item.write(savedFile);
                 } catch (Exception e) {
                     e.printStackTrace();

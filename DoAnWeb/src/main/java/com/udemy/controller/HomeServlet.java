@@ -25,6 +25,7 @@ public class HomeServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         CourseServiceImpl courseService = new CourseServiceImpl();
         CategoryServiceImpl categoryService = new CategoryServiceImpl();
 
@@ -47,8 +48,9 @@ public class HomeServlet extends HttpServlet {
                 ServletUtils.forward("/views/Home.jsp", request, response);
                 break;
             case "/get-subcategory":
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
                 PrintWriter out = response.getWriter();
-                response.setContentType("application/json;charset=UTF-8");
                 String catId = Optional.ofNullable(request.getParameter("catId")).orElse("0");
                 List<Category> categoryList = (List<Category>) request.getAttribute("categoryList");
                 Category category = categoryService.getCategoryByIdFromList(Long.parseLong(catId), categoryList);
