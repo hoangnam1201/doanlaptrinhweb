@@ -7,6 +7,16 @@
         <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
         <link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
     </jsp:attribute>
+    <jsp:attribute name="beforeMainJs">
+        <script>
+            <c:forEach items="${requestScope.course.sections}" var="section">
+            initEditors.push({selector: '#new-lesson-quill${section.id}'})
+            <c:forEach items="${section.lessons}" var="lesson">
+            initEditors.push({selector: '#quill${lesson.id}', value: '${lesson.description}'})
+            </c:forEach>
+            </c:forEach>
+        </script>
+    </jsp:attribute>
     <jsp:body>
         <main class="d-flex">
             <div class="teacher-nav m-3 flex-grow-1 flex-shrink-0">
@@ -75,7 +85,8 @@
                                 <div class="col-3">
                                     <div class="form-group">
                                         <label for="row-order">Row order</label>
-                                        <input required class="form-control outline-none" name="row-order" id="row-order"
+                                        <input required class="form-control outline-none" name="row-order"
+                                               id="row-order"
                                                type="number" step="1">
                                     </div>
                                 </div>
@@ -130,7 +141,8 @@
                                                 <div class="col-3">
                                                     <div class="form-group">
                                                         <label for="row-order${section.id}">Row order</label>
-                                                        <input required class="form-control outline-none" name="row-order"
+                                                        <input required class="form-control outline-none"
+                                                               name="row-order"
                                                                id="row-order${section.id}"
                                                                type="number" value="${section.rowOrder}" step="1">
                                                     </div>
@@ -170,7 +182,8 @@
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label for="name${lesson.id}">Lesson name</label>
-                                                                <input required class="form-control bg-light outline-none"
+                                                                <input required
+                                                                       class="form-control bg-light outline-none"
                                                                        name="name"
                                                                        id="name${lesson.id}"
                                                                        type="text" value="${lesson.name}">
@@ -179,7 +192,8 @@
                                                         <div class="col-3">
                                                             <div class="form-group">
                                                                 <label for="row-order${lesson.id}">Row order</label>
-                                                                <input required class="form-control bg-light outline-none"
+                                                                <input required
+                                                                       class="form-control bg-light outline-none"
                                                                        name="row-order" value="${lesson.rowOrder}"
                                                                        id="row-order${lesson.id}"
                                                                        type="number" step="1">
@@ -242,7 +256,8 @@
                                                 <div class="form-group">
                                                     <label for="new-lesson-video-url${section.id}">Video URL
                                                         (.mp4)</label>
-                                                    <input required class="form-control bg-light outline-none" name="video-url"
+                                                    <input required class="form-control bg-light outline-none"
+                                                           name="video-url"
                                                            id="new-lesson-video-url${section.id}">
                                                 </div>
                                                 <div class="form-group">
@@ -266,13 +281,5 @@
                 </div>
             </div>
         </main>
-        <script>
-            <c:forEach items="${requestScope.course.sections}" var="section">
-            initEditors.push({selector: '#new-lesson-quill${section.id}'})
-            <c:forEach items="${section.lessons}" var="lesson">
-            initEditors.push({selector: '#quill${lesson.id}', value: '${lesson.description}'})
-            </c:forEach>
-            </c:forEach>
-        </script>
     </jsp:body>
 </t:genericpage>

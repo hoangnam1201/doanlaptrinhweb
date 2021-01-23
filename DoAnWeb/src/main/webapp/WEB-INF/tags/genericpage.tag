@@ -6,14 +6,16 @@
 
 <html>
 <head>
-    <jsp:include page="common/head.jsp" />
-    <jsp:invoke fragment="head" />
+    <jsp:include page="common/head.jsp"/>
+    <jsp:invoke fragment="head"/>
 </head>
 <body>
-<jsp:include page="common/navbar.jsp" />
+<jsp:include page="common/navbar.jsp"/>
 <jsp:doBody/>
-<jsp:include page="common/footer.jsp" />
-<jsp:include page="common/script.jsp" />
-<jsp:invoke fragment="js" />
+<jsp:include page="common/footer.jsp"/>
+<jsp:include page="common/script.jsp"/>
+<jsp:invoke fragment="beforeMainJs"/>
+<script type="text/javascript" src="<c:url value="/static/scripts/main.js"/>"></script>
+<jsp:invoke fragment="js"/>
 </body>
 </html>

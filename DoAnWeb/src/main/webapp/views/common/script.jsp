@@ -10,4 +10,3 @@
     let myContextPath = "${pageContext.request.contextPath}"
     var initEditors = []
 </script>
-<script type="text/javascript" src="<c:url value="/static/scripts/main.js"/>"></script>
