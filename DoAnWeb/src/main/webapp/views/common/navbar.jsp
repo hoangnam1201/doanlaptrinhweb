@@ -106,6 +106,16 @@
                             <a class="a-unstyled"
                                href="${pageContext.request.contextPath}/account/wishlist">Wishlist</a>
                         </div>
+                        <c:if test="${sessionScope.authUser.role.equals('admin')}">
+                            <div class="border-bottom">
+                                <a class="a-unstyled" href="${pageContext.request.contextPath}/admin/managercat">My
+                                    Categories</a>
+                                <a class="a-unstyled" href="${pageContext.request.contextPath}/admin/managercourse">My
+                                    Courses</a>
+                                <a class="a-unstyled"
+                                   href="${pageContext.request.contextPath}/admin/manageruser">Users</a>
+                            </div>
+                        </c:if>
                         <c:if test="${sessionScope.authUser.role.equals('teacher')}">
                             <div class="border-bottom">
                                 <a class="a-unstyled" href="${pageContext.request.contextPath}/teacher/courses">My

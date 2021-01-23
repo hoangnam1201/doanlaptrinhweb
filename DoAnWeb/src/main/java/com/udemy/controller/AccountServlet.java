@@ -1,6 +1,10 @@
 package com.udemy.controller;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.udemy.model.Course;
+import com.udemy.model.Lesson;
+import com.udemy.model.Section;
+import com.udemy.service.CourseServiceImpl;
 import com.udemy.util.ServletUtils;
 import com.udemy.model.User;
 import com.udemy.service.UserServiceImpl;
@@ -19,7 +23,17 @@ import java.util.Optional;
 @WebServlet(name = "AccountServlet", urlPatterns = "/account/*")
 public class AccountServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String path = request.getPathInfo();
+        String path = Optional.ofNullable(request.getPathInfo()).orElse("");
+        CourseServiceImpl courseService = new CourseServiceImpl();
+
+        User teacher;
+        Course course;
+        Section section;
+        Lesson lesson;
+
+        long courseId = Long.parseLong(Optional.ofNullable(request.getParameter("courseId")).orElse("0"));
+        long sectionId = Long.parseLong(Optional.ofNullable(request.getParameter("sectionId")).orElse("0"));
+        long lessonId = Long.parseLong(Optional.ofNullable(request.getParameter("lessonId")).orElse("0"));
         switch (path) {
             case "/register":
                 postRegister(request, response);
@@ -29,6 +43,9 @@ public class AccountServlet extends HttpServlet {
                 break;
             case "/logout":
                 postLogout(request, response);
+                break;
+            case "/profile":
+                updateProfile(request, response);
                 break;
             default:
                 ServletUtils.forwardErrorPage(response);
@@ -100,6 +117,34 @@ public class AccountServlet extends HttpServlet {
         if (url == null) url = "/";
         ServletUtils.redirect(url, request, response);
     }
+    private void updateProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Long id =Long.parseLong(request.getParameter("id"));
+        String password = request.getParameter("password");
+        String bcryptHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+        String email = request.getParameter("email");
+        String username = request.getParameter("username");
+        String name = request.getParameter("name");
+
+        UserServiceImpl userService = new UserServiceImpl();
+
+        User user = (User) request.getSession().getAttribute("authUser");
+
+        user.setEmail(email);
+        user.setUsername(username);
+        user.setName(name);
+        user.setPassword(bcryptHashString);
+
+        System.out.println(password);
+        System.out.println(user.getPassword());
+
+        PrintWriter out = response.getWriter();
+        try {
+            userService.update(user);
+            ServletUtils.redirect("/account/profile", request, response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = Optional.ofNullable(request.getPathInfo()).orElse("");
@@ -127,11 +172,13 @@ public class AccountServlet extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.setAttribute("auth", true);
                     session.setAttribute("authUser", user.get());
-                    request.setAttribute("authUser", user.get());
+                    request.setAttribute("user", user.get());
                 }
+
                 ServletUtils.forward("/views/Profile.jsp", request, response);
                 break;
-            case "/learning":
+            case "/mylearning":
+                ServletUtils.forward("/views/UserMyLearning.jsp",request,response);
             case "/wishlist":
                 ServletUtils.redirect("/", request, response);
                 break;

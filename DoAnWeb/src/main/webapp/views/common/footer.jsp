@@ -3,8 +3,8 @@
         <div class="row">
             <div class="col-sm-12 col-md-6">
                 <h6>About</h6>
-                <p class="text-justify">Scanfcode.com <i>CODE WANTS TO BE SIMPLE </i> is an initiative to help the
-                    upcoming programmers with the code. Scanfcode focuses on providing the most efficient code or
+                <p class="text-justify">Udemy.com<i>CODE WANTS TO BE SIMPLE </i> is an initiative to help the
+                    upcoming programmers with the code. Udemy focuses on providing the most efficient code or
                     snippets as the code wants to be simple. We will help programmers
                     build up concepts in different programming languages that include C, C++, Java, HTML, CSS,
                     Bootstrap, JavaScript, PHP, Android, SQL and Algorithm.</p>
@@ -37,9 +37,14 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-sm-6 col-sm-12">
-                <p class="copyright-text">Copyright &copy; 2020 All Rights Reserved by
-                    <a href="#">H&N</a>.
+            <div class="col-md-2 col-sm-6 col-sm-12">
+                <a class="flex-shrink-0" href="${pageContext.request.contextPath}/">
+                    <img alt="logo" width="100" src="https://www.udemy.com/staticx/udemy/images/v6/logo-coral.svg">
+                </a>
+            </div>
+            <div class="col-md-6 col-sm-6 col-sm-12">
+                <p class="copyright-text">Copyright &copy; 2021 All Rights Reserved by
+                    <a href="#">Udemy</a>.
                 </p>
             </div>
 

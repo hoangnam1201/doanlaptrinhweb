@@ -17,6 +17,9 @@ public class UserServiceImpl implements UserService {
     }
     public void update(User user){userDAO.update(user);}
     public void delete(Long id) {userDAO.delete(id);}
+
+    @Override
+    public User getUserbyId(Long id){return userDAO.getUserbyId(id);}
     @Override
     public Optional<User> findByUsername(String username) {
         return userDAO.findByUsername(username);

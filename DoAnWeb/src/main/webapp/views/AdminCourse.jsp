@@ -34,30 +34,30 @@
         <div class="content-container">
 
             <div class="container-fluid">
-
-                <a class="btn btn-outline-success mb-2"
-                   href="${pageContext.request.contextPath}/admin/addteacher" role="button"><i class="fa fa-plus" aria-hidden="true"></i>ADD</a>
                 <table class="table table-bordered">
                     <thead>
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Username</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Role</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Language</th>
+                        <th scope="col">Level</th>
+                        <th scope="col">Category</th>
                         <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${requestScope.userList}" var="user">
-
+                    <c:forEach items="${requestScope.courseList}" var="course">
                         <tr>
-                            <td>${user.id}</td>
-                            <td>${user.name}</td>
-                            <td>${user.username}</td>
-                            <td>${user.email}</td>
-                            <td>${user.role}</td>
-                            <td><form method="post" action="${pageContext.request.contextPath}/admin/deleteuser?id=${user.id}"><button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></form></td>
+                            <td>${course.id}</td>
+                            <td>${course.name}</td>
+                            <td>${course.price}</td>
+                            <td>${course.shortDescription}</td>
+                            <td>${course.language}</td>
+                            <td>${course.level}</td>
+                            <td>${course.category.name}</td>
+                            <td><form method="post" action="${pageContext.request.contextPath}/admin/deletecourse?id=${course.id}"><button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></form></td>
                         </tr>
                     </c:forEach>
                     </tbody>

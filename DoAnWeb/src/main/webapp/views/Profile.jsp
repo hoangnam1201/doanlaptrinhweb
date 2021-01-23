@@ -2,30 +2,20 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="t" %>
 
+<style>
+    main{
+        background-image: url("../static/images/register.png");
+    }
+    .container{
+        display: flex;
+        justify-content: center;
+    }
+</style>
 <t:genericpage>
     <jsp:body>
         <main>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3 ">
-                        <div class="list-group ">
-                            <a href="#" class="list-group-item list-group-item-action active">Dashboard</a>
-                            <a href="#" class="list-group-item list-group-item-action">User Management</a>
-                            <a href="#" class="list-group-item list-group-item-action">Used</a>
-                            <a href="#" class="list-group-item list-group-item-action">Enquiry</a>
-                            <a href="#" class="list-group-item list-group-item-action">Dealer</a>
-                            <a href="#" class="list-group-item list-group-item-action">Media</a>
-                            <a href="#" class="list-group-item list-group-item-action">Post</a>
-                            <a href="#" class="list-group-item list-group-item-action">Category</a>
-                            <a href="#" class="list-group-item list-group-item-action">New</a>
-                            <a href="#" class="list-group-item list-group-item-action">Comments</a>
-                            <a href="#" class="list-group-item list-group-item-action">Appearance</a>
-                            <a href="#" class="list-group-item list-group-item-action">Reports</a>
-                            <a href="#" class="list-group-item list-group-item-action">Settings</a>
-
-
-                        </div>
-                    </div>
                     <c:choose>
                         <c:when test="${auth}">
                             <div class="col-md-9">
@@ -39,33 +29,26 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <form>
+                                                <form method="post" action="${pageContext.request.contextPath}/account/profile?id=${authUser.id}">
                                                     <div class="form-group row">
-                                                        <label for="username" class="col-4 col-form-label">User Name</label>
+                                                        <label for="txtUsername" class="col-4 col-form-label">User Name</label>
                                                         <div class="col-8">
-                                                            <input id="username" name="username" placeholder="Username"
+                                                            <input id="txtUsername" name="username" placeholder="Username"
                                                                    class="form-control here" required="required" type="text" value="${authUser.username}">
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group row">
-                                                        <label for="text" class="col-4 col-form-label">Nick Name*</label>
+                                                        <label for="txtName" class="col-4 col-form-label">Nick Name*</label>
                                                         <div class="col-8">
-                                                            <input id="text" name="text" placeholder="Nick Name"
+                                                            <input id="txtName" name="name" placeholder="Nick Name"
                                                                    class="form-control here" required="required" type="text" value="${authUser.name}">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="email" class="col-4 col-form-label">Role*</label>
+                                                        <label for="txtEmail" class="col-4 col-form-label">Email*</label>
                                                         <div class="col-8">
-                                                            <input id="role" name="role" placeholder="Role"
-                                                                   class="form-control here" required="required" type="text" value="${authUser.role}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="email" class="col-4 col-form-label">Email*</label>
-                                                        <div class="col-8">
-                                                            <input id="email" name="email" placeholder="Email"
+                                                            <input id="txtEmail" name="email" placeholder="Email"
                                                                    class="form-control here" required="required" type="text" value="${authUser.email}">
                                                         </div>
                                                     </div>
@@ -84,10 +67,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="newpass" class="col-4 col-form-label">New Password</label>
+                                                        <label for="txtpassword" class="col-4 col-form-label">New Password</label>
                                                         <div class="col-8">
-                                                            <input id="newpass" name="newpass" placeholder="New Password"
-                                                                   class="form-control here" type="text">
+                                                            <input id="txtpassword" name="password" placeholder="New Password"
+                                                                   class="form-control here" type="password">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">

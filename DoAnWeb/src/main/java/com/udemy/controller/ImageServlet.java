@@ -16,7 +16,7 @@ public class ImageServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String filename = request.getPathInfo().substring(1);
-        File file = new File("D:/images", filename);
+        File file = new File("E:/images", filename);
         if (!file.exists()) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;

@@ -31,6 +31,18 @@ public class CourseDAOImpl implements CourseDAO {
     }
 
     @Override
+    public List<Course> getCourseList() {
+        EntityManager em = emf.createEntityManager();
+        String queryString = "from Course c";
+        try {
+            return em.createQuery(queryString, Course.class).getResultList();
+        }
+        finally {
+            em.close();
+        }
+    }
+
+    @Override
     public List<Course> getMyCourses(Long userId) {
         EntityManager em = emf.createEntityManager();
         String queryString = "select c from Course c where c.teacher.id =" + userId;

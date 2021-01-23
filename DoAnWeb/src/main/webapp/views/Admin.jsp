@@ -3,9 +3,10 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="t" %>
 <t:genericpage>
     <jsp:body>
+
         <div class="sidebar-container">
             <div class="sidebar-logo">
-                Udemy
+                Dashboard
             </div>
             <ul class="sidebar-navigation">
                 <li>
@@ -14,23 +15,18 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard
-                    </a>
-                </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/admin/manager">
+                    <a href="${pageContext.request.contextPath}/admin/managercat">
                         <i class="fa fa-book" aria-hidden="true"></i> Categories
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="${pageContext.request.contextPath}/admin/manageruser">
                         <i class="fa fa-users" aria-hidden="true"></i> Users
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <i class="fa fa-info-circle" aria-hidden="true"></i> Information
+                    <a href="${pageContext.request.contextPath}/admin/managercourse">
+                        <i class="fa fa-list-alt" aria-hidden="true"></i> Courses
                     </a>
                 </li>
             </ul>

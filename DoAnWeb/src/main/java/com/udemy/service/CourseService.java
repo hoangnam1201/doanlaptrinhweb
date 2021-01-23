@@ -7,6 +7,8 @@ import com.udemy.model.Section;
 import java.util.List;
 
 public interface CourseService {
+    List<Course> getCourseList();
+
     Course getCourseById(Long id);
 
     Section getSectionById(Course course, long sectionId);

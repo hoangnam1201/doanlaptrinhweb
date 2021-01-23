@@ -2,8 +2,10 @@ package com.udemy.controller;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.udemy.model.Category;
+import com.udemy.model.Course;
 import com.udemy.model.User;
 import com.udemy.service.CategoryServiceImpl;
+import com.udemy.service.CourseServiceImpl;
 import com.udemy.service.UserServiceImpl;
 import com.udemy.util.ServletUtils;
 
@@ -38,12 +40,14 @@ public class AdminServlet extends HttpServlet {
             case "/deleteuser":
                 deleteUser(request, response);
                 break;
+            case "/deletecourse":
+                deleteCourse(request, response);
+                break;
             default:
                 ServletUtils.forwardErrorPage(response);
                 break;
         }
     }
-
     private void postCategories(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("name");
         String image = request.getParameter("image");
@@ -114,7 +118,7 @@ public class AdminServlet extends HttpServlet {
         String username = request.getParameter("username");
         String name = request.getParameter("name");
 
-        String role ="Teacher";
+        String role ="teacher";
 
         UserServiceImpl userService = new UserServiceImpl();
 
@@ -148,8 +152,24 @@ public class AdminServlet extends HttpServlet {
 
         }
     }
+    private void deleteCourse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Long id =Long.parseLong(request.getParameter("id"));
+        CourseServiceImpl courseService = new CourseServiceImpl();
+
+        try {
+            courseService.deleteById(id);
+            ServletUtils.redirect("/admin/managercourse",request,response);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+
+        }
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        CourseServiceImpl courseService = new CourseServiceImpl();
+
         String path = Optional.ofNullable(request.getPathInfo()).orElse("");
         switch (path) {
             case "/managercat":
@@ -174,7 +194,11 @@ public class AdminServlet extends HttpServlet {
             case "/addteacher":
                 ServletUtils.forward("/views/AccountRegister.jsp", request, response);
                 break;
-
+            case "/managercourse":
+                List<Course> courseList = courseService.getCourseList();
+                request.setAttribute("courseList",courseList);
+                ServletUtils.forward("/views/AdminCourse.jsp", request, response);
+                break;
             default:
                 ServletUtils.forwardErrorPage(response);
                 break;

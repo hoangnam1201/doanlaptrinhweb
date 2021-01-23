@@ -8,6 +8,8 @@ import java.util.List;
 public interface CourseDAO {
     Course getCourseById(Long id);
 
+    List<Course> getCourseList();
+
     List<Course> getMyCourses(Long userId);
 
     List<Course> getFeaturedCourses(int amount);

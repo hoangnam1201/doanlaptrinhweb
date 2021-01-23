@@ -39,7 +39,7 @@ public class UserDAOImpl implements UserDAO {
     public void update(User user)
     {
         EntityManager entityManager=emf.createEntityManager();
-        entityManager.getTransaction();
+        entityManager.getTransaction().begin();
         try {
             entityManager.merge(user);
             entityManager.getTransaction().commit();
@@ -69,6 +69,14 @@ public class UserDAOImpl implements UserDAO {
         finally {
             em.close();
         }
+    }
+    @Override
+    public User getUserbyId(Long id)
+    {
+        EntityManager em = emf.createEntityManager();
+        User user = em.find(User.class, id);
+        em.close();
+        return user;
     }
 
     @Override
