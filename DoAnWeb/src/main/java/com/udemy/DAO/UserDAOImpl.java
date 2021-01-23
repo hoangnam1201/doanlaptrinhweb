@@ -1,19 +1,36 @@
 package com.udemy.DAO;
 
 import com.udemy.model.Category;
+import com.udemy.model.Course;
 import com.udemy.model.User;
 import com.udemy.util.JpaUtil;
+import org.hibernate.Hibernate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Optional;
 
 public class UserDAOImpl implements UserDAO {
     private final EntityManagerFactory emf = JpaUtil.getJPAFactory();
 
-    public List<User> getAllUser()
-    {
+    @Override
+    public User getUserById(long id) {
+        EntityManager em = emf.createEntityManager();
+        String queryString = "select u from User u where u.id=" + id;
+        try {
+            User user = em.createQuery(queryString, User.class).getSingleResult();
+            Hibernate.initialize(user.getEnrollments());
+            return user;
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<User> getAllUser() {
         EntityManager em = emf.createEntityManager();
         String queryString = "select c from User c";
         List<User> list = em.createQuery(queryString, User.class).getResultList();
@@ -35,20 +52,18 @@ public class UserDAOImpl implements UserDAO {
             entityManager.close();
         }
     }
+
     @Override
-    public void update(User user)
-    {
-        EntityManager entityManager=emf.createEntityManager();
+    public void update(User user) {
+        EntityManager entityManager = emf.createEntityManager();
         entityManager.getTransaction().begin();
         try {
             entityManager.merge(user);
             entityManager.getTransaction().commit();
-        }catch (Exception ex)
-        {
+        } catch (Exception ex) {
             entityManager.getTransaction().rollback();
-            throw  ex;
-        }
-        finally {
+            throw ex;
+        } finally {
             entityManager.close();
         }
     }
@@ -61,12 +76,10 @@ public class UserDAOImpl implements UserDAO {
         try {
             em.remove(user);
             em.getTransaction().commit();
-        }catch (Exception ex)
-        {
+        } catch (Exception ex) {
             em.getTransaction().rollback();
-            throw  ex;
-        }
-        finally {
+            throw ex;
+        } finally {
             em.close();
         }
     }

@@ -1,4 +1,4 @@
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="t" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 
@@ -13,8 +13,8 @@
                     <div class="col-xl-6 col-lg-6 col-md-9 px-4">
                         <h5 class="active-color font-weight-bold">Welcome to Udemy</h5>
                         <h1 class="font-weight-bold">More than 100 online courses</h1>
-                        <form class="slider-search-form">
-                            <input type="text" class="outline-none" placeholder="Search Courses">
+                        <form class="slider-search-form" method="get" action="search">
+                            <input name="q" type="text" class="outline-none" placeholder="Search Courses">
                             <button type="submit" class="outline-none"><i class="fa fa-search"></i></button>
                         </form>
                     </div>
@@ -46,7 +46,7 @@
                     <div class="category-carousel">
                         <c:forEach items="${requestScope.trendingCategories}" var="category">
                             <a class="d-block border-active rounded font-weight-bold text-center p-2"
-                               href="<c:url value="${category.parent.slug}/${category.slug}" />">
+                               href="<c:url value="/courses/${category.parent.slug}/${category.slug}" />">
                                     ${category.name}
                             </a>
                         </c:forEach>
@@ -61,7 +61,7 @@
                     </div>
                     <div class="mb-30">
                         <div class="multiple-carousel">
-                            <c:forEach items="${requestScope.featuredCourses}" var="course">
+                            <c:forEach items="${requestScope.popularCourses}" var="course">
                                 <t:multicourseunit course="${course}"/>
                             </c:forEach>
                         </div>
@@ -77,7 +77,7 @@
                     </div>
                     <div class="mb-30">
                         <div class="multiple-carousel">
-                            <c:forEach items="${requestScope.featuredCourses}" var="course">
+                            <c:forEach items="${requestScope.latestCourses}" var="course">
                                 <t:multicourseunit course="${course}"/>
                             </c:forEach>
                         </div>

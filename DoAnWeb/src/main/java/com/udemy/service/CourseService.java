@@ -1,8 +1,6 @@
 package com.udemy.service;
 
-import com.udemy.model.Course;
-import com.udemy.model.Lesson;
-import com.udemy.model.Section;
+import com.udemy.model.*;
 
 import java.util.List;
 
@@ -11,13 +9,25 @@ public interface CourseService {
 
     Course getCourseById(Long id);
 
+    Enrollment getEnrollment(Long courseId, Long userId);
+
     Section getSectionById(Course course, long sectionId);
+
+    Lesson getLessonById(long id);
 
     Lesson getLessonById(Course course, long sectionId, long lessonId);
 
     List<Course> getMyCourses(Long userId);
 
     List<Course> getFeaturedCourses(int amount);
+
+    List<Course> getPopularCourses(int amount);
+
+    List<Course> getLatestCourses(int amount);
+
+    List<Course> getCourseListByCategory(Category category, CourseListPageInfo courseListPageInfo);
+
+    List<Course> getCourseRecommendations(Course course, int amount);
 
     void setCompleteById(Long id);
 
@@ -27,6 +37,8 @@ public interface CourseService {
 
     void addLesson(long id, long sectionId, Lesson lesson);
 
+    void enroll(long id, long userId);
+
     void deleteById(Long id);
 
     void deleteSection(Long id, Long sectionId);
@@ -34,4 +46,6 @@ public interface CourseService {
     void deleteLesson(Long id, Long sectionId, Long lessonId);
 
     void update(Course course);
+
+    boolean updateRating(long courseId, long userId, int rating, String comment);
 }

@@ -54,13 +54,13 @@ public class Course implements Serializable {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "course_id")
     @OrderBy("rowOrder asc")
     private List<Section> sections = new ArrayList<Section>();
 
-    @OneToMany(mappedBy = "course")
-    private Set<Enrollment> enrollments = new HashSet<Enrollment>();
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Enrollment> enrollments = new ArrayList<Enrollment>();
 
     public Course() {
     }
@@ -71,14 +71,6 @@ public class Course implements Serializable {
 
     public void setComplete(boolean complete) {
         isComplete = complete;
-    }
-
-    public Set<Enrollment> getEnrollments() {
-        return enrollments;
-    }
-
-    public void setEnrollments(Set<Enrollment> enrollments) {
-        this.enrollments = enrollments;
     }
 
     public String getLevel() {
@@ -231,5 +223,13 @@ public class Course implements Serializable {
 
     public void setSections(List<Section> sections) {
         this.sections = sections;
+    }
+
+    public List<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(List<Enrollment> enrollments) {
+        this.enrollments = enrollments;
     }
 }

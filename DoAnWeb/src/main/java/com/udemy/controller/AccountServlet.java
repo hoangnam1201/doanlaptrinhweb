@@ -112,18 +112,20 @@ public class AccountServlet extends HttpServlet {
     private void postLogout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.setAttribute("auth", false);
-        session.setAttribute("authUser", null);
+        session.setAttribute("authUser", new User());
         String url = request.getHeader("Referer");
         if (url == null) url = "/";
         ServletUtils.redirect(url, request, response);
     }
+
     private void updateProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long id =Long.parseLong(request.getParameter("id"));
         String password = request.getParameter("password");
         String bcryptHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
         String email = request.getParameter("email");
         String username = request.getParameter("username");
         String name = request.getParameter("name");
+        String job = Optional.ofNullable(request.getParameter("job")).orElse("");
+        String bio = Optional.ofNullable(request.getParameter("bio")).orElse("");
 
         UserServiceImpl userService = new UserServiceImpl();
 
@@ -133,6 +135,8 @@ public class AccountServlet extends HttpServlet {
         user.setUsername(username);
         user.setName(name);
         user.setPassword(bcryptHashString);
+        user.setJob(job);
+        user.setBio(bio);
 
         System.out.println(password);
         System.out.println(user.getPassword());
@@ -143,11 +147,14 @@ public class AccountServlet extends HttpServlet {
             ServletUtils.redirect("/account/profile", request, response);
         } catch (Exception ex) {
             ex.printStackTrace();
+            ServletUtils.forwardErrorPage(response);
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = Optional.ofNullable(request.getPathInfo()).orElse("");
+        CourseServiceImpl courseService = new CourseServiceImpl();
+
         switch (path) {
             case "/register":
                 if ((boolean) request.getSession().getAttribute("auth")) {
@@ -177,10 +184,16 @@ public class AccountServlet extends HttpServlet {
 
                 ServletUtils.forward("/views/Profile.jsp", request, response);
                 break;
-            case "/mylearning":
-                ServletUtils.forward("/views/UserMyLearning.jsp",request,response);
+            case "/learning":
+                List<Course> myLearningList = courseService.getCourseList();
+                request.setAttribute("courseList", myLearningList);
+                request.setAttribute("page", "My learning");
+                ServletUtils.forward("/views/UserMyLearning.jsp", request, response);
             case "/wishlist":
-                ServletUtils.redirect("/", request, response);
+                List<Course> myWishlist = courseService.getCourseList();
+                request.setAttribute("courseList", myWishlist);
+                request.setAttribute("page", "Wishlist");
+                ServletUtils.forward("/views/UserMyLearning.jsp", request, response);
                 break;
             default:
                 ServletUtils.forwardErrorPage(response);

@@ -5,9 +5,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table
@@ -33,14 +31,47 @@ public class User implements Serializable {
     @Column(nullable = false, length = 15)
     private String role = "student";
 
+    @Lob
+    private String bio;
+
+    @Column(length = 80)
+    private String job;
+
     @OneToMany(mappedBy = "teacher")
     private List<Course> courses;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Enrollment> enrollments = new ArrayList<Enrollment>();
 
     @CreationTimestamp
     private Date createdAt;
 
     @UpdateTimestamp
     private Date updatedAt;
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     public String getName() {
         return name;
@@ -96,6 +127,14 @@ public class User implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public List<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(List<Enrollment> enrollments) {
+        this.enrollments = enrollments;
     }
 
     public Date getCreatedAt() {

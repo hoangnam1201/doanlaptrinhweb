@@ -15,8 +15,6 @@
                     course</a>
                 <ul class="nav nav-tabs w-100 pt-3 my-3 mr-0">
                     <li class="nav-item"><a href="#" class="nav-link active">All courses</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Complete courses</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Incomplete courses</a></li>
                 </ul>
                 <c:choose>
                     <c:when test="${requestScope.courseList.isEmpty()}">

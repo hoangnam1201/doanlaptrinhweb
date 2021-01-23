@@ -28,10 +28,14 @@ public class HomeServlet extends HttpServlet {
         CourseServiceImpl courseService = new CourseServiceImpl();
         CategoryServiceImpl categoryService = new CategoryServiceImpl();
 
-        List<Course> featuredCourseList = courseService.getFeaturedCourses(25);
+        List<Course> featuredCourseList = courseService.getFeaturedCourses(10);
+        List<Course> popularCourseList = courseService.getPopularCourses(10);
+        List<Course> latestCourseList = courseService.getLatestCourses(10);
         List<Category> trendingCategoryList = categoryService.getMostEnrolledCategoriesLastWeek(10);
 
         request.setAttribute("featuredCourses", featuredCourseList);
+        request.setAttribute("popularCourses", popularCourseList);
+        request.setAttribute("latestCourses", latestCourseList);
         request.setAttribute("trendingCategories", trendingCategoryList);
 
         String path = request.getServletPath();

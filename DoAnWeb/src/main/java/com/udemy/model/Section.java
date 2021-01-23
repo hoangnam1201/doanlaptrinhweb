@@ -20,8 +20,7 @@ public class Section implements Serializable {
     private String name;
     private int rowOrder;
 
-    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "section_id")
+    @OneToMany(mappedBy = "section", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     @OrderBy("rowOrder asc")
     private List<Lesson> lessons = new ArrayList<Lesson>();
 

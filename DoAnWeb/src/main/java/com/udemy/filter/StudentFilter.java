@@ -1,7 +1,6 @@
 package com.udemy.filter;
 
 import com.udemy.model.Course;
-import com.udemy.model.EnrollmentID;
 import com.udemy.model.User;
 import com.udemy.service.CourseServiceImpl;
 import com.udemy.util.ServletUtils;

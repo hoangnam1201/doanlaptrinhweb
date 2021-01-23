@@ -1,4 +1,4 @@
-<%@tag description="Slide nhieu khoa hoc" pageEncoding="UTF-8" %>
+    <%@tag description="Slide nhieu khoa hoc" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@attribute name="course" required="true" type="com.udemy.model.Course" %>
 

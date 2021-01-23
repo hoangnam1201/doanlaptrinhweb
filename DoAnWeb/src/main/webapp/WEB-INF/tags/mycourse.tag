@@ -4,7 +4,7 @@
 
 <div class="course-row--container d-block">
     <div class="d-flex">
-        <a href="#">
+        <a href="<c:url value="/course/${course.id}" />">
             <img width="300" src="<c:url value="/images/${course.image}"/>"
                  alt="">
         </a>

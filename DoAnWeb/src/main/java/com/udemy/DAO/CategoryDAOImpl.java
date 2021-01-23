@@ -29,10 +29,11 @@ public class CategoryDAOImpl implements CategoryDAO {
         EntityManager em = emf.createEntityManager();
         String queryString = "select c " +
                 "from Category c left join Course course on course.category.id = c.id " +
-                "left join course.enrollments " +
-                "where c.parent!=null " +
+                "left join course.enrollments as enrollment " +
+                "where c.parent!=null and course.isComplete = true " +
+                "and function('datediff',CURRENT_DATE, enrollment.createdAt) < 7 " +
                 "group by c.id " +
-                "order by count(course.enrollments.size) desc";
+                "order by course.isComplete desc, count(enrollment.size) desc";
         List<Category> list = em.createQuery(queryString, Category.class).setMaxResults(amount).getResultList();
         em.close();
         return list;

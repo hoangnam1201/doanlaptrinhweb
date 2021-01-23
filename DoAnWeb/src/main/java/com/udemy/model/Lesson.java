@@ -14,7 +14,8 @@ import java.util.Set;
 public class Lesson implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -26,6 +27,10 @@ public class Lesson implements Serializable {
     @Lob
     private String videoUrl;
     private int rowOrder;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "section_id")
+    private Section section;
 
     @OneToMany(mappedBy = "lesson")
     private Set<UserLesson> userLessonSet = new HashSet<UserLesson>();
@@ -42,6 +47,14 @@ public class Lesson implements Serializable {
 
     public void setUserLessonSet(Set<UserLesson> userLessonSet) {
         this.userLessonSet = userLessonSet;
+    }
+
+    public Section getSection() {
+        return section;
+    }
+
+    public void setSection(Section section) {
+        this.section = section;
     }
 
     public Long getId() {

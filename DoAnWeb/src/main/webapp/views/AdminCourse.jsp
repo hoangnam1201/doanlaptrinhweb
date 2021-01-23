@@ -40,7 +40,6 @@
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Price</th>
-                        <th scope="col">Description</th>
                         <th scope="col">Language</th>
                         <th scope="col">Level</th>
                         <th scope="col">Category</th>
@@ -53,11 +52,17 @@
                             <td>${course.id}</td>
                             <td>${course.name}</td>
                             <td>${course.price}</td>
-                            <td>${course.shortDescription}</td>
                             <td>${course.language}</td>
                             <td>${course.level}</td>
                             <td>${course.category.name}</td>
-                            <td><form method="post" action="${pageContext.request.contextPath}/admin/deletecourse?id=${course.id}"><button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></form></td>
+                            <td>
+                                <form method="post"
+                                      action="${pageContext.request.contextPath}/admin/deletecourse?id=${course.id}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"
+                                                                                                   aria-hidden="true"></i>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>

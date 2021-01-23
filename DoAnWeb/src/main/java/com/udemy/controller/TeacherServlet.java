@@ -159,6 +159,7 @@ public class TeacherServlet extends HttpServlet {
         course.setPrice(Double.parseDouble(params.get("price")));
         course.setShortDescription(params.get("short-description"));
         course.setDescription(params.get("description"));
+        course.setLanguage(params.get("language"));
         course.setLevel(params.get("level"));
         course.setLearnGoals(params.get("learn-goal"));
         course.setRequirements(params.get("requirements"));

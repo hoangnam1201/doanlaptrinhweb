@@ -4,27 +4,28 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table
-public class Enrollment {
-    @EmbeddedId
-    private EnrollmentID id;
+@Table(
+        uniqueConstraints =
+        @UniqueConstraint(columnNames = {"user_id", "course_id"})
+)
+public class Enrollment implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @MapsId("userId")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @MapsId("courseId")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id")
+    @ManyToOne
+    @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
-    @Column(columnDefinition = "decimal(15,2) default 0.0")
-    private double price;
     @Lob
     private String comment;
     @Column(columnDefinition = "decimal(2,1) default 0.0")
@@ -35,16 +36,59 @@ public class Enrollment {
     @UpdateTimestamp
     private Date updatedAt;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Enrollment that = (Enrollment) o;
-        return Double.compare(that.price, price) == 0 && Double.compare(that.rating, rating) == 0 && Objects.equals(id, that.id) && Objects.equals(user, that.user) && Objects.equals(course, that.course) && Objects.equals(comment, that.comment) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, user, course, price, comment, rating, createdAt, updatedAt);
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

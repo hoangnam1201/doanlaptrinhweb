@@ -65,7 +65,27 @@ $(document).ready(function () {
                 }
             }
         ]
-    })
+    });
+    $('#rating-form').submit(e => {
+        e.preventDefault();
+        var frm = $('#rating-form');
+        var button = $(`#${e.target.id} button`);
+        button.attr('disabled', true);
+        $.ajax({
+            type: "POST",
+            url: frm.attr('action'),
+            data: frm.serialize(),
+            success: () => {
+                alert("OK");
+                location.reload();
+            },
+            error: () => {
+                alert("Error");
+                button.attr('disabled', false);
+                return false;
+            }
+        })
+    });
 });
 
 var quillOptions = {
@@ -125,5 +145,8 @@ $("form.lesson").submit(e => {
     const description = $(`#${formId} [name=description]`)
     const quillId = $(`#${formId} .ql-container`).attr('id')
     const quill = quills.find(q => q.selector === `#${quillId}`)
-    description.val(JSON.stringify(quill?.obj.getContents()))
+    const content = JSON.stringify(quill?.obj.getContents().replace(/\&nbsp;/g, ''));
+    console.log(encodeURIComponent(content));
+    e.preventDefault()
+    description.val(encodeURIComponent(content));
 })

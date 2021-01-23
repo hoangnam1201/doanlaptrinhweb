@@ -20,4 +20,16 @@
         <from>/teacher/manage/(.*)/(.*)</from>
         <to>/teacher/manage?id=$1&amp;section=$2</to>
     </rule>
+
+    <rule>
+        <name>Lesson</name>
+        <from>/course/(.*)/learn/(.*)</from>
+        <to>/course?id=$1&amp;learn&amp;lesson=$2</to>
+    </rule>
+    <rule>
+        <name>Course</name>
+        <condition type="method">GET</condition>
+        <from>/course/(.*)</from>
+        <to>/course?id=$1</to>
+    </rule>
 </urlrewrite>

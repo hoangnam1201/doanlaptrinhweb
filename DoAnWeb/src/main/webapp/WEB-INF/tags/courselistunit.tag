@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@attribute name="course" required="true" type="com.udemy.model.Course" %>
 
-<a href="<c:url value="${course.id}" />" class="course-row--container a-unstyled">
+<a href="<c:url value="/course/${course.id}" />" class="course-row--container a-unstyled">
     <img width="300" src="<c:url value="/images/${course.image}"/>"
          alt="">
     <div class="p-2 flex-fill">

@@ -10,7 +10,6 @@
         <class>com.udemy.model.Course</class>
         <class>com.udemy.model.User</class>
         <class>com.udemy.model.Enrollment</class>
-        <class>com.udemy.model.EnrollmentID</class>
         <class>com.udemy.model.Lesson</class>
         <class>com.udemy.model.Section</class>
         <class>com.udemy.model.UserLesson</class>
@@ -24,7 +23,7 @@
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/udemy"/>
             <property name="javax.persistence.jdbc.user" value="root"/>
-            <property name="javax.persistence.jdbc.password" value="namhoang123"/>
+            <property name="javax.persistence.jdbc.password" value="123456"/>
             <property name="hibernate.physical_naming_strategy"
                       value="com.udemy.util.CamelCaseToSnakeCaseNamingStrategy"
             />

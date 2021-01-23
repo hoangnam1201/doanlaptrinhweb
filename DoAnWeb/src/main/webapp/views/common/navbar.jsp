@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+
 <header class="position-sticky" style="top:0;z-index: 999;">
     <div class="header">
         <div class="position-relative d-block d-md-none ml-2">
@@ -61,8 +62,9 @@
             </div>
         </nav>
         <div class="flex-fill header-search d-none d-md-block">
-            <form class="h-100 d-flex align-items-center border rounded">
-                <input placeholder="Search for anything" type="text" class="pl-3 header-search-input flex-fill pr-3">
+            <form class="h-100 d-flex align-items-center border rounded" method="get" action="search">
+                <input placeholder="Search for anything" name="q"
+                       type="text" class="pl-3 header-search-input flex-fill pr-3">
                 <button class="ml-2 h-100 btn rounded-0 outline-none bg-active text-white">
                     <i class="fas fa-search"></i>
                 </button>
@@ -70,21 +72,7 @@
         </div>
         <c:choose>
             <c:when test="${sessionScope.auth}">
-                <div class="header-dropdown-wrapper">
-                    <button class="header-dropdown-button">
-                        <i style="font-size: 22px;" class="fas fa-shopping-cart"></i>
-                    </button>
-                    <div class="header-dropdown-menu right">
-                        <div class="px-3 py-2">
-                            <div class="text-center">
-                                Your cart is empty.
-                                <a href="#" class="btn text-info btn-block mt-2 font-weight-bold text-white">Keep
-                                    shopping</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <form id="frmLogout" method="post"
+                <form class="d-none" id="frmLogout" method="post"
                       action="${pageContext.request.contextPath}/account/logout"></form>
                 <div class="dropdown h-100">
                     <button class="btn border-left dropdown-toggle user-btn h-100 outline-none" type="button"
@@ -98,14 +86,14 @@
                             <a class="a-unstyled"
                                href="${pageContext.request.contextPath}/account/profile">Profile</a>
                         </div>
-                        <div class="border-bottom">
-                            <a class="a-unstyled"
-                               href="${pageContext.request.contextPath}/account/learning">My learning</a>
-                            <a class="a-unstyled"
-                               href="${pageContext.request.contextPath}/cart">My cart</a>
-                            <a class="a-unstyled"
-                               href="${pageContext.request.contextPath}/account/wishlist">Wishlist</a>
-                        </div>
+                        <c:if test="${sessionScope.authUser.role != 'admin'}">
+                            <div class="border-bottom">
+                                <a class="a-unstyled"
+                                   href="${pageContext.request.contextPath}/account/learning">My learning</a>
+                                <a class="a-unstyled"
+                                   href="${pageContext.request.contextPath}/account/wishlist">Wishlist</a>
+                            </div>
+                        </c:if>
                         <c:if test="${sessionScope.authUser.role.equals('admin')}">
                             <div class="border-bottom">
                                 <a class="a-unstyled" href="${pageContext.request.contextPath}/admin/managercat">My
@@ -129,10 +117,13 @@
                 </div>
             </c:when>
             <c:otherwise>
-                <a class="header-button btn header-login-button d-none d-md-block"
-                   href="${pageContext.request.contextPath}/account/login" role="button">Log in</a>
-                <a class="header-button btn header-signup-button d-none d-md-block"
-                   href="${pageContext.request.contextPath}/account/register" role="button">Sign up</a>
+                <div class="d-none d-md-block">
+                    <a class="header-button btn header-login-button"
+                       href="${pageContext.request.contextPath}/account/login" role="button">Log in</a>
+                    <a class="header-button btn header-signup-button"
+                       href="${pageContext.request.contextPath}/account/register" role="button">Sign up</a>
+                </div>
+                <div class="d-md-none"></div>
             </c:otherwise>
         </c:choose>
     </div>

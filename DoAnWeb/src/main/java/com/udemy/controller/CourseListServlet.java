@@ -2,9 +2,11 @@ package com.udemy.controller;
 
 import com.udemy.model.Category;
 import com.udemy.model.Course;
+import com.udemy.model.CourseListPageInfo;
 import com.udemy.service.CategoryServiceImpl;
 import com.udemy.service.CourseServiceImpl;
 import com.udemy.util.ServletUtils;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,10 +37,21 @@ public class CourseListServlet extends HttpServlet {
         if (category == null) {
             ServletUtils.forward("/views/Error404.jsp", request, response);
         } else {
-            List<Course> courseList = courseService.getFeaturedCourses(5);
-            request.setAttribute("courseList", courseList);
-            request.setAttribute("category", category);
-            ServletUtils.forward("/views/Category.jsp", request, response);
+            try {
+                CourseListPageInfo courseListPageInfo = new CourseListPageInfo();
+                int page = Integer.parseInt(Optional.ofNullable(request.getParameter("p"))
+                        .orElse("1"));
+
+                courseListPageInfo.setCurrentPage(page);
+                List<Course> courseList = courseService.getCourseListByCategory(category, courseListPageInfo);
+                request.setAttribute("courseList", courseList);
+                request.setAttribute("category", category);
+                request.setAttribute("courseListPageInfo", courseListPageInfo);
+
+                ServletUtils.forward("/views/CourseListPage.jsp", request, response);
+            } catch (Exception e) {
+                ServletUtils.forwardErrorPage(response);
+            }
         }
     }
 }
