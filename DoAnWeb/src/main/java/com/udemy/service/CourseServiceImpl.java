@@ -69,8 +69,44 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getCourseListByCategory(Category category, CourseListPageInfo courseListPageInfo) {
-        return courseDAO.getCourseListByCategory(category, courseListPageInfo);
+    public List<Course> getCourseListWithFilter(CourseListPageInfo courseListPageInfo, String page, String sort, String search) {
+        if (page != null) {
+            try {
+                int p = Integer.parseInt(page);
+                courseListPageInfo.setCurrentPage(p);
+            } catch (Exception ignored) {
+            }
+        }
+
+        if (sort != null) {
+            switch (sort) {
+                case "popular":
+                    courseListPageInfo.setSortField("studentCount");
+                    courseListPageInfo.setSortDirection("desc");
+                    break;
+                case "highest_rated":
+                    courseListPageInfo.setSortField("avgRating");
+                    courseListPageInfo.setSortDirection("desc");
+                    break;
+                case "lowest_price":
+                    courseListPageInfo.setSortField("price");
+                    courseListPageInfo.setSortDirection("asc");
+                    break;
+                case "recently_updated":
+                    courseListPageInfo.setSortField("updatedAt");
+                    courseListPageInfo.setSortDirection("desc");
+                    break;
+                case "newest":
+                    courseListPageInfo.setSortField("createdAt");
+                    courseListPageInfo.setSortDirection("desc");
+                    break;
+            }
+        }
+        if (search != null) {
+            courseListPageInfo.setSearchString(search);
+        }
+
+        return courseDAO.getCourseListWithFilter(courseListPageInfo);
     }
 
     @Override

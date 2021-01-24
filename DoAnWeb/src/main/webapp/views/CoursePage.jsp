@@ -5,8 +5,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <% pageContext.setAttribute("newLineChar", "\n"); %>
 <c:set var="hasComment" scope="page" value="${false}"/>
-<fmt:formatDate var="createdDate" value="${requestScope.course.createdAt}" pattern="MM/yyyy"/>
-<fmt:formatDate var="updatedDate" value="${requestScope.course.updatedAt}" pattern="MM/yyyy"/>
+<fmt:formatDate var="createdDate" value="${requestScope.course.createdAt}" pattern="MM/dd/yyyy"/>
+<fmt:formatDate var="updatedDate" value="${requestScope.course.updatedAt}" pattern="MM/dd/yyyy"/>
 
 <t:genericpage>
     <jsp:attribute name="js">
@@ -37,11 +37,10 @@
                         <div class="banner-title">${requestScope.course.name}</div>
                         <div class="banner-short-description">${requestScope.course.shortDescription}</div>
                         <div class="my-2">
-                        <span class="rating">
+
+                            <span class="rating">
                                 <span class="font-weight-bold">${requestScope.course.avgRating}</span>
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i
-                                class="fas fa-star-half-alt"></i></span>
+                                <div class="starrr" data-rating="${requestScope.course.avgRating}" }></div></span>
                             <small>${requestScope.course.ratingCount} ratings</small>
                         </div>
                         <p><i class="fas fa-user mr-1"></i> by <strong>${requestScope.course.teacher.name}</strong></p>
@@ -87,7 +86,7 @@
                                 </c:choose>
                                 <c:if test="${!requestScope.course.teacher.id.equals(sessionScope.authUser.id)}">
                                     <form class="mb-0" method="post"
-                                          action="<c:url value="/course/wishlist" />">
+                                          action="<c:url value="/course/${requestScope.wishlist?'remove-wishlist':'add-wishlist'}" />">
                                         <input name="courseId" type="hidden"
                                                value="${requestScope.course.id}">
                                         <button class="btn wishlist ml ml-lg-2">${requestScope.wishlist ? "Wishlisted" : "Wishlist"}
@@ -211,15 +210,10 @@
                                             <div class="mb-1 font-weight-bold">${comment.user.name}
                                                 <small class="mr-1">${comment.updatedAt.toLocaleString()}</small>
                                             </div>
-                                            <div class="mb-2"><span class="rating mr-2"><i
-                                                    class="fas fa-star"></i><i
-                                                    class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                                    class="fas fa-star"></i><i
-                                                    class="fas fa-star-half-alt"></i></span>
+                                            <div class="mb-2 rating">
+                                                <div class="starrr" data-rating="${comment.rating}"></div>
                                             </div>
-                                            <div class="mb-3">
-                                                    ${comment.comment}
-                                            </div>
+                                            <div style="white-space: pre-line" class="mb-3">${comment.comment}</div>
                                         </div>
                                     </div>
                                 </c:if>
@@ -246,6 +240,15 @@
                         </div>
                     </div>
                 </div>
+                <c:if test="${requestScope.recommendation.size() != 0}">
+                    <hr/>
+                    <h3 class="course-info-heading px-3">Recommendation</h3>
+                    <div class="multiple-carousel">
+                        <c:forEach items="${requestScope.recommendation}" var="recommendation">
+                            <t:multicourseunit course="${recommendation}"/>
+                        </c:forEach>
+                    </div>
+                </c:if>
             </div>
         </main>
     </jsp:body>

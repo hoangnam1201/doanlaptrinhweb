@@ -35,10 +35,6 @@
                         </c:forEach>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="txtImage">Image</label>
-                    <input type="file" accept="image/png, image/jpeg" class="form-control" id="txtImage" name="image">
-                </div>
                 <div class="card-footer">
                     <button type="submit" class="btn btn-outline-success">
                         <i class="fa fa-check" aria-hidden="true"></i>

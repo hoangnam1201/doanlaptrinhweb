@@ -32,6 +32,7 @@ public class CourseServlet extends HttpServlet {
             switch (path) {
                 case "/enroll":
                     if (user.getId() == null) {
+                        request.getSession().setAttribute("retUrl", "/course/" + courseId);
                         ServletUtils.redirect("/account/login", request, response);
                         return;
                     }
@@ -49,20 +50,18 @@ public class CourseServlet extends HttpServlet {
                     }
                     response.sendError(422);
                     break;
-                case "/wishlist":
+                case "/add-wishlist":
                     if (user.getId() == null) {
+                        request.getSession().setAttribute("retUrl", "/course/" + courseId);
                         ServletUtils.redirect("/account/login", request, response);
                         return;
                     }
-                    Wishlist wishlist = user.getWishlist().stream()
-                            .filter(_wishlist -> _wishlist.getCourse().getId().equals(courseId)).findAny().orElse(null);
-                    if (wishlist == null) {
-                        userService.addWishlist(user, courseId);
-                    } else {
-                        userService.removeWishlist(user, courseId);
-                    }
+                    userService.addWishlist(user.getId(), courseId);
                     ServletUtils.redirect("/course/" + courseId, request, response);
                     break;
+                case "/remove-wishlist":
+                    userService.removeWishlist(user.getId(), courseId);
+                    ServletUtils.redirect("/course/" + courseId, request, response);
                 default:
                     break;
             }
@@ -110,9 +109,8 @@ public class CourseServlet extends HttpServlet {
                 ServletUtils.forwardErrorPage(response);
             }
         } else {
-            if (user != null) {
-                Wishlist wishlist = user.getWishlist().stream()
-                        .filter(_wishlist -> _wishlist.getCourse().getId().equals(course.getId())).findAny().orElse(null);
+            if (user.getId() != null) {
+                Wishlist wishlist = userService.getWishlist(user.getId(), course.getId());
                 if (wishlist != null) {
                     request.setAttribute("wishlist", true);
                 } else {

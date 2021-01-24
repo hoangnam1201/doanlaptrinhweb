@@ -2,10 +2,13 @@ package com.udemy.service;
 
 import com.udemy.DAO.CourseDAOImpl;
 import com.udemy.DAO.UserDAOImpl;
+import com.udemy.DAO.WishlistDAOImpl;
 import com.udemy.model.Course;
 import com.udemy.model.Enrollment;
 import com.udemy.model.User;
 import com.udemy.model.Wishlist;
+import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +16,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     UserDAOImpl userDAO = new UserDAOImpl();
     CourseDAOImpl courseDAO = new CourseDAOImpl();
+    WishlistDAOImpl wishlistDAO = new WishlistDAOImpl();
 
     @Override
     public List<User> getAllUser() {
@@ -33,9 +37,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addWishlist(User user, long courseId) {
+    public User getUserById(long id) {
+        return userDAO.getUserById(id);
+    }
+
+    @Override
+    public User getUserWithWishlistById(long id) {
+        return userDAO.getUserWithWishlistById(id);
+    }
+
+    @Override
+    public Wishlist getWishlist(long userId, long courseId) {
+        return wishlistDAO.getWishlist(courseId, userId);
+    }
+
+    @Override
+    public void addWishlist(long userId, long courseId) {
+        User user = userDAO.getUserWithWishlistById(userId);
         Course course = courseDAO.getCourseById(courseId);
-        if (course != null) {
+        if (course != null && user != null) {
             Wishlist wishlist = new Wishlist();
             wishlist.setCourse(course);
             wishlist.setUser(user);
@@ -46,8 +66,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void removeWishlist(User user, long courseId) {
-        user.getWishlist().removeIf(wishlist -> wishlist.getCourse().getId().equals(courseId));
+    public void removeWishlist(long userId, long courseId) {
+        User user = userDAO.getUserWithWishlistById(userId);
+        user.getWishlist().removeIf(_wishlist -> _wishlist.getCourse().getId().equals(courseId));
         userDAO.update(user);
     }
 

@@ -1,4 +1,4 @@
-    <%@tag description="Slide nhieu khoa hoc" pageEncoding="UTF-8" %>
+<%@tag description="Slide nhieu khoa hoc" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@attribute name="course" required="true" type="com.udemy.model.Course" %>
 
@@ -25,9 +25,9 @@
             </div>
             <ul class="list-dot p-0">
                 <li><span class="rating">
-                                <span class="font-weight-bold">${course.avgRating}</span>
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                        class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span><small>(${course.ratingCount}) </small>
+                    <span class="font-weight-bold">${course.avgRating}</span>
+                    <div class="starrr" data-rating="${course.avgRating}"></div>
+                    </span><small>(${course.ratingCount}) </small>
                 </li>
                 <li><small>${course.studentCount} students </small></li>
                 <li><small>${course.level}</small></li>

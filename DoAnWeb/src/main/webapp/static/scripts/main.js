@@ -167,3 +167,27 @@ var quillGetHTML = inputDelta => {
     (new Quill(tempCont)).setContents(decoding(inputDelta));
     return tempCont.getElementsByClassName("ql-editor")[0].innerHTML;
 }
+
+$(".rating .starrr").each(function () {
+    var rating = $(this).attr("data-rating");
+    $(this).starrr({
+        rating,
+        readOnly: true
+    })
+})
+
+$("#rating-form .starrr").each(function () {
+    var rating = $(this).attr("data-rating");
+    $(this).starrr({
+        rating,
+        change: function (e, value) {
+            $("#rating-form [name='rating']").val(value)
+        }
+    })
+    $(this).children("button").attr("type", "button")
+})
+
+$('#paging button').click(function (e) {
+    var page = $(this).attr('data-page');
+    $('#paging [name="p"]').val(page);
+})

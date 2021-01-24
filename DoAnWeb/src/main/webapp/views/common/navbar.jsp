@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+
 <style>
     .sidenav {
         height: 100%;
@@ -11,7 +12,6 @@
         background-color: white;
         overflow-x: hidden;
         transition: 0.5s;
-        padding-top: 60px;
     }
 
     .sidenav a {
@@ -28,33 +28,34 @@
     }
 
     .sidenav .closebtn {
-        position: absolute;
-        top: 0;
-        right: 25px;
         font-size: 36px;
-        margin-left: 50px;
+        text-align: right;
+        line-height: 40px;
     }
 
     @media screen and (max-height: 450px) {
-        .sidenav {padding-top: 15px;}
-        .sidenav a {font-size: 18px;}
+        .sidenav a {
+            font-size: 18px;
+        }
     }
 </style>
 <header class="position-sticky" style="top:0;z-index: 999;">
     <div class="header">
-        <div class="position-relative d-block ml-2 mr-2">
+        <div class="position-relative d-block d-md-none ml-2 mr-2">
             <span style="position: sticky;  font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
         </div>
         <div id="mySidenav" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <div class="dropdown show">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Categories
                 </a>
 
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <c:forEach items="${requestScope.categoryList}" var="cat">
-                        <a class="dropdown-item text-inherit text-decoration-none" href="${pageContext.request.contextPath}/courses/${cat.slug}">${cat.name}</a>
+                        <a class="dropdown-item text-inherit text-decoration-none"
+                           href="${pageContext.request.contextPath}/courses/${cat.slug}">${cat.name}</a>
                     </c:forEach>
                 </div>
                 <c:choose>
@@ -91,6 +92,12 @@
                         </c:if>
                         <a class="a-unstyled" href="javascript:$('#frmLogout').submit();">Log Out</a>
                     </c:when>
+                    <c:otherwise>
+                        <div class="border-bottom">
+                            <a class="a-unstyled" href="${pageContext.request.contextPath}/account/login">Login</a>
+                            <a class="a-unstyled" href="${pageContext.request.contextPath}/account/register">Sign up</a>
+                        </div>
+                    </c:otherwise>
                 </c:choose>
             </div>
         </div>
@@ -140,7 +147,16 @@
             </div>
         </nav>
         <div class="flex-fill header-search d-none d-md-block">
-            <form class="h-100 d-flex align-items-center border rounded" method="get" action="search">
+            <form class="h-100 d-flex align-items-center border rounded" method="get" action="<c:url value="/search"/>">
+                <c:if test="${!empty requestScope.courseListPageInfo}">
+                    <c:set var="pageInfo" value="${requestScope.courseListPageInfo}"/>
+                    <c:if test="${not empty param.p}">
+                        <input type="hidden" name="p" value="${pageInfo.currentPage}">
+                    </c:if>
+                    <c:if test="${not empty param.order}">
+                        <input type="hidden" name="order" value="${pageInfo.searchString}">
+                    </c:if>
+                </c:if>
                 <input placeholder="Search for anything" name="q"
                        type="text" class="pl-3 header-search-input flex-fill pr-3">
                 <button class="ml-2 h-100 btn rounded-0 outline-none bg-active text-white">
@@ -153,7 +169,8 @@
                 <form class="d-none" id="frmLogout" method="post"
                       action="${pageContext.request.contextPath}/account/logout"></form>
                 <div class="dropdown h-100">
-                    <button class="btn border-left dropdown-toggle user-btn h-100 outline-none" type="button"
+                    <button class="d-none d-md-block btn border-left dropdown-toggle user-btn h-100 outline-none"
+                            type="button"
                             id="dropdown-user--button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-user mr-3"></i>${authUser.name}

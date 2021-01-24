@@ -38,16 +38,17 @@ public class CourseListServlet extends HttpServlet {
             ServletUtils.forward("/views/Error404.jsp", request, response);
         } else {
             try {
+                String page = request.getParameter("p");
+                String sort = request.getParameter("order");
+                String search = "";
+
                 CourseListPageInfo courseListPageInfo = new CourseListPageInfo();
-                int page = Integer.parseInt(Optional.ofNullable(request.getParameter("p"))
-                        .orElse("1"));
-
-                courseListPageInfo.setCurrentPage(page);
-                List<Course> courseList = courseService.getCourseListByCategory(category, courseListPageInfo);
+                courseListPageInfo.setCategory(category);
+                List<Course> courseList = courseService
+                        .getCourseListWithFilter(courseListPageInfo, page, sort, search);
+                courseListPageInfo.setPagination();
                 request.setAttribute("courseList", courseList);
-                request.setAttribute("category", category);
                 request.setAttribute("courseListPageInfo", courseListPageInfo);
-
                 ServletUtils.forward("/views/CourseListPage.jsp", request, response);
             } catch (Exception e) {
                 ServletUtils.forwardErrorPage(response);

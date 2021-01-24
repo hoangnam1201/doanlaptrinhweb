@@ -1,6 +1,7 @@
 package com.udemy.service;
 
 import com.udemy.model.User;
+import com.udemy.model.Wishlist;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +15,15 @@ public interface UserService {
 
     void delete(Long id);
 
-    void addWishlist(User user, long courseId);
+    User getUserById(long id);
 
-    void removeWishlist(User user, long courseId);
+    User getUserWithWishlistById(long id);
+
+    Wishlist getWishlist(long userId, long courseId);
+
+    void addWishlist(long userId, long courseId);
+
+    void removeWishlist(long userId, long courseId);
 
     Optional<User> findByUsername(String username);
 

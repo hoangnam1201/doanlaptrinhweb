@@ -1,13 +1,15 @@
 package com.udemy.DAO;
 
-import com.udemy.model.Category;
-import com.udemy.model.Course;
-import com.udemy.model.CourseListPageInfo;
-import com.udemy.model.Enrollment;
+import com.udemy.model.*;
+import com.udemy.model.Category_;
+import com.udemy.model.Course_;
+import com.udemy.model.Enrollment_;
 import com.udemy.util.JpaUtil;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseDAOImpl implements CourseDAO {
@@ -44,29 +46,47 @@ public class CourseDAOImpl implements CourseDAO {
     }
 
     @Override
-    public List<Course> searchCourses(String searchString) {
-        return null;
-    }
-
-    @Override
-    public List<Course> getCourseListByCategory(Category category, CourseListPageInfo courseListPageInfo) {
-        int pageSize = 1;
+    public List<Course> getCourseListWithFilter(CourseListPageInfo courseListPageInfo) {
+        //Init
         EntityManager em = emf.createEntityManager();
-        String queryString = "select c from Course c where c.isComplete = true and " +
-                " (c.category.id=?1 or c.category.parent.id=?1) ";
-        Query query = em.createQuery(queryString).setParameter(1, category.getId());
-        query.setFirstResult((courseListPageInfo.getCurrentPage() - 1) * pageSize);
-        query.setMaxResults(pageSize);
-        List<Course> list = query.getResultList();
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Course> query = builder.createQuery(Course.class);
+        Root<Course> root = query.from(Course.class);
 
-        Query queryTotal = em.createQuery("select count(c.id) from Course c where c.isComplete = true and " +
-                " (c.category.id=?1 or c.category.parent.id=?1) ");
-        queryTotal.setParameter(1, category.getId());
-        long countResult = (long) queryTotal.getSingleResult();
-        courseListPageInfo.setResultCount((int) countResult);
-        courseListPageInfo.setTotalPage((int) ((countResult / pageSize) + 1));
+        //Condition
+        Predicate isComplete = builder.isTrue(root.get(Course_.IS_COMPLETE));
+        Predicate search = builder.like(root.get(Course_.NAME), "%" + courseListPageInfo.getSearchString() + "%");
+        Predicate category = builder.and();
+        if (courseListPageInfo.getCategory() != null) {
+            if (courseListPageInfo.getCategory().getParent() != null) {
+                category = builder.equal(root.get(Course_.CATEGORY), courseListPageInfo.getCategory().getId());
+            } else {
+                category = builder.equal(root.get(Course_.CATEGORY).get("parent"), courseListPageInfo.getCategory().getId());
+            }
+        }
+        Predicate condition = builder.and(isComplete, search, category);
+
+        //Count
+        CriteriaQuery<Long> totalResults = builder.createQuery(Long.class);
+        totalResults.select(builder.count(totalResults.from(Course.class)));
+        em.createQuery(totalResults);
+        totalResults.where(condition);
+        courseListPageInfo.setResultCount(em.createQuery(totalResults).getSingleResult());
+
+        //List
+        query.select(root).where(condition);
+        if (courseListPageInfo.getSortDirection().equals("asc")) {
+            query.orderBy(builder.asc(root.get(courseListPageInfo.getSortField())));
+        } else {
+            query.orderBy(builder.desc(root.get(courseListPageInfo.getSortField())));
+        }
+
+        List<Course> results = em.createQuery(query)
+                .setFirstResult((courseListPageInfo.getCurrentPage() - 1) * CourseListPageInfo.pageLimit)
+                .setMaxResults(CourseListPageInfo.pageLimit)
+                .getResultList();
         em.close();
-        return list;
+        return results;
     }
 
     @Override
@@ -187,7 +207,7 @@ public class CourseDAOImpl implements CourseDAO {
         try {
             course = em.merge(course);
 
-            double totalRating = (double) em.createQuery("select sum(e.rating) " +
+            Long totalRating = (Long) em.createQuery("select sum(e.rating) " +
                     "from Course c " +
                     "join c.enrollments as e where c.id = ?1 and e.rating != 0")
                     .setParameter(1, course.getId()).getSingleResult();
@@ -197,7 +217,7 @@ public class CourseDAOImpl implements CourseDAO {
                     "where c.id = ?1 and e.rating != 0").setParameter(1, course.getId())
                     .getSingleResult();
 
-            course.setAvgRating(totalRating / ratingCount);
+            course.setAvgRating((totalRating * 1.0) / ratingCount);
             course.setRatingCount(ratingCount.intValue());
 
             em.merge(course);

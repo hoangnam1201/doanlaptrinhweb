@@ -24,6 +24,7 @@
                 <div class="container-fluid">
                     <h2 class="section-featured-title">
                         Featured courses
+                        <div class="starrr"></div>
                     </h2>
                     <div class="single-carousel">
                         <c:forEach items="${requestScope.featuredCourses}" var="course">

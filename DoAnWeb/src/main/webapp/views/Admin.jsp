@@ -43,7 +43,6 @@
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Image</th>
                         <th scope="col">Slug</th>
                         <th scope="col">Parent</th>
                         <th scope="col"></th>
@@ -56,7 +55,6 @@
                         <tr>
                         <td>${cat.id}</td>
                         <td>${cat.name}</td>
-                        <td>${cat.image}</td>
                         <td>${cat.slug}</td>
                             <td>None</td>
                         <td><a class="btn btn-sm btn-outline-primary" role="button" href="${pageContext.request.contextPath}/admin/editcat?id=${cat.id}">
@@ -67,7 +65,6 @@
                             <tr>
                                 <td>${subcat.id}</td>
                                 <td>${subcat.name}</td>
-                                <td>${subcat.image}</td>
                                 <td>${subcat.slug}</td>
                                 <td>${subcat.parent.name}</td>
                                 <td><a class="btn btn-sm btn-outline-primary" role="button" href="${pageContext.request.contextPath}/admin/editcat?id=${subcat.id}">

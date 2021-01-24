@@ -5,7 +5,6 @@
         "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
 
 <urlrewrite>
-
     <rule>
         <name>SubCategory</name>
         <from>/courses/(.*)/(.*)</from>

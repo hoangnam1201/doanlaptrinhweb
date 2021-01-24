@@ -12,18 +12,20 @@
     <form method="post" action="<c:url value="/course/rating" />"
           id="rating-form" role="dialog" class="modal fade pr-0">
         <div class="modal-dialog" role="document">
-            <div class="modal-content border rounded bg-white">
+            <div class="modal-content border-0 shadow rounded bg-white">
                 <div id="message"></div>
                 <input type="hidden" name="courseId" value="${param.id}">
-                <div class="bg-grey p-4 border-bottom">Review this course</div>
+                <h4 class="bg-info d-flex p-4 border-bottom justify-content-center rounded-top text-white">GIVE
+                    FEEDBACK</h4>
                 <div class="p-3">
-                    <input required min="0" step="1" value="${requestScope.enrollment.rating}" class="form-control mb-2"
-                           type="number"
-                           name="rating">
-                    <textarea required class="form-control" type="text" name="comment" placeholder="comment"
+                    <h6 class="text-secondary p-2 d-flex justify-content-center mt-1 mb-0">OVERALL RATING</h6>
+                    <input value="${requestScope.enrollment.rating}" type="hidden" name="rating">
+                    <div class="starrr px-2" data-rating="${requestScope.enrollment.rating}"></div>
+                    <textarea required class="bg-grey border-0 outline-none w-100 p-2" type="text" name="comment"
+                              placeholder="Feedback"
                               rows="6">${requestScope.enrollment.comment}</textarea>
                 </div>
-                <div class="p-4 text-right">
+                <div class="p-3 text-right">
                     <button data-toggle="modal" data-target="#rating-form"
                             type="button" class="btn text-active font-weight-bold mr-2">Cancel
                     </button>

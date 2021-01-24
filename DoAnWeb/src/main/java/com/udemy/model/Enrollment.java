@@ -18,7 +18,7 @@ public class Enrollment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -28,8 +28,8 @@ public class Enrollment implements Serializable {
 
     @Lob
     private String comment;
-    @Column(columnDefinition = "decimal(2,1) default 0.0")
-    private double rating;
+    @Column(nullable = false, columnDefinition = "TINYINT default 0")
+    private int rating = 0;
 
     @CreationTimestamp
     private Date createdAt;
@@ -72,7 +72,7 @@ public class Enrollment implements Serializable {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(int rating) {
         this.rating = rating;
     }
 

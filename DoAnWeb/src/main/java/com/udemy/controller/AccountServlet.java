@@ -28,22 +28,27 @@ public class AccountServlet extends HttpServlet {
         }
 
         String path = Optional.ofNullable(request.getPathInfo()).orElse("");
-        switch (path) {
-            case "/register":
-                postRegister(request, response);
-                break;
-            case "/login":
-                postLogin(request, response);
-                break;
-            case "/logout":
-                postLogout(request, response);
-                break;
-            case "/profile":
-                updateProfile(request, response);
-                break;
-            default:
-                ServletUtils.forwardErrorPage(response);
-                break;
+        try {
+            switch (path) {
+                case "/register":
+                    postRegister(request, response);
+                    break;
+                case "/login":
+                    postLogin(request, response);
+                    break;
+                case "/logout":
+                    postLogout(request, response);
+                    break;
+                case "/profile":
+                    updateProfile(request, response);
+                    break;
+                default:
+                    ServletUtils.forwardErrorPage(response);
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ServletUtils.forwardErrorPage(response);
         }
     }
 
@@ -62,13 +67,8 @@ public class AccountServlet extends HttpServlet {
         user.setName(name);
         user.setPassword(bcryptHashString);
 
-        PrintWriter out = response.getWriter();
-        try {
-            userService.addNew(user);
-            ServletUtils.redirect("/account/login", request, response);
-        } catch (Exception ex) {
-            out.println(ex.getMessage());
-        }
+        userService.addNew(user);
+        ServletUtils.redirect("/account/login", request, response);
 
     }
 
@@ -146,43 +146,47 @@ public class AccountServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = Optional.ofNullable(request.getPathInfo()).orElse("");
         CourseServiceImpl courseService = new CourseServiceImpl();
+        UserServiceImpl userService = new UserServiceImpl();
         User user = (User) request.getSession().getAttribute("authUser");
-
-        switch (path) {
-            case "/register":
-                if ((boolean) request.getSession().getAttribute("auth")) {
-                    ServletUtils.redirect("/", request, response);
-                    return;
-                }
-                ServletUtils.forward("/views/AccountRegister.jsp", request, response);
-                break;
-            case "/login":
-                if ((boolean) request.getSession().getAttribute("auth")) {
-                    ServletUtils.redirect("/", request, response);
-                    return;
-                }
-                request.setAttribute("hasError", false);
-                ServletUtils.forward("/views/Login.jsp", request, response);
-                break;
-            case "/profile":
-                ServletUtils.forward("/views/Profile.jsp", request, response);
-                break;
-            case "/learning":
-                user.getEnrollments().size();
-                List<Course> myLearningList = courseService.getCourseList();
-                request.setAttribute("courseList", myLearningList);
-                request.setAttribute("page", "My learning");
-                ServletUtils.forward("/views/UserMyLearning.jsp", request, response);
-            case "/wishlist":
-                user.getEnrollments().size();
-                List<Course> myWishlist = courseService.getCourseList();
-                request.setAttribute("courseList", myWishlist);
-                request.setAttribute("page", "Wishlist");
-                ServletUtils.forward("/views/UserMyLearning.jsp", request, response);
-                break;
-            default:
-                ServletUtils.forwardErrorPage(response);
-                break;
+        try {
+            switch (path) {
+                case "/register":
+                    if ((boolean) request.getSession().getAttribute("auth")) {
+                        ServletUtils.redirect("/", request, response);
+                        return;
+                    }
+                    ServletUtils.forward("/views/AccountRegister.jsp", request, response);
+                    break;
+                case "/login":
+                    if ((boolean) request.getSession().getAttribute("auth")) {
+                        ServletUtils.redirect("/", request, response);
+                        return;
+                    }
+                    request.setAttribute("hasError", false);
+                    ServletUtils.forward("/views/Login.jsp", request, response);
+                    break;
+                case "/profile":
+                    ServletUtils.forward("/views/Profile.jsp", request, response);
+                    break;
+                case "/learning":
+                    User newUser = userService.getUserById(user.getId());
+                    newUser.getEnrollments().size();
+                    request.setAttribute("user", newUser);
+                    request.setAttribute("page", "My learning");
+                    ServletUtils.forward("/views/UserMyLearning.jsp", request, response);
+                case "/wishlist":
+                    User userWithWishlist = userService.getUserWithWishlistById(user.getId());
+                    request.setAttribute("user", userWithWishlist);
+                    request.setAttribute("page", "Wishlist");
+                    ServletUtils.forward("/views/UserMyLearning.jsp", request, response);
+                    break;
+                default:
+                    ServletUtils.forwardErrorPage(response);
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ServletUtils.forwardErrorPage(response);
         }
     }
 }

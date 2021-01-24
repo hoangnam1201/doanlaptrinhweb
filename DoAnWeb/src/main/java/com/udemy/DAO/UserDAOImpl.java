@@ -22,14 +22,28 @@ public class UserDAOImpl implements UserDAO {
         try {
             User user = em.createQuery(queryString, User.class).getSingleResult();
             Hibernate.initialize(user.getEnrollments());
-            Hibernate.initialize(user.getWishlist());
-            Hibernate.initialize(user.getUserLessons());
             return user;
         } catch (NoResultException ex) {
             return null;
         } finally {
             em.close();
         }
+    }
+
+    @Override
+    public User getUserWithWishlistById(long id) {
+        EntityManager em = emf.createEntityManager();
+        String queryString = "select u from User u left join fetch u.wishlist where u.id=" + id;
+        try {
+            User user = em.createQuery(queryString, User.class).getSingleResult();
+            Hibernate.initialize(user.getEnrollments());
+            return user;
+        } catch (NoResultException ex) {
+            return null;
+        } finally {
+            em.close();
+        }
+
     }
 
     public List<User> getAllUser() {
@@ -93,8 +107,6 @@ public class UserDAOImpl implements UserDAO {
             User user = entityManager.createQuery("select u from User u where u.username = :username", User.class)
                     .setParameter("username", username).getSingleResult();
             Hibernate.initialize(user.getEnrollments());
-            Hibernate.initialize(user.getWishlist());
-            Hibernate.initialize(user.getUserLessons());
             return Optional.of(user);
         } catch (Exception ex) {
             ex.printStackTrace();

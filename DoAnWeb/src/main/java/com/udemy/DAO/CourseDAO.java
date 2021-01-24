@@ -11,9 +11,7 @@ public interface CourseDAO {
 
     List<Course> getCourseList();
 
-    List<Course> searchCourses(String searchString);
-
-    List<Course> getCourseListByCategory(Category category, CourseListPageInfo courseListPageInfo);
+    List<Course> getCourseListWithFilter(CourseListPageInfo courseListPageInfo);
 
     List<Course> getMyCourses(Long categoryId);
 

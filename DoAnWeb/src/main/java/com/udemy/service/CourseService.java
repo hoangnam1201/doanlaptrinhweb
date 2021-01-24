@@ -25,7 +25,7 @@ public interface CourseService {
 
     List<Course> getLatestCourses(int amount);
 
-    List<Course> getCourseListByCategory(Category category, CourseListPageInfo courseListPageInfo);
+    List<Course> getCourseListWithFilter(CourseListPageInfo courseListPageInfo, String page, String sort, String search);
 
     List<Course> getCourseRecommendations(Course course, int amount);
 

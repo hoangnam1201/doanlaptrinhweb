@@ -3,6 +3,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <c:set var="page" value="${requestScope.page}"/>
 <c:set var="user" value="${sessionScope.authUser}"/>
+<c:set var="userWithWishlist" value="${requestScope.user}"/>
 
 <t:genericpage>
     <jsp:attribute name="js">
@@ -36,8 +37,8 @@
                     </c:choose>
                 </ul>
                 <c:choose>
-                    <c:when test="${(page.equals('Wishlist')&&user.wishlist.size()==0)||
-            (page.equals('My learning')&&user.enrollments.size()==0)}">
+                    <c:when test="${(page.equals('Wishlist')&&userWithWishlist.wishlist.size()==0)||
+            (page.equals('My learning')&&requestScope.user.enrollments.size()==0)}">
                         <div class="p-3 text-center bg-grey rounded">
                             <h4 class="font-weight-bold">Nothing to see here</h4>
                             <p class="text-secondary">
@@ -49,14 +50,14 @@
                         <div class="d-flex flex-wrap">
                             <c:choose>
                                 <c:when test="${page.equals('Wishlist')}">
-                                    <c:forEach items="${sessionScope.authUser.wishlist}" var="wishlist">
+                                    <c:forEach items="${userWithWishlist.wishlist}" var="wishlist">
                                         <div class="col-3 my-list mb-3">
                                             <t:multicourseunit course="${wishlist.course}"/>
                                         </div>
                                     </c:forEach>
                                 </c:when>
                                 <c:otherwise>
-                                    <c:forEach items="${sessionScope.authUser.enrollments}" var="enrollment">
+                                    <c:forEach items="${requestScope.user.enrollments}" var="enrollment">
                                         <div class="col-3 my-list mb-3">
                                             <t:multicourseunit course="${enrollment.course}"/>
                                         </div>

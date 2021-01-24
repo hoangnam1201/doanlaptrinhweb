@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface UserDAO {
     User getUserById(long id);
 
+    User getUserWithWishlistById(long id);
+
     List<User> getAllUser();
 
     void addNew(User user);
