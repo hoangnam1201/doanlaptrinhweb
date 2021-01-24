@@ -99,13 +99,9 @@
 </div>
 <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
 <jsp:include page="common/script.jsp"/>
+<script type="text/javascript" src="<c:url value="/static/scripts/main.js"/>"></script>
 <script>
-    var quillGetHTML = inputDelta => {
-        var tempCont = document.createElement("div");
-        (new Quill(tempCont)).setContents(inputDelta);
-        return tempCont.getElementsByClassName("ql-editor")[0].innerHTML;
-    }
-    $("#description").append(quillGetHTML(${requestScope.lesson.description}))
+    $("#description").append(quillGetHTML('${requestScope.lesson.description}'))
 </script>
 </body>
 </html>

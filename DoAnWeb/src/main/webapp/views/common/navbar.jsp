@@ -1,19 +1,97 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<style>
+    .sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: white;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+    }
 
+    .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 20px;
+        color: black;
+        display: block;
+        transition: 0.3s;
+    }
+
+    .sidenav a:hover {
+        color: #f1f1f1;
+    }
+
+    .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
+
+    @media screen and (max-height: 450px) {
+        .sidenav {padding-top: 15px;}
+        .sidenav a {font-size: 18px;}
+    }
+</style>
 <header class="position-sticky" style="top:0;z-index: 999;">
     <div class="header">
-        <div class="position-relative d-block d-md-none ml-2">
-            <input id="header-mobile-toggle" class="header-mobile-toggle" type="checkbox">
-            <label id="drawer-toggle" for="header-mobile-toggle"></label>
-            <label id="icon" for="header-mobile-toggle">
-                <i class="fas fa-bars"></i>
-            </label>
-            <div class="drawer">
-                <nav class="sidebar--mobile">
-                    <div class="sidebar--mobile-profile">
-                    </div>
-                </nav>
+        <div class="position-relative d-block ml-2 mr-2">
+            <span style="position: sticky;  font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+        </div>
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <div class="dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Categories
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <c:forEach items="${requestScope.categoryList}" var="cat">
+                        <a class="dropdown-item text-inherit text-decoration-none" href="${pageContext.request.contextPath}/courses/${cat.slug}">${cat.name}</a>
+                    </c:forEach>
+                </div>
+                <c:choose>
+                    <c:when test="${sessionScope.auth}">
+                        <div class="border-bottom">
+                            <a class="a-unstyled"
+                               href="${pageContext.request.contextPath}/account/profile">Profile</a>
+                        </div>
+                        <c:if test="${sessionScope.authUser.role != 'admin'}">
+                            <div class="border-bottom">
+                                <a class="a-unstyled"
+                                   href="${pageContext.request.contextPath}/account/learning">My learning</a>
+                                <a class="a-unstyled"
+                                   href="${pageContext.request.contextPath}/account/wishlist">Wishlist</a>
+                            </div>
+                        </c:if>
+                        <c:if test="${sessionScope.authUser.role.equals('admin')}">
+                            <div class="border-bottom">
+                                <a class="a-unstyled" href="${pageContext.request.contextPath}/admin/managercat">My
+                                    Categories</a>
+                                <a class="a-unstyled" href="${pageContext.request.contextPath}/admin/managercourse">My
+                                    Courses</a>
+                                <a class="a-unstyled"
+                                   href="${pageContext.request.contextPath}/admin/manageruser">Users</a>
+                            </div>
+                        </c:if>
+                        <c:if test="${sessionScope.authUser.role.equals('teacher')}">
+                            <div class="border-bottom">
+                                <a class="a-unstyled" href="${pageContext.request.contextPath}/teacher/courses">My
+                                    courses</a>
+                                <a class="a-unstyled"
+                                   href="${pageContext.request.contextPath}/teacher/create">Create course</a>
+                            </div>
+                        </c:if>
+                        <a class="a-unstyled" href="javascript:$('#frmLogout').submit();">Log Out</a>
+                    </c:when>
+                </c:choose>
             </div>
         </div>
         <a class="flex-shrink-0" href="${pageContext.request.contextPath}/">
@@ -127,4 +205,13 @@
             </c:otherwise>
         </c:choose>
     </div>
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+    </script>
 </header>
