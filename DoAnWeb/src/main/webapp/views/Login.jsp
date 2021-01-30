@@ -1,84 +1,120 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="t" %>
-<style>
-    body{
-        background-image: url("../static/images/login.jpg");
-    }
-    .loginbox{
-        width: 400px;
-        height: 420px;
-        position: relative;
-        margin: 6% auto;
-        background: #6c757d;
-        padding-right: 320px;
-        box-shadow: 5px 5px 5px 5px midnightblue;
-        border-radius: 25px;
-    }
-    .form-group{
-        width: 300px;
-
-    }
-    .alert{
-        width: 300px;
-    }
-</style>
+<link rel="stylesheet" href="<c:url value="/static/css/login.css" />">
+<link
+        rel="stylesheet"
+        href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+        integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+        crossorigin="anonymous"
+/>
+<link
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400"
+        rel="stylesheet"
+/>
 <t:genericpage>
     <jsp:body>
-        <div class="loginbox">
-            <div class="container-fluid h-100">
-                <div class="row h-100 justify-content-center align-items-center">
-                    <div class="col-sm-4">
-                        <c:if test="${requestScope.hasError}">
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                <strong>Login failed!</strong> ${requestScope.errorMessage}
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        </c:if>
-                        <form method="post">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <input required class="form-control form-control-lg border-right-0 border"
-                                           placeholder="User name"
-                                           type="text" name="username" autofocus>
-                                    <span class="input-group-append">
-                                        <div class="input-group-text bg-white">
-                                          <i class="fa fa-user" aria-hidden="true"></i>
-                                        </div>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <input required class="form-control form-control-lg border-right-0 border" placeholder="Password"
-                                           type="password" name="password">
-                                    <span class="input-group-append">
-                                        <div class="input-group-text bg-white">
-                                          <i class="fa fa-key" aria-hidden="true"></i>
-                                        </div>
-                                     </span>
-                                </div>
-                            </div>
-                            <div class="form-group d-flex">
-                                <div>
-                                    <a class="btn btn-lg btn-outline-info btn-block text-white"
-                                       href="${pageContext.request.contextPath}/" role="button">
-                                        <i class="fa fa-home" aria-hidden="true"></i>
-                                        Home
-                                    </a>
-                                </div>
-                                <div class="flex-fill ml-1">
-                                    <button type="submit" class="btn btn-lg btn-info btn-block text-white">
-                                        Sign In
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+        <c:if test="${requestScope.hasError}">
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Login failed!</strong> ${requestScope.errorMessage}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-        </div>
+        </c:if>
+            <div id="form_wrapper">
+                <div id="form_left">
+                    <img src="../static/images/iconlap.png" alt="computer icon"/>
+                </div>
+                <form method="post">
+                    <div id="form_right">
+                        <h1>Member Login</h1>
+                        <div class="input_container">
+                            <i class="fas fa-user"></i>
+                            <input
+                                    placeholder="Username"
+                                    type="text"
+                                    name="username"
+                                    id="field_email"
+                                    class="input_field"
+                            />
+                        </div>
+                        <div class="input_container">
+                            <i class="fas fa-lock"></i>
+                            <input
+                                    placeholder="Password"
+                                    type="password"
+                                    name="password"
+                                    id="field_password"
+                                    class="input_field"
+                            />
+                        </div>
+                        <input
+                                type="submit"
+                                value="Login"
+                                id="input_submit"
+                                class="input_field"
+                        />
+                        <span>Forgot <a href="#"> Username / Password ?</a></span>
+                        <span id="create_account">
+                    <a href="#">Create your account ➡ </a>
+                  </span>
+                    </div>
+                </form>
+            </div>
+<%--        <div class="container">--%>
+<%--            <div class="d-flex justify-content-center h-100">--%>
+<%--                <div class="card">--%>
+<%--                    <div class="card-header">--%>
+<%--                        <h3>Sign In</h3>--%>
+<%--                        <div class="d-flex justify-content-end social_icon">--%>
+<%--                            <span><i class="fab fa-facebook-square"></i></span>--%>
+<%--                            <span><i class="fab fa-google-plus-square"></i></span>--%>
+<%--                            <span><i class="fab fa-twitter-square"></i></span>--%>
+<%--                        </div>--%>
+<%--                    </div>--%>
+<%--                    <div class="card-body">--%>
+<%--                        <c:if test="${requestScope.hasError}">--%>
+<%--                            <div class="alert alert-warning alert-dismissible fade show" role="alert">--%>
+<%--                           <strong>Login failed!</strong> ${requestScope.errorMessage}--%>
+<%--                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">--%>
+<%--                           <span aria-hidden="true">&times;</span>--%>
+<%--                            </button>--%>
+<%--                             </div>--%>
+<%--                            </c:if>--%>
+<%--                        <form method="post">--%>
+<%--                            <div class="input-group form-group">--%>
+<%--                                <div class="input-group-prepend">--%>
+<%--                                    <span class="input-group-text"><i class="fas fa-user"></i></span>--%>
+<%--                                </div>--%>
+<%--                                <input type="text" class="form-control" placeholder="Username" name="username" autofocus>--%>
+
+<%--                            </div>--%>
+<%--                            <div class="input-group form-group">--%>
+<%--                                <div class="input-group-prepend">--%>
+<%--                                    <span class="input-group-text"><i class="fas fa-key"></i></span>--%>
+<%--                                </div>--%>
+<%--                                <input type="password" class="form-control" placeholder="Password" name="password">--%>
+<%--                            </div>--%>
+<%--                            <div class="row align-items-center remember">--%>
+<%--                                <input type="checkbox">Remember Me--%>
+<%--                            </div>--%>
+<%--                            <div class="form-group">--%>
+<%--                                <input type="submit" value="Login" class="btn btn-warning float-right login_btn">--%>
+<%--                            </div>--%>
+<%--                        </form>--%>
+<%--                    </div>--%>
+<%--                    <div class="card-footer">--%>
+<%--                        <div class="d-flex justify-content-center links">--%>
+<%--                            Don't have an account?<a href="#">Sign Up</a>--%>
+<%--                        </div>--%>
+<%--                        <div class="d-flex justify-content-center">--%>
+<%--                            <a href="#">Forgot your password?</a>--%>
+<%--                        </div>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--            </div>--%>
+<%--        </div>--%>
+
     </jsp:body>
 </t:genericpage>
