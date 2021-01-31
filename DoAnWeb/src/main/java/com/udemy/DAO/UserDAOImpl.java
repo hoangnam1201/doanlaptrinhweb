@@ -54,6 +54,15 @@ public class UserDAOImpl implements UserDAO {
         return list;
     }
 
+    @Override
+    public List<User> getTeachers() {
+        EntityManager em = emf.createEntityManager();
+        String queryString = "select c from User c where c.role = 'teacher'";
+        List<User> list = em.createQuery(queryString, User.class).getResultList();
+        em.close();
+        return list;
+    }
+
 
     @Override
     public void addNew(User user) {
@@ -106,6 +115,22 @@ public class UserDAOImpl implements UserDAO {
         try {
             User user = entityManager.createQuery("select u from User u where u.username = :username", User.class)
                     .setParameter("username", username).getSingleResult();
+            Hibernate.initialize(user.getEnrollments());
+            return Optional.of(user);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Optional.empty();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        EntityManager entityManager = emf.createEntityManager();
+        try {
+            User user = entityManager.createQuery("select u from User u where u.email = :username", User.class)
+                    .setParameter("username", email).getSingleResult();
             Hibernate.initialize(user.getEnrollments());
             return Optional.of(user);
         } catch (Exception ex) {

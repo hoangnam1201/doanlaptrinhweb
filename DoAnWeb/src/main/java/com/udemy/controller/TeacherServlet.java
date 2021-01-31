@@ -47,7 +47,7 @@ public class TeacherServlet extends HttpServlet {
                     courseService.addNew(course);
                     request.setAttribute("create", true);
                     request.setAttribute("success", true);
-                    ServletUtils.redirect("/teacher/create", request, response);
+                    ServletUtils.forward("/views/TeacherCourseDetails.jsp", request, response);
                     break;
                 case "/update-details":
                     course = setCourseDetails(true, request);
@@ -176,7 +176,7 @@ public class TeacherServlet extends HttpServlet {
     protected void setLessonDetails(Lesson lesson, HttpServletRequest request) {
         lesson.setName(request.getParameter("name"));
         lesson.setRowOrder(Integer.parseInt(request.getParameter("row-order")));
-        lesson.setVideoUrl(request.getParameter("video-url"));
+        lesson.setVideoUrl(request.getParameter("video-url").replace('_', '.'));
         lesson.setDescription(request.getParameter("description"));
     }
 

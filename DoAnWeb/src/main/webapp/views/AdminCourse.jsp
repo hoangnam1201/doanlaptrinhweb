@@ -57,9 +57,10 @@
                             <td>${course.category.name}</td>
                             <td>
                                 <form method="post"
-                                      action="${pageContext.request.contextPath}/admin/deletecourse?id=${course.id}">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash"
-                                                                                                   aria-hidden="true"></i>
+                                      action="${pageContext.request.contextPath}/admin/bancourse?id=${course.id}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i
+                                            class="fas fa-lock${course.disabled ? "-open":""}"
+                                            aria-hidden="true"></i>
                                     </button>
                                 </form>
                             </td>

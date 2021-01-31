@@ -1,6 +1,7 @@
 <%@tag description="Slide 1 khoa hoc" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@attribute name="course" required="true" type="com.udemy.model.Course" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="t" %>
 
 <a href="${pageContext.request.contextPath}/course/${course.id}"
    class="a-unstyled single-course--container flex-column flex-sm-row">
@@ -14,7 +15,7 @@
             <h5 class="font-weight-bold">${course.name}</h5>
             <p class="m-0">${course.shortDescription}</p>
             <small>by <span class="active-color">${course.teacher.name}</span></small>
-            <ul class="list-dot p-0">
+            <ul class="list-dot p-0 mb-0">
                 <li><span class="rating">
                     <span class="font-weight-bold">${course.avgRating}</span>
                     <div class="starrr" data-rating="${course.avgRating}"></div>
@@ -23,6 +24,7 @@
                 <li><small>${course.studentCount} students </small></li>
                 <li><small>${course.level}</small></li>
             </ul>
+            <t:badge course="${course}" />
         </div>
         <p class="price">
             $${course.price}

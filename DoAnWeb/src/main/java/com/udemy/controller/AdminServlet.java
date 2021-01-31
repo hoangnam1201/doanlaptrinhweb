@@ -46,11 +46,15 @@ public class AdminServlet extends HttpServlet {
             case "/deletecourse":
                 deleteCourse(request, response);
                 break;
+            case "/bancourse":
+                banCourse(request, response);
+                break;
             default:
                 ServletUtils.forwardErrorPage(response);
                 break;
         }
     }
+
     private void postCategories(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("name");
         String image = request.getParameter("image");
@@ -77,25 +81,25 @@ public class AdminServlet extends HttpServlet {
         }
 
     }
+
     private void deleteCategory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long id =Long.parseLong(request.getParameter("id"));
+        Long id = Long.parseLong(request.getParameter("id"));
         CategoryServiceImpl categoryService = new CategoryServiceImpl();
 
         try {
             categoryService.delete(id);
-            ServletUtils.redirect("/admin/managercat",request,response);
-        }
-        catch (Exception ex)
-        {
+            ServletUtils.redirect("/admin/managercat", request, response);
+        } catch (Exception ex) {
             throw ex;
 
         }
     }
+
     private void updateCategory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long id =Long.parseLong(request.getParameter("id"));
+        Long id = Long.parseLong(request.getParameter("id"));
         String parentId = request.getParameter("parent");
         CategoryServiceImpl categoryService = new CategoryServiceImpl();
-        Category category =categoryService.getCategoryById(id);
+        Category category = categoryService.getCategoryById(id);
         Category parentCategory = parentId.isEmpty()
                 ? null
                 : categoryService.getCategoryById(Long.parseLong(parentId));
@@ -106,14 +110,13 @@ public class AdminServlet extends HttpServlet {
 
         try {
             categoryService.update(category);
-            ServletUtils.redirect("/admin/managercat",request,response);
-        }
-        catch (Exception ex)
-        {
+            ServletUtils.redirect("/admin/managercat", request, response);
+        } catch (Exception ex) {
             throw ex;
 
         }
     }
+
     private void postRegisterTeacher(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String password = request.getParameter("password");
         String bcryptHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
@@ -121,7 +124,7 @@ public class AdminServlet extends HttpServlet {
         String username = request.getParameter("username");
         String name = request.getParameter("name");
 
-        String role ="teacher";
+        String role = "teacher";
 
         UserServiceImpl userService = new UserServiceImpl();
 
@@ -141,34 +144,47 @@ public class AdminServlet extends HttpServlet {
         }
 
     }
+
     private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long id =Long.parseLong(request.getParameter("id"));
+        Long id = Long.parseLong(request.getParameter("id"));
         UserServiceImpl userService = new UserServiceImpl();
 
         try {
             userService.delete(id);
-            ServletUtils.redirect("/admin/manageruser",request,response);
-        }
-        catch (Exception ex)
-        {
+            ServletUtils.redirect("/admin/manageruser", request, response);
+        } catch (Exception ex) {
             throw ex;
 
         }
     }
+
     private void deleteCourse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long id =Long.parseLong(request.getParameter("id"));
+        Long id = Long.parseLong(request.getParameter("id"));
         CourseServiceImpl courseService = new CourseServiceImpl();
 
         try {
             courseService.deleteById(id);
-            ServletUtils.redirect("/admin/managercourse",request,response);
-        }
-        catch (Exception ex)
-        {
+            ServletUtils.redirect("/admin/managercourse", request, response);
+        } catch (Exception ex) {
             throw ex;
 
         }
     }
+
+    private void banCourse(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Long id = Long.parseLong(request.getParameter("id"));
+        CourseServiceImpl courseService = new CourseServiceImpl();
+        Course course = courseService.getCourseById(id);
+
+        try {
+            course.setDisabled(!course.isDisabled());
+            courseService.update(course);
+            ServletUtils.redirect("/admin/managercourse", request, response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CourseServiceImpl courseService = new CourseServiceImpl();
@@ -182,16 +198,16 @@ public class AdminServlet extends HttpServlet {
                 ServletUtils.forward("/views/AddCategories.jsp", request, response);
                 break;
             case "/editcat":
-                Long id =Long.parseLong(request.getParameter("id"));
-                CategoryServiceImpl categoryService =new CategoryServiceImpl();
+                Long id = Long.parseLong(request.getParameter("id"));
+                CategoryServiceImpl categoryService = new CategoryServiceImpl();
                 Category category = categoryService.getCategoryById(id);
-                request.setAttribute("category",category);
+                request.setAttribute("category", category);
                 ServletUtils.forward("/views/EditCategories.jsp", request, response);
                 break;
             case "/manageruser":
-                UserServiceImpl userService =new UserServiceImpl();
+                UserServiceImpl userService = new UserServiceImpl();
                 List<User> userList = userService.getAllUser();
-                request.setAttribute("userList",userList);
+                request.setAttribute("userList", userList);
                 ServletUtils.forward("/views/AdminUser.jsp", request, response);
                 break;
             case "/addteacher":
@@ -199,7 +215,7 @@ public class AdminServlet extends HttpServlet {
                 break;
             case "/managercourse":
                 List<Course> courseList = courseService.getCourseList();
-                request.setAttribute("courseList",courseList);
+                request.setAttribute("courseList", courseList);
                 ServletUtils.forward("/views/AdminCourse.jsp", request, response);
                 break;
             default:

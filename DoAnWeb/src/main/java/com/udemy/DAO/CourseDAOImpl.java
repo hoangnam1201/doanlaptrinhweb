@@ -55,6 +55,7 @@ public class CourseDAOImpl implements CourseDAO {
 
         //Condition
         Predicate isComplete = builder.isTrue(root.get(Course_.IS_COMPLETE));
+        Predicate isNotDisable = builder.isFalse(root.get(Course_.IS_DISABLED));
         Predicate search = builder.like(root.get(Course_.NAME), "%" + courseListPageInfo.getSearchString() + "%");
         Predicate category = builder.and();
         if (courseListPageInfo.getCategory() != null) {
@@ -64,7 +65,7 @@ public class CourseDAOImpl implements CourseDAO {
                 category = builder.equal(root.get(Course_.CATEGORY).get("parent"), courseListPageInfo.getCategory().getId());
             }
         }
-        Predicate condition = builder.and(isComplete, search, category);
+        Predicate condition = builder.and(isComplete, isNotDisable, search, category);
 
         //Count
         CriteriaQuery<Long> totalResults = builder.createQuery(Long.class);
@@ -102,10 +103,10 @@ public class CourseDAOImpl implements CourseDAO {
     public List<Course> getFeaturedCourses(int amount) {
         EntityManager em = emf.createEntityManager();
         String queryString = "select c from Course c join c.enrollments as e " +
-                "where c.isComplete = true and " +
+                "where c.isComplete = true and c.isDisabled = false and " +
                 "function('datediff',CURRENT_DATE, e.createdAt) < 7 " +
                 "group by c.id " +
-                "order by count(c.enrollments.size) desc";
+                "order by count(e.id) desc";
 
         List<Course> list = em.createQuery(queryString, Course.class)
                 .setMaxResults(amount).getResultList();
@@ -117,9 +118,8 @@ public class CourseDAOImpl implements CourseDAO {
     public List<Course> getPopularCourses(int amount) {
         EntityManager em = emf.createEntityManager();
         String queryString = "select c from Course c " +
-                "where c.isComplete = true " +
-                "group by c.id " +
-                "order by count(c.enrollments.size) desc";
+                "where c.isComplete = true and c.isDisabled = false " +
+                "order by c.studentCount desc";
 
         List<Course> list = em.createQuery(queryString, Course.class)
                 .setMaxResults(amount).getResultList();
@@ -130,7 +130,7 @@ public class CourseDAOImpl implements CourseDAO {
     @Override
     public List<Course> getLatestCourses(int amount) {
         EntityManager em = emf.createEntityManager();
-        String queryString = "select c from Course c where c.isComplete = true order by c.createdAt desc";
+        String queryString = "select c from Course c where c.isComplete = true and c.isDisabled = false order by c.createdAt desc";
         List<Course> list = em.createQuery(queryString, Course.class)
                 .setMaxResults(amount).getResultList();
         em.close();
@@ -142,8 +142,7 @@ public class CourseDAOImpl implements CourseDAO {
         EntityManager em = emf.createEntityManager();
         String queryString = "select c from Course c " +
                 "where c.category.id = ?1 and c.id != ?2 " +
-                "group by c.id " +
-                "order by count(c.enrollments.size) desc";
+                "order by c.studentCount desc";
         try {
             return em.createQuery(queryString, Course.class)
                     .setParameter(1, course.getCategory().getId())

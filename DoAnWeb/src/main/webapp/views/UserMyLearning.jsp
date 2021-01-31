@@ -10,15 +10,6 @@
         <script src="<c:url value="/static/scripts/main.js"/>"></script>
     </jsp:attribute>
     <jsp:body>
-        <style>
-            ul li:hover {
-                background-color: #00aced;
-            }
-
-            body {
-                background: cadetblue;
-            }
-        </style>
         <main>
             <h2 class="text-center font-weight-bold my-5">${requestScope.page}</h2>
             <div class="bg-white border shadow-sm container-fluid py-3 mb-5">
@@ -32,7 +23,7 @@
                         <c:otherwise>
                             <li class="nav-item"><a href="<c:url value="/account/learning" />" class="nav-link">My
                                 Courses</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link active">WishList</a></li>
+                            <li class="nav-item "><a href="#" class="nav-link active">Wishlist</a></li>
                         </c:otherwise>
                     </c:choose>
                 </ul>

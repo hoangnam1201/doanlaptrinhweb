@@ -30,7 +30,7 @@ public class CategoryDAOImpl implements CategoryDAO {
         String queryString = "select c " +
                 "from Category c left join Course course on course.category.id = c.id " +
                 "left join course.enrollments as enrollment " +
-                "where c.parent!=null and course.isComplete = true " +
+                "where c.parent!=null and course.isComplete = true and course.isDisabled = false " +
                 "and function('datediff',CURRENT_DATE, enrollment.createdAt) < 7 " +
                 "group by c.id " +
                 "order by course.isComplete desc, count(enrollment.size) desc";

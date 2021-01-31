@@ -60,39 +60,32 @@
                             <div class="d-block d-lg-flex align-items-center">
                                 <c:choose>
                                     <c:when test="${requestScope.course.teacher.id.equals(sessionScope.authUser.id)}">
-                                        <a class="btn btn-info" id="enroll-btn"
+                                        <a class="btn btn-info enroll"
                                            href="<c:url value="/teacher/manage/${requestScope.course.id}/details"/>">Edit
                                             course</a>
                                     </c:when>
                                     <c:otherwise>
                                         <c:choose>
                                             <c:when test="${requestScope.enrolled}">
-                                                <button id="enroll-btn" disabled class="btn btn-secondary">Enrolled
+                                                <button id="enroll-btn" disabled class="btn btn-secondary enroll">Enrolled
                                                 </button>
                                             </c:when>
                                             <c:otherwise>
-                                                <form class="mb-0" method="post"
-                                                      action="<c:url value="/course/enroll" />">
-                                                    <input name="courseId" type="hidden"
-                                                           value="${requestScope.course.id}">
-                                                    <button type="submit" class="btn btn-danger"
-                                                            data-target="${requestScope.course.id}"
-                                                            id="enroll-btn">Enroll now
-                                                    </button>
-                                                </form>
+                                                <button type="button" class="btn btn-danger enroll"
+                                                        data-course="${requestScope.course.id}"
+                                                        id="enroll-btn">Enroll now
+                                                </button>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:otherwise>
                                 </c:choose>
                                 <c:if test="${!requestScope.course.teacher.id.equals(sessionScope.authUser.id)}">
-                                    <form class="mb-0" method="post"
-                                          action="<c:url value="/course/${requestScope.wishlist?'remove-wishlist':'add-wishlist'}" />">
-                                        <input name="courseId" type="hidden"
-                                               value="${requestScope.course.id}">
-                                        <button class="btn wishlist ml ml-lg-2">${requestScope.wishlist ? "Wishlisted" : "Wishlist"}
-                                            <i class="${requestScope.wishlist?"fas":"far"} fa-heart d-inline-block ml-2"></i>
-                                        </button>
-                                    </form>
+                                    <button id="wishlist-btn"
+                                            data-course="${requestScope.course.id}"
+                                            data-action="${requestScope.wishlist?'remove-wishlist':'add-wishlist'}"
+                                            class="btn wishlist ml ml-lg-2">${requestScope.wishlist ? "Wishlisted" : "Wishlist"}
+                                        <i class="${requestScope.wishlist?"fas":"far"} fa-heart d-inline-block ml-2"></i>
+                                    </button>
                                 </c:if>
                             </div>
                             <p class="ml-1 mb-0 mt-2"><strong>${requestScope.course.studentCount}</strong> already

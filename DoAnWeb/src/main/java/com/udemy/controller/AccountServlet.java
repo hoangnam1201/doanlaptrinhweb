@@ -1,13 +1,11 @@
 package com.udemy.controller;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import com.udemy.model.Course;
-import com.udemy.model.Lesson;
-import com.udemy.model.Section;
 import com.udemy.service.CourseServiceImpl;
 import com.udemy.util.ServletUtils;
 import com.udemy.model.User;
 import com.udemy.service.UserServiceImpl;
+import org.apache.commons.validator.routines.EmailValidator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import java.util.Optional;
 
 @WebServlet(name = "AccountServlet", urlPatterns = "/account/*")
@@ -39,8 +36,11 @@ public class AccountServlet extends HttpServlet {
                 case "/logout":
                     postLogout(request, response);
                     break;
-                case "/profile":
+                case "/update-profile":
                     updateProfile(request, response);
+                    break;
+                case "/change-password":
+                    changePassword(request, response);
                     break;
                 default:
                     ServletUtils.forwardErrorPage(response);
@@ -74,9 +74,17 @@ public class AccountServlet extends HttpServlet {
 
     private void postLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
+        boolean isEmail = EmailValidator.getInstance().isValid(username);
+
         String password = request.getParameter("password");
         UserServiceImpl userService = new UserServiceImpl();
-        Optional<User> user = userService.findByUsername(username);
+
+        Optional<User> user;
+        if (isEmail) {
+            user = userService.findByEmail(username);
+        } else {
+            user = userService.findByUsername(username);
+        }
 
         if (user.isPresent()) {
             BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.get().getPassword());
@@ -93,13 +101,11 @@ public class AccountServlet extends HttpServlet {
                 request.setAttribute("hasError", true);
                 request.setAttribute("errorMessage", "Wrong password");
                 ServletUtils.forward("/views/Login.jsp", request, response);
-                return;
             }
         } else {
             request.setAttribute("hasError", true);
             request.setAttribute("errorMessage", "User not found!");
             ServletUtils.forward("/views/Login.jsp", request, response);
-            return;
         }
     }
 
@@ -115,9 +121,30 @@ public class AccountServlet extends HttpServlet {
     private void updateProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UserServiceImpl userService = new UserServiceImpl();
         User user = (User) request.getSession().getAttribute("authUser");
+        PrintWriter out = response.getWriter();
 
         String email = request.getParameter("email");
         String username = request.getParameter("username");
+
+        Optional<User> checkUsername = userService.findByUsername(username);
+        Optional<User> checkEmail = userService.findByEmail(email);
+        boolean error = false;
+
+        if (checkUsername.isPresent() && !checkUsername.get().getId().equals(user.getId())) {
+            error = true;
+            out.print("Username not available");
+
+        }
+        if (checkEmail.isPresent() && !checkEmail.get().getId().equals(user.getId())) {
+            error = true;
+            out.print("Username not available");
+        }
+        if (error) {
+            response.setStatus(500);
+            out.flush();
+            return;
+        }
+
         String name = request.getParameter("name");
         String job = Optional.ofNullable(request.getParameter("job")).orElse("");
         String bio = Optional.ofNullable(request.getParameter("bio")).orElse("");
@@ -128,15 +155,41 @@ public class AccountServlet extends HttpServlet {
         user.setJob(job);
         user.setBio(bio);
 
-        String password = request.getParameter("password");
-        if (!password.isEmpty()) {
-            String bcryptHashString = BCrypt.withDefaults().hashToString(12, password.toCharArray());
-            user.setPassword(bcryptHashString);
-        }
-
         try {
             userService.update(user);
             ServletUtils.redirect("/account/profile", request, response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ServletUtils.forwardErrorPage(response);
+        }
+    }
+
+    private void changePassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UserServiceImpl userService = new UserServiceImpl();
+        User user = (User) request.getSession().getAttribute("authUser");
+        PrintWriter out = response.getWriter();
+
+        String oldPassword = request.getParameter("current-password");
+        String newPassword = request.getParameter("new-password");
+
+        BCrypt.Result result = BCrypt.verifyer().verify(oldPassword.toCharArray(), user.getPassword());
+
+        if (!result.verified) {
+            response.setStatus(500);
+            out.println("Wrong password");
+            out.flush();
+            out.close();
+            return;
+        }
+
+        String newPasswordEncrypted = BCrypt.withDefaults().hashToString(12, newPassword.toCharArray());
+        user.setPassword(newPasswordEncrypted);
+
+        try {
+            userService.update(user);
+            out.println("Success");
+            out.flush();
+            out.close();
         } catch (Exception ex) {
             ex.printStackTrace();
             ServletUtils.forwardErrorPage(response);
@@ -170,7 +223,6 @@ public class AccountServlet extends HttpServlet {
                     break;
                 case "/learning":
                     User newUser = userService.getUserById(user.getId());
-                    newUser.getEnrollments().size();
                     request.setAttribute("user", newUser);
                     request.setAttribute("page", "My learning");
                     ServletUtils.forward("/views/UserMyLearning.jsp", request, response);

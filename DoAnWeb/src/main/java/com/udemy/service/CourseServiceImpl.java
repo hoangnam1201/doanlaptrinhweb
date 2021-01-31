@@ -117,7 +117,6 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void setCompleteById(Long id) {
         Course course = courseDAO.getCourseById(id);
-        System.out.println(course.getName());
         course.setComplete(true);
         courseDAO.update(course);
     }
@@ -184,6 +183,7 @@ public class CourseServiceImpl implements CourseService {
             Optional<Section> section = Optional.ofNullable(this.getSectionById(course.get(), sectionId));
             if (section.isPresent()) {
                 section.get().getLessons().removeIf(lesson -> lesson.getId().equals(lessonId));
+                course.get().getSections().add(section.get());
                 courseDAO.update(course.get());
             }
         }

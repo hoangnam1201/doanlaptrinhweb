@@ -33,14 +33,19 @@ public class CourseServlet extends HttpServlet {
                 case "/enroll":
                     if (user.getId() == null) {
                         request.getSession().setAttribute("retUrl", "/course/" + courseId);
-                        ServletUtils.redirect("/account/login", request, response);
+                        out.println(request.getContextPath() + "/account/login");
+                        out.flush();
                         return;
                     }
                     if (!enrolled) {
-                        courseService.enroll(courseId, user.getId());
+                        try {
+                            courseService.enroll(courseId, user.getId());
+                            response.setStatus(200);
+                        } catch (Exception ex) {
+                            response.sendError(500);
+                        }
                     }
-                    ServletUtils.redirect("/course/" + courseId, request, response);
-                    break;
+                    return;
                 case "/rating":
                     int rating = Integer.parseInt(request.getParameter("rating"));
                     String comment = request.getParameter("comment");
@@ -53,15 +58,25 @@ public class CourseServlet extends HttpServlet {
                 case "/add-wishlist":
                     if (user.getId() == null) {
                         request.getSession().setAttribute("retUrl", "/course/" + courseId);
-                        ServletUtils.redirect("/account/login", request, response);
+                        out.println(request.getContextPath() + "/account/login");
+                        out.flush();
                         return;
                     }
-                    userService.addWishlist(user.getId(), courseId);
-                    ServletUtils.redirect("/course/" + courseId, request, response);
-                    break;
+                    try {
+                        userService.addWishlist(user.getId(), courseId);
+                        response.setStatus(200);
+                    } catch (Exception ex) {
+                        response.sendError(500);
+                    }
+                    return;
                 case "/remove-wishlist":
-                    userService.removeWishlist(user.getId(), courseId);
-                    ServletUtils.redirect("/course/" + courseId, request, response);
+                    try {
+                        userService.removeWishlist(user.getId(), courseId);
+                        response.setStatus(200);
+                    } catch (Exception ex) {
+                        response.sendError(500);
+                    }
+                    return;
                 default:
                     break;
             }
@@ -78,6 +93,11 @@ public class CourseServlet extends HttpServlet {
         boolean learn = Optional.ofNullable(request.getParameter("learn")).isPresent();
         Course course = (Course) request.getAttribute("course");
         User user = (User) request.getSession().getAttribute("authUser");
+
+        if (course.isDisabled()) {
+            ServletUtils.forwardErrorPage(response);
+            return;
+        }
 
         if (!course.isComplete() && !course.getTeacher().getId().equals(user.getId())) {
             ServletUtils.redirect("/", request, response);

@@ -24,6 +24,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getTeachers() {
+        return null;
+    }
+
+    @Override
     public void addNew(User user) {
         userDAO.addNew(user);
     }
@@ -75,5 +80,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByUsername(String username) {
         return userDAO.findByUsername(username);
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userDAO.findByEmail(email);
     }
 }

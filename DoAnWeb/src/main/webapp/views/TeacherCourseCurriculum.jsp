@@ -59,7 +59,7 @@
                         <small class="mt-2 text-secondary font-weight-bold d-block">${requestScope.course.name}</small>
                     </h5>
                 </div>
-                <div class="bg-white shadow-sm mb-3">
+                <div class="bg-white shadow-sm mb-3" id="curriculum">
                     <div class="border-bottom p-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <h5 class="mb-0">Course Curriculum</h5>
@@ -71,7 +71,7 @@
                                 New section
                             </button>
                         </div>
-                        <form method="post" action="<c:url value="/teacher/add-section" />"
+                        <form data-parent="#curriculum" method="post" action="<c:url value="/teacher/add-section" />"
                               id="new-section--form" class="mt-2 collapse">
                             <input type="hidden" name="courseId" value="${requestScope.course.id}">
                             <div class="row">
@@ -92,7 +92,7 @@
                                 </div>
                             </div>
                             <div class="text-right">
-                                <button class="btn btn-outline-info font-weight-bold">Save</button>
+                                <button class="btn save btn-outline-info font-weight-bold">Save</button>
                             </div>
                         </form>
                     </div>
@@ -125,7 +125,8 @@
                                                 </button>
                                             </form>
                                         </div>
-                                        <form method="post" action="<c:url value="/teacher/update-section" />"
+                                        <form data-parent="#curriculum" method="post"
+                                              action="<c:url value="/teacher/update-section" />"
                                               id="section${section.id}" class="mt-2 collapse">
                                             <input type="hidden" name="courseId" value="${requestScope.course.id}">
                                             <input type="hidden" name="sectionId" value="${section.id}">
@@ -149,7 +150,7 @@
                                                 </div>
                                             </div>
                                             <div class="text-right">
-                                                <button class="btn btn-outline-info font-weight-bold">Save</button>
+                                                <button class="btn save btn-outline-info font-weight-bold">Save</button>
                                             </div>
                                         </form>
                                         <c:forEach items="${section.lessons}" var="lesson">
@@ -170,7 +171,8 @@
                                                     </button>
                                                 </form>
                                             </div>
-                                            <form method="post" action="<c:url value="/teacher/update-lesson" />"
+                                            <form data-parent="#curriculum" method="post"
+                                                  action="<c:url value="/teacher/update-lesson" />"
                                                   id="lesson${lesson.id}"
                                                   class="lesson mt-2 mb-0 bg-white border collapse">
                                                 <div class="p-2">
@@ -201,10 +203,15 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="video-url${lesson.id}">Video URL (.mp4)</label>
-                                                        <input required class="form-control bg-light outline-none"
-                                                               name="video-url" value="${lesson.videoUrl}"
-                                                               id="video-url${lesson.id}">
+                                                        <label for="lesson-video-url${lesson.id}">Video (.mp4)</label>
+                                                        <div>
+                                                            <label class="btn btn-info text-white font-weight-bold"
+                                                                   for="lesson-video${lesson.id}">Browse</label>
+                                                            <span>${empty lesson.videoUrl ? "Not uploaded yet" : "Uploaded"}</span>
+                                                        </div>
+                                                        <input type="hidden" value="${lesson.videoUrl}"
+                                                               name="video-url"
+                                                               id="lesson-video-url${lesson.id}">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="description${lesson.id}">Course description</label>
@@ -215,17 +222,24 @@
                                                         </div>
                                                     </div>
                                                     <div class="text-right">
-                                                        <button class="btn btn-outline-info font-weight-bold">Save
+                                                        <button class="btn save btn-outline-info font-weight-bold">Save
                                                         </button>
                                                     </div>
                                                 </div>
+                                            </form>
+                                            <form id="lesson-video-form${lesson.id}" class="d-none lesson-video"
+                                                  enctype="multipart/form-data" method="post"
+                                                  action="<c:url value="/upload" />">
+                                                <input type="file" name="video" class="video-upload"
+                                                       id="lesson-video${lesson.id}">
                                             </form>
                                         </c:forEach>
                                         <button data-toggle="collapse" data-target="#new-lesson${section.id}"
                                                 class="btn btn-block new-lesson active-color outline-none mt-2">
                                             ＋ Add new lesson
                                         </button>
-                                        <form method="post" action="<c:url value="/teacher/add-lesson" />"
+                                        <form data-parent="#curriculum" method="post"
+                                              action="<c:url value="/teacher/add-lesson" />"
                                               id="new-lesson${section.id}"
                                               class="lesson mt-2 mb-0 bg-white border collapse">
                                             <div class="p-2">
@@ -254,9 +268,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="new-lesson-video-url${section.id}">Video URL
-                                                        (.mp4)</label>
-                                                    <input required class="form-control bg-light outline-none"
+                                                    <label for="new-lesson-video-url${section.id}">Video (.mp4)</label>
+                                                    <div>
+                                                        <label class="btn btn-info text-white font-weight-bold mr-2"
+                                                               for="new-lesson-video${section.id}">Browse</label>
+                                                        <span>No video selected</span>
+                                                    </div>
+                                                    <input type="hidden"
                                                            name="video-url"
                                                            id="new-lesson-video-url${section.id}">
                                                 </div>
@@ -269,9 +287,16 @@
                                                     </div>
                                                 </div>
                                                 <div class="text-right">
-                                                    <button class="btn btn-outline-info font-weight-bold">Save</button>
+                                                    <button class="btn save btn-outline-info font-weight-bold">Save
+                                                    </button>
                                                 </div>
                                             </div>
+                                        </form>
+                                        <form id="new-lesson-video-form${section.id}" class="d-none lesson-video"
+                                              enctype="multipart/form-data" method="post"
+                                              action="<c:url value="/upload" />">
+                                            <input type="file" name="video" class="video-upload"
+                                                   id="new-lesson-video${section.id}">
                                         </form>
                                     </div>
                                 </c:forEach>

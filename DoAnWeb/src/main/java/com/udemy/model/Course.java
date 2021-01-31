@@ -41,6 +41,8 @@ public class Course implements Serializable {
     private String language;
     @Column(nullable = false)
     private boolean isComplete = false;
+    @Column(nullable = false)
+    private boolean isDisabled = false;
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp
@@ -63,6 +65,14 @@ public class Course implements Serializable {
     private List<Enrollment> enrollments = new ArrayList<Enrollment>();
 
     public Course() {
+    }
+
+    public boolean isDisabled() {
+        return isDisabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        isDisabled = disabled;
     }
 
     public boolean isComplete() {

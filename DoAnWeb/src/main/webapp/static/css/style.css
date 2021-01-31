@@ -204,7 +204,7 @@ video {
     flex-direction: column;
     border-radius: 5px;
     background-color: white;
-    border: 1px solid rgba(0,0,0,.08);
+    border: 1px solid rgba(0, 0, 0, .08);
 }
 
 .no-course i {
@@ -587,7 +587,7 @@ video {
     width: 245px;
     border-radius: 0;
     padding: 0;
-    left: 16px !important;
+    left: 14px !important;
     border-right: 0;
 }
 
@@ -630,12 +630,46 @@ video {
     box-shadow: 1px 0px 10px 0px rgba(0, 0, 0, 0.15);
 }
 
+.profile--navbar {
+    min-width: 220px;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.profile--navbar a {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    color: rgb(120, 130, 131);
+    padding: 5px 0 5px 10px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: 0.15s color ease-in-out;
+}
+
+.profile--navbar a.active,
+.profile--navbar a:hover {
+    text-decoration: none;
+    color: rgb(15, 25, 35);
+}
+
+.profile--navbar a.active i,
+.profile--navbar a:hover i {
+    color: var(--active-color);
+}
+
+.account-setting label {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgb(120, 130, 140);
+}
+
 .header-mobile-toggle:checked ~ .drawer {
     transform: translateX(0);
     visibility: visible;
 }
 
-#enroll-btn {
+.btn.enroll {
     font-size: 16px;
     font-weight: 600;
     padding: 10px 30px;
@@ -643,7 +677,7 @@ video {
     width: 400px;
 }
 
-#enroll-btn.btn-danger {
+.btn.enroll.btn-danger {
     background-color: rgb(165, 28, 48) !important;
 }
 
@@ -1248,6 +1282,32 @@ x
 .social-icons a.dribbble:hover {
     background-color: #ea4c89
 }
+
+.bestseller-badge {
+    background-color: #ffe799;
+    color: #593d00;
+    border-radius: 4px;
+    font-size: 12px;
+    padding: 2px 3px;
+    margin-top: 2px;
+}
+
+.high-rated-badge {
+    background-color: #ffc48c;
+    color: #592b00;
+    border-radius: 4px;
+    font-size: 12px;
+    padding: 2px 3px;
+    margin-top: 2px;
+}
+
+.new-badge {
+    background-color: #99dbaa;
+    color: #003b0f;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
 
 @media (max-width: 767px) {
     .social-icons li.title {

@@ -7,7 +7,6 @@
     <a class="a-unstyled ml-2" href="<c:url value="/course/${requestScope.course.id}"/>">
         ${requestScope.course.name}
     </a>
-    <label class="close-button" for="header-mobile-toggle">&times;</label>
 </header>
 <c:choose>
     <c:when test="${requestScope.enrolled}">

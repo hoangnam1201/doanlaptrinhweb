@@ -11,12 +11,23 @@
         <div class="d-flex flex-fill flex-column flex-md-row">
             <div class="p-2 flex-fill">
                 <div class="d-flex align-items-center mb-2">
-                    <a href="<c:url value="/course/${course.id}" />" class="a-unstyled">
-                        <h5 class="active-color font-weight-bold mb-0">
-                            ${course.name}
-                        </h5>
-                    </a>
                     <c:choose>
+                        <c:when test="${course.disabled}">
+                            <h5 class="text-muted font-weight-bold mb-0">${course.name}</h5>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="<c:url value="/course/${course.id}" />" class="a-unstyled">
+                                <h5 class="active-color font-weight-bold mb-0">
+                                        ${course.name}
+                                </h5>
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
+                    <c:choose>
+                        <c:when test="${course.disabled}">
+                            <label style="font-size: 11px"
+                                   class="bg-secondary text-white font-weight-bold d-flex align-items-center ml-2 mb-0 p-1">Disabled</label>
+                        </c:when>
                         <c:when test="${course.complete}">
                             <label style="font-size: 11px"
                                    class="bg-success text-white font-weight-bold d-flex align-items-center ml-2 mb-0 p-1">Complete</label>
@@ -44,7 +55,7 @@
                 <p class="price">$${course.price}</p>
             </div>
             <a href="<c:url value="/teacher/manage/${course.id}/details" />"
-               class="hover-darker d-flex p-3 font-weight-bold align-items-center text-decoration-none flex-shrink-0">
+               class="${course.disabled ? "d-none": "d-flex"} hover-darker p-3 font-weight-bold align-items-center text-decoration-none flex-shrink-0">
                 <span><i class="fas fa-cog mr-1"></i> Edit / manage course</span>
             </a>
         </div>

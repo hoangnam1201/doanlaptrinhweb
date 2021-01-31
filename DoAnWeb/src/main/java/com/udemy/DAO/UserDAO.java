@@ -13,6 +13,8 @@ public interface UserDAO {
 
     List<User> getAllUser();
 
+    List<User> getTeachers();
+
     void addNew(User user);
 
     void update(User user);
@@ -20,4 +22,6 @@ public interface UserDAO {
     void delete(Long id);
 
     Optional<User> findByUsername(String username);
+
+    Optional<User> findByEmail(String email);
 }
