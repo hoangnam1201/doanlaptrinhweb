@@ -40,7 +40,7 @@ public class CourseListServlet extends HttpServlet {
             try {
                 String page = request.getParameter("p");
                 String sort = request.getParameter("order");
-                String search = "";
+                String search = Optional.ofNullable(request.getParameter("q")).orElse("");
 
                 CourseListPageInfo courseListPageInfo = new CourseListPageInfo();
                 courseListPageInfo.setCategory(category);

@@ -16,6 +16,9 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private boolean isDisabled = false;
+
     @Column(nullable = false, length = 35)
     private String name;
 
@@ -54,6 +57,14 @@ public class User implements Serializable {
 
     @UpdateTimestamp
     private Date updatedAt;
+
+    public boolean isDisabled() {
+        return isDisabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        isDisabled = disabled;
+    }
 
     public List<Wishlist> getWishlist() {
         return wishlist;

@@ -41,6 +41,21 @@
                 </div>
             </div>
             <div class="course-table--container">
+                <c:if test="${!empty pageInfo.category}">
+                    <form id="search-by-title" class="mb-4 mx-4 p-0 col-12 col-md-6 d-flex border" method="get">
+                        <c:if test="${not empty param.p}">
+                            <input type="hidden" name="p" value="1">
+                        </c:if>
+                        <c:if test="${not empty param.order}">
+                            <input type="hidden" name="order" value="${param.order}">
+                        </c:if>
+                        <input placeholder="Search by title" type="text"
+                               class="form-control bg-grey flex-fill border-0 rounded-0" name="q"
+                               value="${empty param.q ? "" : param.q}">
+                        <button class="btn bg-active text-white border-0 rounded-0"><i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </c:if>
                 <div class="d-flex justify-content-between px-3 mx-2 align-items-center mb-2">
                     <div class="result-count-text"><c:choose>
                         <c:when test="${empty pageInfo.category}"> </c:when>

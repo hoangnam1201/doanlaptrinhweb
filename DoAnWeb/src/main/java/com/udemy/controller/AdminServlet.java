@@ -46,6 +46,9 @@ public class AdminServlet extends HttpServlet {
             case "/deletecourse":
                 deleteCourse(request, response);
                 break;
+            case "/banuser":
+                banUser(request, response);
+                break;
             case "/bancourse":
                 banCourse(request, response);
                 break;
@@ -185,6 +188,20 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
+    private void banUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Long id = Long.parseLong(request.getParameter("id"));
+        UserServiceImpl userService = new UserServiceImpl();
+        User user = userService.getUserById(id);
+
+        try {
+            user.setDisabled(!user.isDisabled());
+            userService.update(user);
+            ServletUtils.redirect("/admin/manageruser", request, response);
+        } catch (Exception ex) {
+            throw ex;
+
+        }
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CourseServiceImpl courseService = new CourseServiceImpl();

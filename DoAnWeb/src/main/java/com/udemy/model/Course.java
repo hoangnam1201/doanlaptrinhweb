@@ -64,7 +64,22 @@ public class Course implements Serializable {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Enrollment> enrollments = new ArrayList<Enrollment>();
 
+    @Transient
+    private String badge;
+
     public Course() {
+    }
+
+    public String getBadge() {
+//        long diff = Date
+//        if (dayOfWeek < 7) {
+//            badge = "New";
+//        } else if (studentCount > 5) {
+//            badge = "Best seller";
+//        } else {
+//            badge = "None";
+//        }
+        return badge;
     }
 
     public boolean isDisabled() {

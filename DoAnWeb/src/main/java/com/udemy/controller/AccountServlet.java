@@ -87,6 +87,12 @@ public class AccountServlet extends HttpServlet {
         }
 
         if (user.isPresent()) {
+            if (user.get().isDisabled() && !user.get().getRole().equals("admin")) {
+                request.setAttribute("hasError", true);
+                request.setAttribute("errorMessage", "Account has been deactivated!");
+                ServletUtils.forward("/views/Login.jsp", request, response);
+                return;
+            }
             BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.get().getPassword());
             if (result.verified) {
                 HttpSession session = request.getSession();
