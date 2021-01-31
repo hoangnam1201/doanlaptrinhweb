@@ -202,7 +202,7 @@ public class TeacherServlet extends HttpServlet {
                 break;
             case "/manage":
                 Course course = (Course) request.getAttribute("course");
-                if (course != null) {
+                if (course != null && !course.isDisabled()) {
                     String section = request.getParameter("section");
                     request.setAttribute("course", course);
                     switch (section) {

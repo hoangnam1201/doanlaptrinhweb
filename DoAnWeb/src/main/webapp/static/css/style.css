@@ -1306,6 +1306,10 @@ x
     color: #003b0f;
     border-radius: 4px;
     font-size: 12px;
+    padding: 2px 3px;
+    margin-top: 2px;
+    width: 55px;
+    text-align: center;
 }
 
 

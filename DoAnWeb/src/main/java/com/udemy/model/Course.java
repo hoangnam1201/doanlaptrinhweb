@@ -6,6 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 @Table
@@ -71,14 +72,16 @@ public class Course implements Serializable {
     }
 
     public String getBadge() {
-//        long diff = Date
-//        if (dayOfWeek < 7) {
-//            badge = "New";
-//        } else if (studentCount > 5) {
-//            badge = "Best seller";
-//        } else {
-//            badge = "None";
-//        }
+        long diff = (new Date()).getTime() - createdAt.getTime();
+        if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) < 3) {
+            badge = "New";
+        } else if (studentCount >= 3) {
+            badge = "Bestseller";
+        } else if (avgRating > 4.5 && ratingCount >= 2) {
+            badge = "High rated";
+        } else {
+            badge = "None";
+        }
         return badge;
     }
 

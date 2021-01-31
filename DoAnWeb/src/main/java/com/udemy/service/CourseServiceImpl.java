@@ -9,12 +9,20 @@ import java.util.Optional;
 public class CourseServiceImpl implements CourseService {
     UserDAOImpl userDAO = new UserDAOImpl();
     CourseDAOImpl courseDAO = new CourseDAOImpl();
+    CategoryDAOImpl categoryDAO = new CategoryDAOImpl();
     LessonDAOImpl lessonDAO = new LessonDAOImpl();
     EnrollmentDAOImpl enrollmentDAO = new EnrollmentDAOImpl();
 
     @Override
     public List<Course> getCourseList() {
         return courseDAO.getCourseList();
+    }
+
+    @Override
+    public List<Course> getCourseList(long categoryId, long teacherId) {
+        Category category = categoryDAO.getCategoryById(categoryId);
+        User teacher = userDAO.getUserById(teacherId);
+        return courseDAO.getCourseList(category, teacher);
     }
 
     @Override

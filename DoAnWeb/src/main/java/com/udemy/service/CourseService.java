@@ -7,6 +7,8 @@ import java.util.List;
 public interface CourseService {
     List<Course> getCourseList();
 
+    List<Course> getCourseList(long categoryId, long teacherId);
+
     Course getCourseById(Long id);
 
     Enrollment getEnrollment(Long courseId, Long userId);

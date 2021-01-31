@@ -100,6 +100,36 @@ var quillOptions = {
 
 var editor = new Quill("#quill", quillOptions);
 
+$('#cat-select').change(e => {
+    let catId = e.target.value;
+    if (catId === '0') {
+        $("#subcat-select").html("<option value='0'>None</option>")
+        return;
+    }
+    e.target.disabled = true;
+    $.ajax({
+        url: myContextPath + '/get-subcategory?catId=' + catId,
+        type: 'GET',
+        dataType: 'json',
+        error: (data) => {
+            alert(data.responseText);
+        },
+        success: function (data) {
+            let subcategorySelect = $("#subcat-select")
+            subcategorySelect.html("");
+            subcategorySelect.append('<option selected value="0">None</option>');
+            data.forEach(subCategory => {
+                subcategorySelect.append(`<option value="${subCategory.id}">${subCategory.name}</option>`)
+            })
+            const subcategoryId = $("#cat-select").data("subCat") || "";
+            subcategorySelect.val(subcategoryId);
+        },
+        complete: () => {
+            e.target.disabled = false;
+        }
+    })
+})
+
 $("#create-course #category").change(e => {
     let catId = e.target.value;
     e.target.disabled = true;

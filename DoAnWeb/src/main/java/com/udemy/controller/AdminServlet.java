@@ -231,8 +231,18 @@ public class AdminServlet extends HttpServlet {
                 ServletUtils.forward("/views/AccountRegister.jsp", request, response);
                 break;
             case "/managercourse":
-                List<Course> courseList = courseService.getCourseList();
+                userService = new UserServiceImpl();
+                long catId = 0;
+                if (request.getParameter("subCatId") != null && !request.getParameter("subCatId").equals("0")) {
+                    catId = Long.parseLong(request.getParameter("subCatId"));
+                } else if (request.getParameter("catId") != null && !request.getParameter("catId").equals("0")) {
+                    catId = Long.parseLong(request.getParameter("catId"));
+                }
+                long teacherId = Long.parseLong(Optional.ofNullable(request.getParameter("teacherId")).orElse("0"));
+                List<Course> courseList = courseService.getCourseList(catId, teacherId);
+                List<User> teacherList = userService.getTeachers();
                 request.setAttribute("courseList", courseList);
+                request.setAttribute("teacherList", teacherList);
                 ServletUtils.forward("/views/AdminCourse.jsp", request, response);
                 break;
             default:

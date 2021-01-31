@@ -46,6 +46,35 @@ public class CourseDAOImpl implements CourseDAO {
     }
 
     @Override
+    public List<Course> getCourseList(Category category, User teacher) {
+        //Init
+        EntityManager em = emf.createEntityManager();
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Course> query = builder.createQuery(Course.class);
+        Root<Course> root = query.from(Course.class);
+
+        //Condition
+        Predicate checkCategory = builder.and();
+        Predicate checkTeacher = builder.and();
+        if (category != null) {
+            if (category.getParent() != null) {
+                checkCategory = builder.equal(root.get(Course_.CATEGORY), category.getId());
+            } else {
+                checkCategory = builder.equal(root.get(Course_.CATEGORY).get("parent"), category.getId());
+            }
+        }
+        if (teacher != null) {
+            checkTeacher = builder.equal(root.get(Course_.TEACHER), teacher.getId());
+        }
+
+        Predicate condition = builder.and(checkCategory, checkTeacher);
+        query.select(root).where(condition);
+        List<Course> results = em.createQuery(query).getResultList();
+        em.close();
+        return results;
+    }
+
+    @Override
     public List<Course> getCourseListWithFilter(CourseListPageInfo courseListPageInfo) {
         //Init
         EntityManager em = emf.createEntityManager();
