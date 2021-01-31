@@ -37,49 +37,103 @@
 
                 <a class="btn btn-outline-success mb-2"
                    href="${pageContext.request.contextPath}/admin/addteacher" role="button"><i class="fa fa-plus"
-                                                                                               aria-hidden="true"></i>ADD</a>
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Username</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Role</th>
-                        <th scope="col"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach items="${requestScope.userList}" var="user">
-                        <c:if test="${user.role != 'admin'}">
+                                                                                               aria-hidden="true"></i>ADD TEACHER</a>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="student-tab" data-toggle="tab" href="#student" role="tab"
+                           aria-controls="home" aria-selected="true">Student</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="teacher-tab" data-toggle="tab" href="#teacher" role="tab"
+                           aria-controls="profile" aria-selected="false">Teacher</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane show active" id="student" role="tabpanel">
+                        <table class="table table-bordered">
+                            <thead>
                             <tr>
-                                <td>${user.id}</td>
-                                <td>${user.name}</td>
-                                <td>${user.username}</td>
-                                <td>${user.email}</td>
-                                <td>${user.role}</td>
-                                <td>
-                                    <form method="post"
-                                          action="${pageContext.request.contextPath}/admin/deleteuser?id=${user.id}">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger"><i
-                                                class="fa fa-trash"
-                                                aria-hidden="true"></i>
-                                        </button>
-                                    </form>
-                                    <form method="post"
-                                          action="${pageContext.request.contextPath}/admin/banuser?id=${user.id}">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger"><i
-                                                class="fas fa-lock${user.disabled ? "-open":""}"
-                                                aria-hidden="true"></i>
-                                        </button>
-                                    </form>
-                                </td>
+                                <th scope="col">ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Email</th>
+                                <th scope="col"></th>
                             </tr>
-                        </c:if>
-                    </c:forEach>
-                    </tbody>
-                </table>
-
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${requestScope.userList}" var="user">
+                                <c:if test="${user.role == 'student'}">
+                                    <tr>
+                                        <td>${user.id}</td>
+                                        <td>${user.name}</td>
+                                        <td>${user.username}</td>
+                                        <td>${user.email}</td>
+                                        <td>
+                                            <form method="post"
+                                                  action="${pageContext.request.contextPath}/admin/deleteuser?id=${user.id}">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"><i
+                                                        class="fa fa-trash"
+                                                        aria-hidden="true"></i>
+                                                </button>
+                                            </form>
+                                            <form method="post"
+                                                  action="${pageContext.request.contextPath}/admin/banuser?id=${user.id}">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"><i
+                                                        class="fas fa-lock${user.disabled ? "-open":""}"
+                                                        aria-hidden="true"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </c:if>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="teacher" role="tabpanel">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Job</th>
+                                <th scope="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${requestScope.userList}" var="user">
+                                <c:if test="${user.role == 'teacher'}">
+                                    <tr>
+                                        <td>${user.id}</td>
+                                        <td>${user.name}</td>
+                                        <td>${user.username}</td>
+                                        <td>${user.email}</td>
+                                        <td>${user.job}</td>
+                                        <td>
+                                            <form method="post"
+                                                  action="${pageContext.request.contextPath}/admin/deleteuser?id=${user.id}">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"><i
+                                                        class="fa fa-trash"
+                                                        aria-hidden="true"></i>
+                                                </button>
+                                            </form>
+                                            <form method="post"
+                                                  action="${pageContext.request.contextPath}/admin/banuser?id=${user.id}">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"><i
+                                                        class="fas fa-lock${user.disabled ? "-open":""}"
+                                                        aria-hidden="true"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </c:if>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </jsp:body>
